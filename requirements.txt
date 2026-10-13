@@ -1,0 +1,13 @@
+# Phase 1: data
+pandas>=2.0
+requests>=2.31
+
+# Phase 2: modelling (install when you get there)
+# scikit-learn>=1.4
+# xgboost>=2.0
+# shap>=0.45
+# matplotlib>=3.8
+
+# Phase 3: serving
+# fastapi>=0.110
+# uvicorn[standard]>=0.29
