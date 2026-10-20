@@ -30,10 +30,11 @@ OUT_FILE = DATA / "processed" / "training_table.csv"
 ROLLING_WINDOWS = [1, 3, 7, 14, 30]  # days of accumulated rainfall
 
 
-def load_rainfall() -> pd.DataFrame:
-    files = sorted(RAIN_DIR.glob("*.csv"))
+def load_rainfall(rain_dir: Path = RAIN_DIR) -> pd.DataFrame:
+    # Skip helper files like _bias_factors.csv; only per-village rainfall files.
+    files = sorted(f for f in rain_dir.glob("*.csv") if not f.name.startswith("_"))
     if not files:
-        raise SystemExit(f"No rainfall files in {RAIN_DIR}. Run fetch_rainfall.py first.")
+        raise SystemExit(f"No rainfall files in {rain_dir}. Run the matching fetch script first.")
     df = pd.concat((pd.read_csv(f, parse_dates=["date"]) for f in files), ignore_index=True)
     return df.sort_values(["village_id", "date"]).reset_index(drop=True)
 
@@ -53,6 +54,16 @@ def add_rain_features(df: pd.DataFrame) -> pd.DataFrame:
     rainy = df["rain_mm"] > 2.5
     streak_id = (~rainy).groupby(df["village_id"]).cumsum()
     df["wet_streak_days"] = rainy.groupby([df["village_id"], streak_id]).cumsum()
+
+    # FORECAST features: rain over the NEXT k days (t+1 ... t+k).
+    # In training these use the rain that actually fell, i.e. a "perfect forecast",
+    # so results with them are an upper bound. In the live system they must come
+    # from a real weather forecast (Open-Meteo forecast API), never from the future.
+    # The training scripts only use them when asked (--forecast).
+    for k in (1, 2, 3):
+        df[f"fc_rain_{k}d"] = g.transform(
+            lambda s, k=k: s[::-1].rolling(k, min_periods=1).sum()[::-1].shift(-1)
+        ).fillna(0.0)
 
     df["month"] = df["date"].dt.month
     df["is_monsoon"] = df["month"].between(6, 9).astype(int)
@@ -98,9 +109,13 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--horizon", type=int, default=3,
                         help="predict events this many days ahead (default 3)")
+    parser.add_argument("--rain-dir", default="rainfall",
+                        help="folder under ml/data/raw/ with rainfall CSVs: "
+                             "'rainfall' (Open-Meteo) or 'rainfall_imd' (IMD gauges)")
     args = parser.parse_args()
 
-    df = load_rainfall()
+    df = load_rainfall(DATA / "raw" / args.rain_dir)
+    print(f"rainfall source: ml/data/raw/{args.rain_dir}")
     df = add_rain_features(df)
     df = add_labels(df, args.horizon)
     df = add_static(df)
