@@ -1,9 +1,9 @@
-village_id,name,district,lat,lon
-V001,Ujire,Dakshina Kannada,12.995,75.330
-V002,Belthangady,Dakshina Kannada,12.985,75.290
-V003,Subrahmanya,Dakshina Kannada,12.665,75.615
-V004,Madikeri,Kodagu,12.425,75.740
-V005,Kalasa,Chikkamagaluru,13.235,75.360
-V006,Sringeri,Chikkamagaluru,13.420,75.255
-V007,Sakleshpur,Hassan,12.945,75.785
-V008,Agumbe,Shivamogga,13.505,75.090
+village_id,name,name_kn,district,lat,lon
+V001,Ujire,ಉಜಿರೆ,Dakshina Kannada,12.995,75.33
+V002,Belthangady,ಬೆಳ್ತಂಗಡಿ,Dakshina Kannada,12.985,75.29
+V003,Subrahmanya,ಸುಬ್ರಹ್ಮಣ್ಯ,Dakshina Kannada,12.665,75.615
+V004,Madikeri,ಮಡಿಕೇರಿ,Kodagu,12.425,75.74
+V005,Kalasa,ಕಳಸ,Chikkamagaluru,13.235,75.36
+V006,Sringeri,ಶೃಂಗೇರಿ,Chikkamagaluru,13.42,75.255
+V007,Sakleshpur,ಸಕಲೇಶಪುರ,Hassan,12.945,75.785
+V008,Agumbe,ಆಗುಂಬೆ,Shivamogga,13.505,75.09

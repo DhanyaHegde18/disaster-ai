@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# Downloaded / generated data (re-create with the scripts)
+ml/data/raw/
+ml/data/processed/
+ml/models/*.pkl
+ml/models/*.json
+
+# Live risk snapshots (re-created by the backend)
+backend/data/latest_risk.json
+backend/data/alerts.db

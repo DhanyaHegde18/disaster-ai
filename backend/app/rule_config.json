@@ -1,0 +1,271 @@
+{
+  "calibrated_on": "2026-10-23",
+  "source_table": "ml/data/processed/training_table.csv",
+  "rule": "level = higher of (past 3-day rain level, forecast 3-day rain level)",
+  "thresholds_mm": {
+    "past_3d": {
+      "medium": 122.7,
+      "high": 223.4
+    },
+    "forecast_3d": {
+      "medium": 123.0,
+      "high": 223.4
+    }
+  },
+  "monsoon_alert_rates": {
+    "medium_or_high": 0.15,
+    "high": 0.05
+  },
+  "historical_alert_load": {
+    "high_days_per_village_per_monsoon": 9.8,
+    "medium_or_high_days_per_village_per_monsoon": 26.7
+  },
+  "villages": [
+    {
+      "village_id": "V001",
+      "name": "Ujire",
+      "name_kn": "\u0c89\u0c9c\u0cbf\u0cb0\u0cc6",
+      "district": "Dakshina Kannada",
+      "lat": 12.995,
+      "lon": 75.33
+    },
+    {
+      "village_id": "V002",
+      "name": "Belthangady",
+      "name_kn": "\u0cac\u0cc6\u0cb3\u0ccd\u0ca4\u0c82\u0c97\u0ca1\u0cbf",
+      "district": "Dakshina Kannada",
+      "lat": 12.985,
+      "lon": 75.29
+    },
+    {
+      "village_id": "V003",
+      "name": "Subrahmanya",
+      "name_kn": "\u0cb8\u0cc1\u0cac\u0ccd\u0cb0\u0cb9\u0ccd\u0cae\u0ca3\u0ccd\u0caf",
+      "district": "Dakshina Kannada",
+      "lat": 12.665,
+      "lon": 75.615
+    },
+    {
+      "village_id": "V004",
+      "name": "Madikeri",
+      "name_kn": "\u0cae\u0ca1\u0cbf\u0c95\u0cc7\u0cb0\u0cbf",
+      "district": "Kodagu",
+      "lat": 12.425,
+      "lon": 75.74
+    },
+    {
+      "village_id": "V005",
+      "name": "Kalasa",
+      "name_kn": "\u0c95\u0cb3\u0cb8",
+      "district": "Chikkamagaluru",
+      "lat": 13.235,
+      "lon": 75.36
+    },
+    {
+      "village_id": "V006",
+      "name": "Sringeri",
+      "name_kn": "\u0cb6\u0cc3\u0c82\u0c97\u0cc7\u0cb0\u0cbf",
+      "district": "Chikkamagaluru",
+      "lat": 13.42,
+      "lon": 75.255
+    },
+    {
+      "village_id": "V007",
+      "name": "Sakleshpur",
+      "name_kn": "\u0cb8\u0c95\u0cb2\u0cc7\u0cb6\u0caa\u0cc1\u0cb0",
+      "district": "Hassan",
+      "lat": 12.945,
+      "lon": 75.785
+    },
+    {
+      "village_id": "V008",
+      "name": "Agumbe",
+      "name_kn": "\u0c86\u0c97\u0cc1\u0c82\u0cac\u0cc6",
+      "district": "Shivamogga",
+      "lat": 13.505,
+      "lon": 75.09
+    }
+  ],
+  "bias_factors": {
+    "V001": {
+      "1": 1.39,
+      "2": 0.66,
+      "3": 0.59,
+      "4": 0.88,
+      "5": 0.88,
+      "6": 0.85,
+      "7": 1.32,
+      "8": 1.33,
+      "9": 0.87,
+      "10": 1.17,
+      "11": 1.55,
+      "12": 0.87
+    },
+    "V002": {
+      "1": 1.33,
+      "2": 0.53,
+      "3": 0.64,
+      "4": 0.76,
+      "5": 0.83,
+      "6": 0.94,
+      "7": 1.45,
+      "8": 1.54,
+      "9": 1.02,
+      "10": 1.1,
+      "11": 1.4,
+      "12": 0.85
+    },
+    "V003": {
+      "1": 0.78,
+      "2": 0.5,
+      "3": 0.52,
+      "4": 0.5,
+      "5": 0.56,
+      "6": 0.5,
+      "7": 0.72,
+      "8": 0.61,
+      "9": 0.5,
+      "10": 0.54,
+      "11": 0.61,
+      "12": 0.5
+    },
+    "V004": {
+      "1": 0.91,
+      "2": 0.65,
+      "3": 0.5,
+      "4": 0.62,
+      "5": 0.65,
+      "6": 0.6,
+      "7": 0.67,
+      "8": 0.74,
+      "9": 0.59,
+      "10": 0.59,
+      "11": 0.6,
+      "12": 0.65
+    },
+    "V005": {
+      "1": 1.06,
+      "2": 0.65,
+      "3": 0.62,
+      "4": 1.07,
+      "5": 0.87,
+      "6": 1.08,
+      "7": 1.58,
+      "8": 1.5,
+      "9": 0.98,
+      "10": 0.88,
+      "11": 1.12,
+      "12": 0.65
+    },
+    "V006": {
+      "1": 0.86,
+      "2": 1.37,
+      "3": 1.18,
+      "4": 1.14,
+      "5": 0.88,
+      "6": 0.98,
+      "7": 1.49,
+      "8": 1.48,
+      "9": 0.98,
+      "10": 0.8,
+      "11": 0.93,
+      "12": 0.8
+    },
+    "V007": {
+      "1": 0.88,
+      "2": 0.71,
+      "3": 0.9,
+      "4": 1.07,
+      "5": 0.89,
+      "6": 0.56,
+      "7": 0.66,
+      "8": 0.71,
+      "9": 0.58,
+      "10": 0.69,
+      "11": 0.96,
+      "12": 0.68
+    },
+    "V008": {
+      "1": 1.54,
+      "2": 0.84,
+      "3": 0.58,
+      "4": 0.59,
+      "5": 0.61,
+      "6": 1.09,
+      "7": 1.49,
+      "8": 1.56,
+      "9": 1.15,
+      "10": 0.8,
+      "11": 0.69,
+      "12": 0.5
+    }
+  },
+  "event_replay": [
+    {
+      "village_id": "V008",
+      "date": "2018-06-29",
+      "type": "landslide",
+      "level_before": "HIGH"
+    },
+    {
+      "village_id": "V008",
+      "date": "2018-07-13",
+      "type": "landslide",
+      "level_before": "HIGH"
+    },
+    {
+      "village_id": "V004",
+      "date": "2018-08-12",
+      "type": "landslide",
+      "level_before": "MEDIUM"
+    },
+    {
+      "village_id": "V007",
+      "date": "2018-08-14",
+      "type": "landslide",
+      "level_before": "LOW"
+    },
+    {
+      "village_id": "V003",
+      "date": "2018-08-16",
+      "type": "flood",
+      "level_before": "HIGH"
+    },
+    {
+      "village_id": "V004",
+      "date": "2018-08-16",
+      "type": "landslide",
+      "level_before": "HIGH"
+    },
+    {
+      "village_id": "V002",
+      "date": "2019-08-09",
+      "type": "flood",
+      "level_before": "HIGH"
+    },
+    {
+      "village_id": "V001",
+      "date": "2026-08-01",
+      "type": "flood",
+      "level_before": "MEDIUM"
+    },
+    {
+      "village_id": "V001",
+      "date": "2026-08-02",
+      "type": "flood",
+      "level_before": "MEDIUM"
+    },
+    {
+      "village_id": "V005",
+      "date": "2026-08-02",
+      "type": "flood",
+      "level_before": "LOW"
+    },
+    {
+      "village_id": "V007",
+      "date": "2026-08-02",
+      "type": "landslide",
+      "level_before": "LOW"
+    }
+  ]
+}
