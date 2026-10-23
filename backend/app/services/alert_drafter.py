@@ -193,16 +193,18 @@ def check_draft(draft: dict, f: dict) -> list[str]:
 def template_draft(f: dict) -> dict:
     if f["main_cause"] == "forecast":
         rain_en = f"{f['rain_next_3_days_mm']} mm of rain is expected in the next 3 days."
-        rain_kn = f"ಮುಂದಿನ 3 ದಿನಗಳಲ್ಲಿ {f['rain_next_3_days_mm']} ಮಿ.ಮೀ. ಮಳೆ ನಿರೀಕ್ಷಿಸಲಾಗಿದೆ."
+        rain_kn = f"ಮುಂದಿನ 3 ದಿನಗಳಲ್ಲಿ {f['rain_next_3_days_mm']} ಮಿ.ಮೀ. ಮಳೆ ಬೀಳುವ ಮುನ್ಸೂಚನೆ ಇದೆ."
     else:
         rain_en = f"{f['rain_last_3_days_mm']} mm of rain has fallen in the last 3 days."
         rain_kn = f"ಕಳೆದ 3 ದಿನಗಳಲ್ಲಿ {f['rain_last_3_days_mm']} ಮಿ.ಮೀ. ಮಳೆಯಾಗಿದೆ."
+    # Wording reviewed by a native speaker: everyday words (ಗುಡ್ಡ) and the government's own
+    # term for flood relief camps (ಕಾಳಜಿ ಕೇಂದ್ರ), which villagers hear from officials.
     en = (f"Warning for {f['village_en']}: high risk of floods and landslides. {rain_en} "
-          f"Stay away from rivers, streams and steep slopes, and move to the nearest shelter "
-          f"if the Gram Panchayat asks. Emergency: {f['emergency_number']}.")
+          f"Stay away from rivers, streams and hillsides. If the Gram Panchayat asks, go to the "
+          f"nearest relief centre. For emergency help, call {f['emergency_number']}.")
     kn = (f"ಎಚ್ಚರಿಕೆ: {f['village_kn']} ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರವಾಹ ಮತ್ತು ಭೂಕುಸಿತದ ಅಪಾಯ ಹೆಚ್ಚಾಗಿದೆ. {rain_kn} "
-          f"ನದಿ, ಹಳ್ಳ ಮತ್ತು ಕಡಿದಾದ ಇಳಿಜಾರುಗಳಿಂದ ದೂರವಿರಿ. ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ಸೂಚಿಸಿದರೆ ಹತ್ತಿರದ "
-          f"ಆಶ್ರಯ ಕೇಂದ್ರಕ್ಕೆ ತೆರಳಿ. ತುರ್ತು ಸಂಖ್ಯೆ: {f['emergency_number']}.")
+          f"ನದಿ, ಹಳ್ಳ ಮತ್ತು ಗುಡ್ಡಗಳ ಬಳಿ ಹೋಗಬೇಡಿ. ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ಸೂಚಿಸಿದರೆ ಹತ್ತಿರದ "
+          f"ಕಾಳಜಿ ಕೇಂದ್ರಕ್ಕೆ ತೆರಳಿ. ತುರ್ತು ಸಹಾಯಕ್ಕೆ {f['emergency_number']} ಕರೆ ಮಾಡಿ.")
     return {"kn": kn, "en": en}
 
 
