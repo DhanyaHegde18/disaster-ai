@@ -4,6 +4,7 @@ Disaster AI backend.
 Run from the project root:
     uvicorn backend.app.main:app --reload
 Then open:
+    http://localhost:8000/                    Gram Panchayat dashboard
     http://localhost:8000/docs                interactive API docs (try every endpoint here)
     http://localhost:8000/risk                current risk for all villages
     http://localhost:8000/alerts              drafted alerts and their review status
@@ -14,6 +15,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from . import config, database
 from .jobs import scheduler
@@ -40,6 +43,16 @@ app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS,
                    allow_methods=["*"], allow_headers=["*"])
 app.include_router(risk.router)
 app.include_router(alerts.router)
+
+# Gram Panchayat dashboard (plain HTML/JS in frontend/dashboard), served by this same server.
+DASHBOARD_DIR = config.PROJECT_DIR / "frontend" / "dashboard"
+if DASHBOARD_DIR.exists():
+    app.mount("/dashboard", StaticFiles(directory=DASHBOARD_DIR, html=True), name="dashboard")
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse("/dashboard/" if DASHBOARD_DIR.exists() else "/docs")
 
 
 @app.get("/health", tags=["system"])

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GP Control Centre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>Gram Panchayat Control Centre</h1>
+      <p class="kn" lang="kn">ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ನಿಯಂತ್ರಣ ಕೇಂದ್ರ · ಪ್ರವಾಹ ಮತ್ತು ಭೂಕುಸಿತ ಮುನ್ನೆಚ್ಚರಿಕೆ</p>
+    </div>
+    <div class="top-controls">
+      <button class="btn sound-btn" id="btn-sound" type="button" aria-pressed="false">Turn on sound alerts</button>
+      <label class="reviewer" for="reviewer">
+        <span>Reviewing as</span>
+        <input id="reviewer" type="text" placeholder="e.g. Ujire GP secretary" autocomplete="name">
+      </label>
+    </div>
+  </header>
+
+  <div class="statusline" id="statusline">Loading…</div>
+  <div class="alarm-banner" id="alarm-banner" role="alert" hidden>
+    <span id="alarm-text"></span>
+    <button class="btn" id="btn-ack" type="button">Acknowledge</button>
+  </div>
+  <div class="banner" id="stale-banner" hidden></div>
+
+  <section class="summary" aria-label="Villages by risk level">
+    <div class="count count-high"><span class="num" id="n-high">–</span><span class="lbl">High</span><span class="hint">alert villagers after approval</span></div>
+    <div class="count count-medium"><span class="num" id="n-medium">–</span><span class="lbl">Medium</span><span class="hint">watch: check shelters, prepare</span></div>
+    <div class="count count-low"><span class="num" id="n-low">–</span><span class="lbl">Low</span><span class="hint">below warning thresholds</span></div>
+    <div class="count count-pending"><span class="num" id="n-pending">–</span><span class="lbl">Alerts to review</span><span class="hint">drafts waiting for approval</span></div>
+  </section>
+
+  <main class="grid">
+    <section class="card villages" aria-labelledby="villages-title">
+      <div class="card-head">
+        <h2 id="villages-title">Villages</h2>
+        <span class="legend"><i class="dot high"></i>High <i class="dot medium"></i>Medium <i class="dot low"></i>Low</span>
+      </div>
+      <div id="map" role="region" aria-label="Map of villages coloured by risk"></div>
+      <ul class="village-list" id="village-list"></ul>
+    </section>
+
+    <div class="side">
+      <section class="card alerts" aria-labelledby="alerts-title">
+        <div class="card-head">
+          <h2 id="alerts-title">Alerts</h2>
+          <div class="tabs" role="tablist">
+            <button role="tab" class="tab active" data-status="pending" id="tab-pending">Pending</button>
+            <button role="tab" class="tab" data-status="approved" id="tab-approved">Approved</button>
+            <button role="tab" class="tab" data-status="rejected" id="tab-rejected">Rejected</button>
+          </div>
+        </div>
+        <div id="alert-list" class="alert-list"></div>
+      </section>
+
+      <section class="card tools" aria-labelledby="tools-title">
+        <div class="card-head"><h2 id="tools-title">System</h2></div>
+        <dl class="sysinfo" id="sysinfo"></dl>
+        <div class="tool-row">
+          <button class="btn" id="btn-run-now" type="button">Score all villages now</button>
+          <button class="btn" id="btn-test-alarm" type="button">Test alarm</button>
+        </div>
+        <div class="tool-row">
+          <label for="sim-village" class="sr-only">Village for a test alert</label>
+          <select id="sim-village"></select>
+          <button class="btn" id="btn-simulate" type="button">Draft test alert</button>
+        </div>
+        <p class="fine">Test alerts pretend the village is HIGH and are marked <b>Simulated</b>, so they are never shown to villagers as real.</p>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
