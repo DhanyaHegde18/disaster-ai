@@ -30,6 +30,11 @@ GEMINI_TIMEOUT_S = 25      # per request; if a model is silent this long, move o
 GEMINI_BUSY_RETRIES = 2     # extra tries per model on 429/500/503
 GEMINI_RETRY_WAIT_S = 3     # waits 3 s, then 6 s
 
+# Automatic scoring while the server runs (see jobs/scheduler.py)
+SCHEDULER_ENABLED = os.getenv("SCHEDULER_ENABLED", "true").lower() == "true"
+SCORING_INTERVAL_MIN = float(os.getenv("SCORING_INTERVAL_MIN", "180"))   # every 3 hours
+SCHEDULER_FIRST_RUN_DELAY_S = 30   # wait a little after startup before the first run
+
 EMERGENCY_NUMBER = "112"    # India's single emergency number (ERSS)
 ALERT_LEVELS = ("HIGH",)    # levels that get an alert drafted automatically
 

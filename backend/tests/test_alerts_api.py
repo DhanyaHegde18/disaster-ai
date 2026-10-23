@@ -22,6 +22,7 @@ CFG = {"villages": [{"village_id": "V001", "name": "Ujire", "name_kn": "ಉಜ�
 @pytest.fixture
 def client(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "ALERTS_DB", tmp_path / "alerts.db")
+    monkeypatch.setattr(config, "SCHEDULER_ENABLED", False)   # no background network calls in tests
     monkeypatch.setattr(config, "GEMINI_API_KEY", "")          # template only, no network
     monkeypatch.setattr(config, "rule_config", lambda: CFG)
     monkeypatch.setattr(alerts_router, "_cached_or_fresh", lambda: SNAPSHOT)
