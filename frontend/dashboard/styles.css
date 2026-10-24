@@ -27,6 +27,8 @@
 }
 
 * { box-sizing: border-box; }
+/* Anything marked hidden stays hidden, even if a class gives it a display style. */
+[hidden] { display: none !important; }
 html { color-scheme: light dark; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--font-ui);
        padding: 0 max(16px, env(safe-area-inset-left)) 32px max(16px, env(safe-area-inset-right)); }
@@ -43,7 +45,30 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .reviewer { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
 .reviewer input { text-transform: none; letter-spacing: 0; font-size: 14px; color: var(--ink); background: var(--surface);
                   border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; min-width: 240px; max-width: 100%; }
-.top-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.top-controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; }
+.top-controls[hidden] { display: none; }
+.who { display: flex; flex-direction: column; gap: 2px; }
+.who-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.link-btn { border: 0; background: none; color: var(--accent); text-decoration: underline; cursor: pointer; padding: 0 0 0 6px; font-size: 13px; }
+
+/* sign-in */
+.signin { max-width: 420px; margin: 40px auto; padding: 22px; display: grid; gap: 12px; }
+.signin h2 { font-size: 20px; }
+.signin form { display: grid; gap: 10px; }
+.signin form[hidden] { display: none; }
+.signin label { font-size: 13px; font-weight: 600; }
+.signin input { font-size: 18px; border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; background: var(--surface); width: 100%;
+                font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+.signin #code { letter-spacing: 0.4em; text-align: center; }
+.signin .row { display: flex; gap: 8px; align-items: center; }
+.signin .prefix { font: 500 18px var(--font-num); color: var(--muted); }
+.signin .row-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.signin .btn.primary { justify-self: start; padding: 9px 18px; }
+.fine-text { color: var(--muted); font-size: 13px; margin: 0; }
+.sent { margin: 0; color: var(--muted); font-size: 14px; }
+.demo-code { margin: 0; background: var(--medium-bg); color: var(--medium); border-radius: 8px; padding: 8px 12px; font-size: 14px; }
+.demo-code b { font: 600 18px var(--font-num); letter-spacing: 0.15em; }
+.signin-error { margin: 0; color: var(--high); font-weight: 500; }
 .sound-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .alarm-banner { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between;
                 background: var(--high); color: #fff; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px;
@@ -56,7 +81,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .banner { background: var(--medium-bg); color: var(--medium); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-weight: 500; }
 
 /* summary */
-.summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .count { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px;
          display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: baseline; border-top-width: 4px; }
 .count .num { font: 600 28px/1 var(--font-num); grid-row: span 2; }
@@ -163,3 +188,38 @@ button, input, select, textarea { font: inherit; color: inherit; }
   #map { height: 240px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.signin a, .fine a { color: var(--accent); }
+
+/* role-specific parts: body gets class role-gp or role-ngo after sign-in */
+body:not(.role-gp) .gp-only, body:not(.role-ngo) .ngo-only { display: none !important; }
+.count-rescue { border-top-color: var(--high); } .count-rescue .num { color: var(--high); }
+.who-role { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; padding: 1px 6px; border-radius: 5px;
+            background: var(--surface-2); color: var(--muted); margin-left: 4px; vertical-align: 1px; }
+
+/* relief */
+.relief { margin-top: 16px; }
+.relief-totals { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.relief-note { padding: 10px 14px 0; }
+.table-wrap { overflow-x: auto; padding: 4px 0 6px; }
+.relief-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; min-width: 640px; }
+.relief-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase;
+                   letter-spacing: 0.05em; padding: 8px 14px; border-bottom: 1px solid var(--line); }
+.relief-table td { padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.relief-table td.n { text-align: right; width: 1%; white-space: nowrap; }
+.relief-table th:nth-child(n+2):nth-child(-n+6) { text-align: right; }
+.relief-table tr.village-row.clickable { cursor: pointer; }
+.relief-table tr.village-row.clickable:hover { background: var(--surface-2); }
+.relief-table tr.quiet td { color: var(--muted); }
+.relief-table .zero { color: var(--line); }
+.unknown-hi { color: var(--high); font-weight: 600; }
+.need { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--surface-2);
+        border: 1px solid var(--line); margin: 0 4px 3px 0; white-space: nowrap; }
+.need.rescue { background: var(--high); border-color: var(--high); color: #fff; font-weight: 600; }
+.families td { background: var(--surface-2); padding: 0; }
+.family-list { list-style: none; margin: 0; padding: 6px 14px 10px 28px; display: grid; gap: 6px; }
+.family-list li { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+.family-list a { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+.family-list .when { color: var(--muted); font-size: 12px; }
+
+.btn.handle { background: var(--high); border-color: var(--high); color: #fff; padding: 3px 10px; font-size: 12px; }
+.handled { color: var(--low); font-size: 12px; font-weight: 600; }

@@ -14,37 +14,49 @@ Then open:
 import asyncio
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import config, database
-from .jobs import scheduler
-from .routers import alerts, public, risk
+from .auth import require_gp, require_official
+from .jobs import escalation, scheduler
+from . import notify
+from .routers import alerts, auth, public, relief, risk, villagers
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    database.init_db()  # create the alerts table on first run
-    task = asyncio.create_task(scheduler.scheduler_loop()) if config.SCHEDULER_ENABLED else None
+    database.init_db()  # create the tables on first run
+    tasks = []
+    if config.SCHEDULER_ENABLED:
+        tasks.append(asyncio.create_task(scheduler.scheduler_loop()))
+    if notify.topics_for(("gp", "ngo")):          # phone reminders only if ntfy topics are set
+        tasks.append(asyncio.create_task(escalation.escalation_loop()))
     yield
-    if task:
-        task.cancel()   # stop the scheduler cleanly when the server stops
+    for t in tasks:
+        t.cancel()      # stop background jobs cleanly when the server stops
 
 
 app = FastAPI(
     title="Disaster AI: Flood & Landslide Early Warning",
     description="Village-level flood and landslide risk for Coastal and Malnad Karnataka, "
                 "with AI-drafted bilingual alerts reviewed by the Gram Panchayat.",
-    version="0.3.0",
+    version="0.5.0",
     lifespan=lifespan,
 )
-app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS,
+app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_credentials=True,
                    allow_methods=["*"], allow_headers=["*"])
+# Open to everyone: /health, /public/status + /public/villages (warnings), sign-in endpoints, the two pages.
+# Villager session: /public/me, /public/report.  Staff session (GP or NGO): /risk, /alerts (NGO: approved only),
+# /relief/summary.  Gram Panchayat only: drafting/reviewing alerts, /relief/reports, running checks.
+app.include_router(auth.router)
 app.include_router(risk.router)
 app.include_router(alerts.router)
 app.include_router(public.router)
+app.include_router(villagers.router)
+app.include_router(relief.router)
 
 # Pages served by this same server (plain HTML/JS, no build step):
 #   /dashboard/  Gram Panchayat control centre    /villager/  villagers' warning page
@@ -67,16 +79,20 @@ def health():
     return {"status": "ok", "engine": "rule-v1", "calibrated_on": cfg["calibrated_on"],
             "villages": len(cfg["villages"]),
             "alert_drafting": f"gemini ({config.GEMINI_MODEL})" if config.GEMINI_API_KEY else "template only (no GEMINI_API_KEY)",
-            "automatic_scoring": f"every {config.SCORING_INTERVAL_MIN:g} min" if config.SCHEDULER_ENABLED else "off"}
+            "automatic_scoring": f"every {config.SCORING_INTERVAL_MIN:g} min" if config.SCHEDULER_ENABLED else "off",
+            "sign_in": "demo codes on screen" if config.OTP_DEMO_MODE else f"SMS codes via {config.SMS_PROVIDER}",
+            "phone_alerts": (f"ntfy to {', '.join(r for r in ('gp', 'ngo') if notify.topics_for((r,)))}, "
+                             f"reminders every {config.ESCALATE_AFTER_MIN:g} min")
+                            if notify.topics_for(("gp", "ngo")) else "off (set NTFY_TOPIC_GP / NTFY_TOPIC_NGO)"}
 
 
-@app.get("/system/scheduler", tags=["system"])
+@app.get("/system/scheduler", tags=["system"], dependencies=[Depends(require_official)])
 def scheduler_status():
     """When automatic scoring last ran, what it found, and when it runs next."""
     return scheduler.state
 
 
-@app.post("/system/scheduler/run-now", tags=["system"])
+@app.post("/system/scheduler/run-now", tags=["system"], dependencies=[Depends(require_gp)])
 async def scheduler_run_now():
     """Run one scoring + alert-drafting cycle immediately, without waiting for the timer."""
     if scheduler.state["running_now"]:

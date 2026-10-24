@@ -12,3 +12,5 @@ ml/models/*.json
 # Live risk snapshots (re-created by the backend)
 backend/data/latest_risk.json
 backend/data/alerts.db
+.pytest_cache/
+*.db-journal

@@ -1,14 +1,16 @@
-"""Risk endpoints. The dashboard and the villager app read from here."""
+"""Risk endpoints for dashboard staff (sign-in required; refresh is Gram Panchayat only).
+Villagers never see raw risk levels; they get approved alerts from /public."""
 import json
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
 from .. import config
+from ..auth import require_gp, require_official
 from ..jobs.score_villages import score_now
 
-router = APIRouter(prefix="/risk", tags=["risk"])
+router = APIRouter(prefix="/risk", tags=["risk"], dependencies=[Depends(require_official)])
 
 
 def _cached_or_fresh(force: bool = False) -> dict:
@@ -46,7 +48,7 @@ def one_village(village_id: str):
     raise HTTPException(status_code=404, detail=f"Unknown village '{village_id}'")
 
 
-@router.post("/refresh")
+@router.post("/refresh", dependencies=[Depends(require_gp)])
 def refresh():
     """Ignore the cache and score all villages now."""
     return _cached_or_fresh(force=True)

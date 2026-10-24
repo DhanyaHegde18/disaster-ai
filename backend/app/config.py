@@ -35,6 +35,34 @@ SCHEDULER_ENABLED = os.getenv("SCHEDULER_ENABLED", "true").lower() == "true"
 SCORING_INTERVAL_MIN = float(os.getenv("SCORING_INTERVAL_MIN", "180"))   # every 3 hours
 SCHEDULER_FIRST_RUN_DELAY_S = 30   # wait a little after startup before the first run
 
+# Sign-in codes by SMS. SMS_PROVIDER:
+#   demo      code shown on screen (no SMS; for development and demos)
+#   twilio    Twilio Verify (free trial: up to 5 verified numbers, 30 days)
+#   fast2sms  Fast2SMS OTP route (any Indian number, paid per SMS)
+SMS_PROVIDER = os.getenv("SMS_PROVIDER", "demo").strip().lower()
+OTP_DEMO_MODE = SMS_PROVIDER == "demo"
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID", "")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "")
+TWILIO_VERIFY_SID = os.getenv("TWILIO_VERIFY_SID", "")      # Verify "Service SID", starts with VA
+FAST2SMS_API_KEY = os.getenv("FAST2SMS_API_KEY", "")
+SMS_TIMEOUT_S = 20
+
+OTP_TTL_MIN = 5            # a code works for 5 minutes
+OTP_MAX_ATTEMPTS = 5       # then a new code must be requested
+OTP_RESEND_S = 30          # minimum gap between code requests for one number
+SESSION_HOURS = 12         # stay signed in for one working day
+COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").lower() == "true"  # set true when served over https
+
+# Phone push alerts for staff (ntfy: free app for Android/iOS). Each person installs the ntfy app
+# and subscribes to their role's topic. Topic names act like passwords: make them long and random.
+NTFY_SERVER = os.getenv("NTFY_SERVER", "https://ntfy.sh").rstrip("/")
+NTFY_TOPIC_GP = os.getenv("NTFY_TOPIC_GP", "")
+NTFY_TOPIC_NGO = os.getenv("NTFY_TOPIC_NGO", "")
+PUBLIC_URL = os.getenv("PUBLIC_URL", "http://127.0.0.1:8000").rstrip("/")   # link opened from a notification
+ESCALATE_AFTER_MIN = float(os.getenv("ESCALATE_AFTER_MIN", "15"))  # re-alert if nobody acted for this long
+ESCALATE_MAX_TIMES = int(os.getenv("ESCALATE_MAX_TIMES", "8"))     # stop after this many alerts per item
+ESCALATION_CHECK_S = 60                                              # how often the server checks
+
 EMERGENCY_NUMBER = "112"    # India's single emergency number (ERSS)
 ALERT_LEVELS = ("HIGH",)    # levels that get an alert drafted automatically
 

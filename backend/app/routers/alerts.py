@@ -13,14 +13,17 @@ drafts an alert as if the village were HIGH, marked "simulated" so it's never sh
 """
 import copy
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from .. import database
+from ..auth import require_gp, require_official
 from ..services.alerts import draft_for, generate_for_snapshot
 from .risk import _cached_or_fresh
 
-router = APIRouter(prefix="/alerts", tags=["alerts"])
+# Every alert endpoint needs a signed-in staff member. NGOs may only READ approved alerts;
+# drafting, editing and reviewing are for Gram Panchayat officials (require_gp).
+router = APIRouter(prefix="/alerts", tags=["alerts"], dependencies=[Depends(require_official)])
 
 
 class EditText(BaseModel):
@@ -29,8 +32,8 @@ class EditText(BaseModel):
 
 
 class Review(BaseModel):
-    reviewed_by: str = Field(..., min_length=2, description="Name or role of the reviewer, e.g. 'Ujire GP secretary'")
-    note: str | None = Field(None, description="Optional comment (required in spirit for rejections)")
+    # The reviewer is the signed-in official, never a name typed into the request.
+    note: str | None = Field(None, description="Optional for approval; required for rejection")
 
 
 def _get_or_404(alert_id: int) -> dict:
@@ -40,14 +43,14 @@ def _get_or_404(alert_id: int) -> dict:
     return a
 
 
-@router.post("/generate")
+@router.post("/generate", dependencies=[Depends(require_gp)])
 def generate():
     """Draft alerts for all HIGH villages that don't already have one today."""
     created = generate_for_snapshot(_cached_or_fresh())
     return {"created": len(created), "alerts": created}
 
 
-@router.post("/draft/{village_id}")
+@router.post("/draft/{village_id}", dependencies=[Depends(require_gp)])
 def draft_one(village_id: str, simulate_high: bool = Query(False, description="Pretend the village is HIGH (for testing)")):
     snap = _cached_or_fresh()
     risk = next((v for v in snap["villages"] if v["village_id"].lower() == village_id.lower()), None)
@@ -66,16 +69,22 @@ def draft_one(village_id: str, simulate_high: bool = Query(False, description="P
 
 
 @router.get("")
-def list_all(status: str | None = Query(None, pattern="^(pending|approved|rejected)$")):
+def list_all(status: str | None = Query(None, pattern="^(pending|approved|rejected)$"),
+             user: dict = Depends(require_official)):
+    if user["role"] != "gp":
+        status = "approved"          # NGOs see only what the Gram Panchayat approved
     return database.list_alerts(status)
 
 
 @router.get("/{alert_id}")
-def get_one(alert_id: int):
-    return _get_or_404(alert_id)
+def get_one(alert_id: int, user: dict = Depends(require_official)):
+    a = _get_or_404(alert_id)
+    if user["role"] != "gp" and a["status"] != "approved":
+        raise HTTPException(status_code=404, detail=f"No alert {alert_id}")
+    return a
 
 
-@router.put("/{alert_id}")
+@router.put("/{alert_id}", dependencies=[Depends(require_gp)])
 def edit(alert_id: int, body: EditText):
     _get_or_404(alert_id)
     try:
@@ -85,18 +94,20 @@ def edit(alert_id: int, body: EditText):
 
 
 @router.post("/{alert_id}/approve")
-def approve(alert_id: int, body: Review):
+def approve(alert_id: int, body: Review, official: dict = Depends(require_gp)):
     _get_or_404(alert_id)
     try:
-        return database.review(alert_id, "approved", body.reviewed_by, body.note)
+        return database.review(alert_id, "approved", official["name"], body.note)
     except ValueError as err:
         raise HTTPException(status_code=409, detail=str(err))
 
 
 @router.post("/{alert_id}/reject")
-def reject(alert_id: int, body: Review):
+def reject(alert_id: int, body: Review, official: dict = Depends(require_gp)):
     _get_or_404(alert_id)
+    if not (body.note or "").strip():
+        raise HTTPException(status_code=422, detail="Add a note saying why the alert is rejected.")
     try:
-        return database.review(alert_id, "rejected", body.reviewed_by, body.note)
+        return database.review(alert_id, "rejected", official["name"], body.note)
     except ValueError as err:
         raise HTTPException(status_code=409, detail=str(err))

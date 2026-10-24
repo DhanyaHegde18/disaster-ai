@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 
 from backend.app import config
 from backend.app.routers import alerts as alerts_router
+from backend.tests.conftest import sign_in
 
 SNAPSHOT = {
     "generated_at": "2026-08-01T09:00:00+05:30",
@@ -28,6 +29,7 @@ def client(tmp_path, monkeypatch):
     monkeypatch.setattr(alerts_router, "_cached_or_fresh", lambda: SNAPSHOT)
     from backend.app.main import app
     with TestClient(app) as c:
+        sign_in(c, name="Ujire GP")
         yield c
 
 
@@ -50,7 +52,7 @@ def test_review_flow(client):
 
     # No editing or re-reviewing after a decision.
     assert client.put(f"/alerts/{a['id']}", json={"message_en": "x"}).status_code == 409
-    assert client.post(f"/alerts/{a['id']}/reject", json={"reviewed_by": "Ujire GP"}).status_code == 409
+    assert client.post(f"/alerts/{a['id']}/reject", json={"note": "late"}).status_code == 409
     assert [x["id"] for x in client.get("/alerts?status=approved").json()] == [a["id"]]
 
 

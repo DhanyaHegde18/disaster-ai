@@ -1,5 +1,5 @@
 """Glue between risk results, the drafter and the database."""
-from .. import config, database
+from .. import config, database, notify
 from .alert_drafter import draft_alert
 
 
@@ -21,5 +21,7 @@ def generate_for_snapshot(snapshot: dict) -> list[dict]:
     created = []
     for risk in snapshot["villages"]:
         if risk["level"] in config.ALERT_LEVELS and not database.open_alert_today(risk["village_id"]):
-            created.append(draft_for(risk))
+            alert = draft_for(risk)
+            created.append(alert)
+            notify.notify_pending_alert(alert)      # Gram Panchayat phones: "alert waiting"
     return created

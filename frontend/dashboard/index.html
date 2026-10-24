@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GP Control Centre</title>
+  <title>Relief Control Centre</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;600&display=swap">
@@ -13,18 +13,43 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <h1>Gram Panchayat Control Centre</h1>
+      <h1 id="app-title">Gram Panchayat Control Centre</h1>
       <p class="kn" lang="kn">ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ನಿಯಂತ್ರಣ ಕೇಂದ್ರ · ಪ್ರವಾಹ ಮತ್ತು ಭೂಕುಸಿತ ಮುನ್ನೆಚ್ಚರಿಕೆ</p>
     </div>
-    <div class="top-controls">
+    <div class="top-controls" id="top-controls" hidden>
       <button class="btn sound-btn" id="btn-sound" type="button" aria-pressed="false">Turn on sound alerts</button>
-      <label class="reviewer" for="reviewer">
-        <span>Reviewing as</span>
-        <input id="reviewer" type="text" placeholder="e.g. Ujire GP secretary" autocomplete="name">
-      </label>
+      <div class="who">
+        <span class="who-label">Signed in as</span>
+        <span><b id="who-name"></b><span class="who-role" id="who-role"></span> <button class="link-btn" id="btn-logout" type="button">Sign out</button></span>
+      </div>
     </div>
   </header>
 
+  <section class="signin card" id="signin" hidden aria-labelledby="signin-title">
+    <h2 id="signin-title">Sign in</h2>
+    <p class="fine-text">For Gram Panchayat officials and NGO staff. Villagers see warnings on the <a href="/villager/">villager page</a>, no sign-in needed.</p>
+    <form id="form-phone" novalidate>
+      <label for="phone">Mobile number</label>
+      <div class="row">
+        <span class="prefix">+91</span>
+        <input id="phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="98765 43210" maxlength="14" required>
+      </div>
+      <button class="btn primary" type="submit" id="btn-send">Send code</button>
+    </form>
+    <form id="form-code" novalidate hidden>
+      <p class="sent" id="code-sent"></p>
+      <p class="demo-code" id="demo-code" hidden></p>
+      <label for="code">6-digit code</label>
+      <input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••" required>
+      <div class="row-actions">
+        <button class="link-btn" type="button" id="btn-back">Use another number</button>
+        <button class="btn primary" type="submit" id="btn-verify">Sign in</button>
+      </div>
+    </form>
+    <p class="signin-error" id="signin-error" role="alert" hidden></p>
+  </section>
+
+  <div id="app" hidden>
   <div class="statusline" id="statusline">Loading…</div>
   <div class="alarm-banner" id="alarm-banner" role="alert" hidden>
     <span id="alarm-text"></span>
@@ -36,7 +61,8 @@
     <div class="count count-high"><span class="num" id="n-high">–</span><span class="lbl">High</span><span class="hint">alert villagers after approval</span></div>
     <div class="count count-medium"><span class="num" id="n-medium">–</span><span class="lbl">Medium</span><span class="hint">watch: check shelters, prepare</span></div>
     <div class="count count-low"><span class="num" id="n-low">–</span><span class="lbl">Low</span><span class="hint">below warning thresholds</span></div>
-    <div class="count count-pending"><span class="num" id="n-pending">–</span><span class="lbl">Alerts to review</span><span class="hint">drafts waiting for approval</span></div>
+    <div class="count count-pending gp-only"><span class="num" id="n-pending">–</span><span class="lbl">Alerts to review</span><span class="hint">drafts waiting for approval</span></div>
+    <div class="count count-rescue"><span class="num" id="n-rescue">–</span><span class="lbl">Rescue requests</span><span class="hint">families waiting for urgent help</span></div>
   </section>
 
   <main class="grid">
@@ -53,7 +79,7 @@
       <section class="card alerts" aria-labelledby="alerts-title">
         <div class="card-head">
           <h2 id="alerts-title">Alerts</h2>
-          <div class="tabs" role="tablist">
+          <div class="tabs gp-only" role="tablist">
             <button role="tab" class="tab active" data-status="pending" id="tab-pending">Pending</button>
             <button role="tab" class="tab" data-status="approved" id="tab-approved">Approved</button>
             <button role="tab" class="tab" data-status="rejected" id="tab-rejected">Rejected</button>
@@ -66,19 +92,38 @@
         <div class="card-head"><h2 id="tools-title">System</h2></div>
         <dl class="sysinfo" id="sysinfo"></dl>
         <div class="tool-row">
-          <button class="btn" id="btn-run-now" type="button">Score all villages now</button>
+          <button class="btn gp-only" id="btn-run-now" type="button">Score all villages now</button>
           <button class="btn" id="btn-test-alarm" type="button">Test alarm</button>
         </div>
-        <div class="tool-row">
+        <div class="tool-row gp-only">
           <label for="sim-village" class="sr-only">Village for a test alert</label>
           <select id="sim-village"></select>
           <button class="btn" id="btn-simulate" type="button">Draft test alert</button>
         </div>
-        <p class="fine">Test alerts pretend the village is HIGH and are marked <b>Simulated</b>, so they are never shown to villagers as real.
+        <p class="fine gp-only">Test alerts pretend the village is HIGH and are marked <b>Simulated</b>, so they are never shown to villagers as real.
           <a href="/villager/?demo=true" target="_blank" rel="noopener">Open the villager page in demo mode</a> to see how approved test alerts look to villagers.</p>
+        <p class="fine ngo-only">NGO view: you see risk, approved alerts and where people are. Alerts are drafted and approved by the Gram Panchayat.</p>
       </section>
     </div>
   </main>
+
+  <section class="card relief" aria-labelledby="relief-title">
+    <div class="card-head">
+      <h2 id="relief-title">Relief: where people are</h2>
+      <span class="relief-totals" id="relief-totals"></span>
+    </div>
+    <p class="fine relief-note">From families' own reports on the villager page in the last 3 days. <span class="gp-only">Click a village to see each family and call them.</span></p>
+    <div class="table-wrap">
+      <table class="relief-table">
+        <thead><tr>
+          <th scope="col">Village</th><th scope="col">Families</th><th scope="col">At relief centre</th>
+          <th scope="col">Relatives / other village</th><th scope="col">At home</th><th scope="col">Unknown</th><th scope="col">Needs</th>
+        </tr></thead>
+        <tbody id="relief-body"></tbody>
+      </table>
+    </div>
+  </section>
+  </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 

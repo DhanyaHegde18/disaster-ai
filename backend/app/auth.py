@@ -1,0 +1,245 @@
+"""
+Sign-in with phone number + one-time code (OTP), then a session cookie.
+
+Two kinds of people sign in:
+  staff     Gram Panchayat officials (role 'gp') and NGO workers (role 'ngo').
+            Only numbers in the `officials` table, added by whoever runs the server
+            (python -m backend.app.jobs.officials add ...). No self-registration: staff see
+            villagers' evacuation data, and GP officials approve alerts.
+  villager  Anyone with an Indian mobile number, only to report their family's evacuation
+            status. Seeing warnings never needs a sign-in.
+
+Codes
+  6 digits, valid OTP_TTL_MIN minutes, OTP_MAX_ATTEMPTS wrong tries, one request per
+  OTP_RESEND_S seconds, usable once. Only a hash is stored. Sent by the SMS provider in
+  SMS_PROVIDER (see sms.py); in demo mode the code is shown on screen.
+
+Sessions
+  A random token in an httpOnly, SameSite=Strict cookie (separate cookies for staff and
+  villagers). Only a hash is stored server-side.
+"""
+import hashlib
+import re
+import secrets
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+
+from fastapi import HTTPException, Request
+
+from . import config, database, sms
+
+STAFF, VILLAGER = "staff", "villager"
+COOKIES = {STAFF: "gp_session", VILLAGER: "v_session"}
+COOKIE = COOKIES[STAFF]          # kept for older imports
+ROLES = ("gp", "ngo")
+
+
+class AuthError(Exception):
+    """A sign-in problem to show to the user, with an HTTP status."""
+    def __init__(self, message: str, status: int = 400):
+        super().__init__(message)
+        self.status = status
+
+
+def _now() -> datetime:
+    return datetime.now(ZoneInfo(config.TIMEZONE))
+
+
+def _hash(text: str) -> str:
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def normalize_phone(raw: str) -> str:
+    """Accept 9876543210, 09876543210, +91 98765 43210 ... and return +919876543210."""
+    digits = re.sub(r"\D", "", raw or "")
+    if len(digits) == 12 and digits.startswith("91"):
+        digits = digits[2:]
+    elif len(digits) == 11 and digits.startswith("0"):
+        digits = digits[1:]
+    if not re.fullmatch(r"[6-9]\d{9}", digits):
+        raise AuthError("Enter a 10-digit Indian mobile number.")
+    return "+91" + digits
+
+
+def mask(phone: str) -> str:
+    return phone[:3] + "•" * 6 + phone[-4:]
+
+
+def _village_ids() -> set[str]:
+    return {v["village_id"] for v in config.rule_config()["villages"]}
+
+
+# ---------- staff accounts ----------
+
+def add_official(phone: str, name: str, role: str = "gp") -> dict:
+    phone, role = normalize_phone(phone), role.lower()
+    if role not in ROLES:
+        raise AuthError(f"Role must be one of: {', '.join(ROLES)}")
+    with database.connect() as c:
+        c.execute("INSERT INTO officials (phone, name, created_at, role) VALUES (?, ?, ?, ?) "
+                  "ON CONFLICT(phone) DO UPDATE SET name = excluded.name, role = excluded.role",
+                  (phone, name.strip(), database.now(), role))
+    return {"phone": phone, "name": name.strip(), "role": role}
+
+
+def remove_official(phone: str) -> bool:
+    phone = normalize_phone(phone)
+    with database.connect() as c:
+        removed = c.execute("DELETE FROM officials WHERE phone = ?", (phone,)).rowcount
+        c.execute("DELETE FROM sessions WHERE phone = ? AND kind = ?", (phone, STAFF))  # signed out everywhere
+    return bool(removed)
+
+
+def list_officials() -> list[dict]:
+    with database.connect() as c:
+        return [dict(r) for r in c.execute("SELECT phone, name, role, created_at FROM officials ORDER BY role, name")]
+
+
+def get_official(phone: str) -> dict | None:
+    with database.connect() as c:
+        r = c.execute("SELECT phone, name, role FROM officials WHERE phone = ?", (phone,)).fetchone()
+        return dict(r) if r else None
+
+
+# ---------- codes ----------
+
+def request_code(raw_phone: str, purpose: str = STAFF) -> dict:
+    phone = normalize_phone(raw_phone)
+    if purpose == STAFF and not get_official(phone):
+        raise AuthError("This number is not registered for the dashboard. "
+                        "Ask the person who runs the system to add it.", 403)
+    now = _now()
+    with database.connect() as c:
+        row = c.execute("SELECT sent_at FROM otp_codes WHERE phone = ? AND purpose = ?", (phone, purpose)).fetchone()
+    if row:
+        wait = config.OTP_RESEND_S - (now - datetime.fromisoformat(row["sent_at"])).total_seconds()
+        if wait > 0:
+            raise AuthError(f"Please wait {int(wait) + 1} seconds before asking for a new code.", 429)
+
+    provider, code = config.SMS_PROVIDER, None
+    try:
+        if provider == "twilio":
+            sms.twilio_start(phone)                 # Twilio makes and remembers the code
+            code_hash = "twilio"
+        elif provider in ("fast2sms", "demo"):
+            code = f"{secrets.randbelow(10**6):06d}"
+            code_hash = _hash(f"{phone}|{purpose}|{code}")
+            if provider == "fast2sms":
+                sms.fast2sms_send(phone, code)
+        else:
+            raise AuthError(f"Unknown SMS_PROVIDER '{provider}'. Use demo, twilio or fast2sms.", 500)
+    except sms.SMSError as err:
+        raise AuthError(f"Could not send the code: {err}", 502)
+
+    with database.connect() as c:
+        c.execute("INSERT OR REPLACE INTO otp_codes (phone, purpose, code_hash, sent_at, expires_at, attempts) "
+                  "VALUES (?, ?, ?, ?, ?, 0)",
+                  (phone, purpose, code_hash, now.isoformat(timespec="seconds"),
+                   (now + timedelta(minutes=config.OTP_TTL_MIN)).isoformat(timespec="seconds")))
+    result = {"phone": mask(phone), "expires_in_min": config.OTP_TTL_MIN, "sent_by": provider}
+    if provider == "demo":
+        result["demo_code"] = code              # no SMS: the screen shows the code
+    return result
+
+
+def _code_matches(row, phone: str, purpose: str, code: str) -> bool:
+    if row["code_hash"] == "twilio":
+        try:
+            return sms.twilio_check(phone, code)
+        except sms.SMSError as err:
+            raise AuthError(f"Could not check the code: {err}", 502)
+    return secrets.compare_digest(row["code_hash"], _hash(f"{phone}|{purpose}|{code}"))
+
+
+def verify_code(raw_phone: str, code: str, purpose: str = STAFF, village_id: str | None = None) -> tuple[str, dict]:
+    """Check the code; on success return (session token, user)."""
+    phone = normalize_phone(raw_phone)
+    code = (code or "").strip()
+    if purpose == VILLAGER and village_id not in _village_ids():
+        raise AuthError("Choose your village first.", 422)
+    now = _now()
+    with database.connect() as c:
+        row = c.execute("SELECT * FROM otp_codes WHERE phone = ? AND purpose = ?", (phone, purpose)).fetchone()
+    if not row or now > datetime.fromisoformat(row["expires_at"]):
+        raise AuthError("This code has expired. Ask for a new one.", 401)
+    if row["attempts"] >= config.OTP_MAX_ATTEMPTS:
+        raise AuthError("Too many wrong tries. Ask for a new code.", 429)
+
+    if not _code_matches(row, phone, purpose, code):
+        with database.connect() as c:
+            c.execute("UPDATE otp_codes SET attempts = attempts + 1 WHERE phone = ? AND purpose = ?", (phone, purpose))
+        left = config.OTP_MAX_ATTEMPTS - row["attempts"] - 1
+        raise AuthError(f"Wrong code. {left} tr{'y' if left == 1 else 'ies'} left."
+                        if left else "Wrong code. Ask for a new code.", 401)
+
+    token = secrets.token_urlsafe(32)
+    with database.connect() as c:
+        c.execute("DELETE FROM otp_codes WHERE phone = ? AND purpose = ?", (phone, purpose))   # works once
+        c.execute("INSERT INTO sessions (token_hash, phone, kind, created_at, expires_at) VALUES (?, ?, ?, ?, ?)",
+                  (_hash(token), phone, purpose, now.isoformat(timespec="seconds"),
+                   (now + timedelta(hours=config.SESSION_HOURS)).isoformat(timespec="seconds")))
+        if purpose == VILLAGER:
+            c.execute("INSERT INTO villagers (phone, village_id, created_at) VALUES (?, ?, ?) "
+                      "ON CONFLICT(phone) DO UPDATE SET village_id = excluded.village_id",
+                      (phone, village_id, now.isoformat(timespec="seconds")))
+    user = get_official(phone) if purpose == STAFF else get_villager(phone)
+    return token, user
+
+
+# ---------- villagers ----------
+
+def get_villager(phone: str) -> dict | None:
+    with database.connect() as c:
+        r = c.execute("SELECT phone, village_id FROM villagers WHERE phone = ?", (phone,)).fetchone()
+        return dict(r) if r else None
+
+
+# ---------- sessions ----------
+
+def user_for_token(token: str | None, kind: str) -> dict | None:
+    if not token:
+        return None
+    with database.connect() as c:
+        r = c.execute("SELECT phone, expires_at FROM sessions WHERE token_hash = ? AND kind = ?",
+                      (_hash(token), kind)).fetchone()
+        if r and _now() > datetime.fromisoformat(r["expires_at"]):
+            c.execute("DELETE FROM sessions WHERE token_hash = ?", (_hash(token),))
+            return None
+    if not r:
+        return None
+    return get_official(r["phone"]) if kind == STAFF else get_villager(r["phone"])
+
+
+def official_for_token(token: str | None) -> dict | None:
+    return user_for_token(token, STAFF)
+
+
+def end_session(token: str | None) -> None:
+    if token:
+        with database.connect() as c:
+            c.execute("DELETE FROM sessions WHERE token_hash = ?", (_hash(token),))
+
+
+# ---------- FastAPI dependencies ----------
+
+def require_official(request: Request) -> dict:
+    """Any signed-in staff member (Gram Panchayat or NGO)."""
+    user = user_for_token(request.cookies.get(COOKIES[STAFF]), STAFF)
+    if not user:
+        raise HTTPException(status_code=401, detail="Please sign in.")
+    return user
+
+
+def require_gp(request: Request) -> dict:
+    """A signed-in Gram Panchayat official (approving alerts, running checks)."""
+    user = require_official(request)
+    if user["role"] != "gp":
+        raise HTTPException(status_code=403, detail="Only Gram Panchayat officials can do this.")
+    return user
+
+
+def require_villager(request: Request) -> dict:
+    user = user_for_token(request.cookies.get(COOKIES[VILLAGER]), VILLAGER)
+    if not user:
+        raise HTTPException(status_code=401, detail="Please sign in with your mobile number.")
+    return user

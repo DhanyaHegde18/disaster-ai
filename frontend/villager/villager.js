@@ -35,6 +35,29 @@ const T = {
     noKnVoice: "ಈ ಫೋನಿನಲ್ಲಿ ಕನ್ನಡ ಧ್ವನಿ ಇಲ್ಲ. ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಓದಲಾಗುತ್ತಿದೆ.",
     notifTitle: "ಊರಿನ ಎಚ್ಚರಿಕೆ",
     langBtn: "English",
+    reportTitle: "ನಿಮ್ಮ ಕುಟುಂಬದ ಸ್ಥಿತಿ ತಿಳಿಸಿ",
+    reportWhy: "ನೀವು ಎಲ್ಲಿದ್ದೀರಿ ಎಂದು ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ಮತ್ತು ಸಹಾಯ ಸಂಸ್ಥೆಗಳಿಗೆ ತಿಳಿಯುತ್ತದೆ. ಸಹಾಯ ಬೇಕಾದರೆ ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ನಿಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸುತ್ತದೆ.",
+    reportSignIn: "ವರದಿ ಮಾಡಲು ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+    sendCode: "ಕೋಡ್ ಕಳುಹಿಸಿ",
+    codeLabel: "6 ಅಂಕಿಯ ಕೋಡ್",
+    signIn: "ಮುಂದುವರಿಸಿ",
+    codeSent: (p, m) => `${p} ಗೆ ಕೋಡ್ ಕಳುಹಿಸಲಾಗಿದೆ. ${m} ನಿಮಿಷ ಮಾನ್ಯ.`,
+    demoCode: "ಡೆಮೊ (SMS ಇಲ್ಲ): ನಿಮ್ಮ ಕೋಡ್",
+    howMany: "ಪ್ರತಿ ಸ್ಥಳದಲ್ಲಿ ಎಷ್ಟು ಜನ ಇದ್ದಾರೆ?",
+    cats: { at_shelter: "ಕಾಳಜಿ ಕೇಂದ್ರದಲ್ಲಿ", with_relatives: "ಸಂಬಂಧಿಕರ ಮನೆ / ಬೇರೆ ಊರಿನಲ್ಲಿ",
+            at_home: "ಮನೆಯಲ್ಲೇ ಇದ್ದಾರೆ", unknown: "ಎಲ್ಲಿದ್ದಾರೆ ಗೊತ್ತಿಲ್ಲ" },
+    needsTitle: "ಏನಾದರೂ ಬೇಕೇ?",
+    needs: { rescue: "ತುರ್ತು ರಕ್ಷಣೆ ಬೇಕು", food: "ಆಹಾರ", water: "ಕುಡಿಯುವ ನೀರು", medicine: "ಔಷಧಿ",
+             elderly_help: "ಹಿರಿಯರು / ಅಂಗವಿಕಲರಿಗೆ ಸಹಾಯ" },
+    rescueNote: "ಜೀವಕ್ಕೆ ಅಪಾಯವಿದ್ದರೆ ಮೊದಲು 112 ಗೆ ಕರೆ ಮಾಡಿ.",
+    sendStatus: "ಸ್ಥಿತಿ ಕಳುಹಿಸಿ",
+    saved: "ಧನ್ಯವಾದ. ನಿಮ್ಮ ಸ್ಥಿತಿ ಕಳುಹಿಸಲಾಗಿದೆ.",
+    lastReport: (t) => `ಕೊನೆಯ ವರದಿ: ${t}. ಬದಲಾದರೆ ಮತ್ತೆ ಕಳುಹಿಸಿ.`,
+    atLeastOne: "ಕನಿಷ್ಠ ಒಬ್ಬರ ಸ್ಥಿತಿ ತಿಳಿಸಿ.",
+    logout: "ಲಾಗ್ ಔಟ್",
+    less: "ಕಡಿಮೆ", more: "ಹೆಚ್ಚು",
+    err: { 400: "ಸರಿಯಾದ 10 ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ.", 401: "ಕೋಡ್ ತಪ್ಪಾಗಿದೆ ಅಥವಾ ಅವಧಿ ಮುಗಿದಿದೆ.",
+           429: "ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.", 502: "SMS ಕಳುಹಿಸಲು ಆಗಲಿಲ್ಲ. ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಪ್ರಯತ್ನಿಸಿ." },
   },
   en: {
     app: "Village Alert",
@@ -66,6 +89,28 @@ const T = {
     noKnVoice: "No Kannada voice on this phone. Reading in English.",
     notifTitle: "Village Alert",
     langBtn: "ಕನ್ನಡ",
+    reportTitle: "Tell us your family's status",
+    reportWhy: "Your Gram Panchayat and relief organisations will know where you are. If you need help, the Gram Panchayat will contact you.",
+    reportSignIn: "Your mobile number, to send a report",
+    sendCode: "Send code",
+    codeLabel: "6-digit code",
+    signIn: "Continue",
+    codeSent: (p, m) => `Code sent to ${p}. It works for ${m} minutes.`,
+    demoCode: "Demo (no SMS): your code is",
+    howMany: "How many people are in each place?",
+    cats: { at_shelter: "At the relief centre", with_relatives: "With relatives / in another village",
+            at_home: "Staying at home", unknown: "Don't know where they are" },
+    needsTitle: "Do you need anything?",
+    needs: { rescue: "Urgent rescue needed", food: "Food", water: "Drinking water", medicine: "Medicine",
+             elderly_help: "Help for elderly / disabled" },
+    rescueNote: "If someone's life is in danger, call 112 first.",
+    sendStatus: "Send status",
+    saved: "Thank you. Your status has been sent.",
+    lastReport: (t) => `Last report: ${t}. Send again if anything changes.`,
+    atLeastOne: "Report at least one person.",
+    logout: "Log out",
+    less: "Fewer", more: "More",
+    err: {},
   },
 };
 
@@ -99,6 +144,7 @@ function applyLang() {
   $("tips").innerHTML = t("tips").map((x) => `<li>${esc(x)}</li>`).join("");
   setSoundButton();
   renderPicker();
+  renderReportForm();
   if (S.data) renderStatus();
 }
 
@@ -124,6 +170,7 @@ function chooseVillage(id) {
   store("v-village", id);
   showHome();
   refresh();
+  initReport();
 }
 
 function showHome() {
@@ -258,6 +305,118 @@ function speak(a) {
 }
 if ("speechSynthesis" in window) speechSynthesis.getVoices();   // some browsers load voices lazily
 
+// ---------- family status report (needs a villager sign-in) ----------
+const CATS = ["at_shelter", "with_relatives", "at_home", "unknown"];
+const NEED_CODES = ["rescue", "food", "water", "medicine", "elderly_help"];
+const R = { counts: { at_shelter: 0, with_relatives: 0, at_home: 0, unknown: 0 }, needs: new Set(), last: null };
+
+async function call(path, body) {
+  const res = await fetch(path, { method: body ? "POST" : "GET", credentials: "same-origin",
+    headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  let data = null;
+  try { data = await res.json(); } catch { }
+  if (!res.ok) {
+    const detail = data && typeof data.detail === "string" ? data.detail : res.statusText;
+    const err = new Error(T[S.lang].err[res.status] || detail);
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+function reportError(msg) { $("r-error").textContent = msg || ""; $("r-error").hidden = !msg; }
+
+function showReportStep(step) {      // "phone" | "code" | "form"
+  $("r-phone-form").hidden = step !== "phone";
+  $("r-code-form").hidden = step !== "code";
+  $("r-form").hidden = step !== "form";
+}
+
+function renderReportForm() {
+  $("steppers").innerHTML = CATS.map((c) => `
+    <div class="stepper">
+      <span>${esc(t("cats")[c])}</span>
+      <div class="ctl">
+        <button type="button" data-cat="${c}" data-d="-1" aria-label="${esc(t("less"))}: ${esc(t("cats")[c])}">−</button>
+        <output id="n-${c}" aria-live="polite">${R.counts[c]}</output>
+        <button type="button" data-cat="${c}" data-d="1" aria-label="${esc(t("more"))}: ${esc(t("cats")[c])}">+</button>
+      </div>
+    </div>`).join("");
+  $("steppers").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+    const c = b.dataset.cat;
+    R.counts[c] = Math.max(0, Math.min(50, R.counts[c] + Number(b.dataset.d)));
+    $(`n-${c}`).textContent = R.counts[c];
+  }));
+  $("needs").innerHTML = NEED_CODES.map((n) => `
+    <label class="need-opt ${n}"><input type="checkbox" value="${n}" ${R.needs.has(n) ? "checked" : ""}>
+      <span>${esc(t("needs")[n])}</span></label>`).join("");
+  $("needs").querySelectorAll("input").forEach((i) => i.addEventListener("change", () => {
+    i.checked ? R.needs.add(i.value) : R.needs.delete(i.value);
+  }));
+  $("r-last").textContent = R.last ? t("lastReport")(fmt(R.last)) : "";
+}
+
+function loadReport(rep) {
+  if (!rep) return;
+  CATS.forEach((c) => (R.counts[c] = rep[c] || 0));
+  R.needs = new Set(rep.needs || []);
+  R.last = rep.reported_at;
+}
+
+async function initReport() {
+  reportError("");
+  try {
+    const me = await call("/public/me");
+    loadReport(me.report);
+    renderReportForm();
+    showReportStep("form");
+  } catch {
+    showReportStep("phone");
+  }
+}
+
+$("r-phone-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); reportError("");
+  try {
+    const r = await call("/public/auth/request-code", { phone: $("r-phone").value });
+    $("r-sent").textContent = t("codeSent")(r.phone, r.expires_in_min);
+    $("r-demo").hidden = !r.demo_code;
+    if (r.demo_code) $("r-demo").innerHTML = `${esc(t("demoCode"))} <b>${esc(r.demo_code)}</b>`;
+    $("r-code").value = "";
+    showReportStep("code");
+    $("r-code").focus();
+  } catch (err) { reportError(err.message); }
+});
+
+$("r-code-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); reportError("");
+  try {
+    await call("/public/auth/verify", { phone: $("r-phone").value, code: $("r-code").value, village_id: S.village });
+    await initReport();
+  } catch (err) { reportError(err.message); }
+});
+
+$("r-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); reportError("");
+  if (CATS.every((c) => R.counts[c] === 0)) { reportError(t("atLeastOne")); return; }
+  try {
+    const r = await call("/public/report", { village_id: S.village, ...R.counts, needs: [...R.needs] });
+    R.last = r.report.reported_at;
+    $("r-last").textContent = t("lastReport")(fmt(R.last));
+    toast(t("saved"));
+  } catch (err) {
+    if (err.status === 401) { showReportStep("phone"); }
+    reportError(err.message);
+  }
+});
+
+$("r-logout").addEventListener("click", async () => {
+  try { await call("/public/auth/logout", {}); } catch { }
+  R.counts = { at_shelter: 0, with_relatives: 0, at_home: 0, unknown: 0 }; R.needs = new Set(); R.last = null;
+  renderReportForm();
+  showReportStep("phone");
+});
+
 // ---------- start ----------
 async function start() {
   S.lang = load("v-lang") === "en" ? "en" : "kn";
@@ -267,6 +426,7 @@ async function start() {
   applyLang();
   showHome();
   refresh();
+  if (S.village) initReport();
   setInterval(refresh, POLL_MS);
 }
 start();

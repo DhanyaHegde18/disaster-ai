@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 
 from backend.app import config
 from backend.app.routers import alerts as alerts_router
+from backend.tests.conftest import sign_in
 
 RISK = {"village_id": "V001", "name": "Ujire", "district": "Dakshina Kannada", "level": "HIGH",
         "past_3d_mm": 60.0, "forecast_3d_mm": 260.0, "reasons": ["test"], "daily_mm": []}
@@ -21,6 +22,7 @@ def client(tmp_path, monkeypatch):
     monkeypatch.setattr(alerts_router, "_cached_or_fresh", lambda: SNAP)
     from backend.app.main import app
     with TestClient(app) as c:
+        sign_in(c, name="Ujire GP")
         yield c
 
 

@@ -2,7 +2,9 @@
 "use strict";
 
 const REFRESH_MS = 60_000;
-const state = { risk: null, alerts: [], tab: "pending", scheduler: null, health: null, dirty: new Set() };
+const state = { risk: null, alerts: [], tab: "pending", scheduler: null, health: null, dirty: new Set(),
+                relief: null, expanded: new Set(), families: {}, role: null };
+const NEED_LABEL = { rescue: "Rescue needed", food: "Food", water: "Drinking water", medicine: "Medicine", elderly_help: "Elderly / disabled help" };
 let map, markers = {};
 
 // ---------- helpers ----------
@@ -25,9 +27,14 @@ function toast(msg, isError = false) {
 }
 
 async function api(path, options = {}) {
-  const res = await fetch(path, { headers: { "Content-Type": "application/json" }, ...options });
+  // The session cookie is sent automatically (same server); JavaScript never sees it.
+  const res = await fetch(path, { headers: { "Content-Type": "application/json" }, credentials: "same-origin", ...options });
   let body = null;
   try { body = await res.json(); } catch { /* empty body */ }
+  if (res.status === 401 && !path.startsWith("/auth/")) {
+    showSignIn("Your session ended. Please sign in again.");
+    throw new Error("Please sign in.");
+  }
   if (!res.ok) {
     const detail = body && body.detail ? (typeof body.detail === "string" ? body.detail : JSON.stringify(body.detail)) : res.statusText;
     throw new Error(detail);
@@ -35,16 +42,88 @@ async function api(path, options = {}) {
   return body;
 }
 
-function reviewer() {
-  return $("reviewer").value.trim();
+// ---------- sign-in ----------
+let refreshTimer = null;
+
+function showSignIn(message) {
+  state.signedIn = false;
+  clearInterval(refreshTimer);
+  $("app").hidden = true;
+  $("top-controls").hidden = true;
+  $("signin").hidden = false;
+  $("form-phone").hidden = false;
+  $("form-code").hidden = true;
+  signinError(message || "");
+  $("phone").focus();
 }
 
-// Remember the reviewer's name in this browser only.
-try { $("reviewer").value = localStorage.getItem("gp-reviewer") || ""; } catch { /* storage blocked */ }
-$("reviewer").addEventListener("input", () => { try { localStorage.setItem("gp-reviewer", reviewer()); } catch { } });
+function showApp(me) {
+  state.signedIn = true;
+  state.role = me.role;
+  // body.role-gp / body.role-ngo shows or hides the parts marked gp-only / ngo-only.
+  document.body.classList.toggle("role-gp", me.role === "gp");
+  document.body.classList.toggle("role-ngo", me.role === "ngo");
+  $("app-title").textContent = me.role === "ngo" ? "Relief Coordination" : "Gram Panchayat Control Centre";
+  $("who-role").textContent = me.role === "ngo" ? "NGO" : "GP";
+  if (me.role !== "gp") state.tab = "approved";       // NGOs see approved alerts only
+  $("who-name").textContent = me.name;
+  $("signin").hidden = true;
+  $("top-controls").hidden = false;
+  $("app").hidden = false;
+  if (map) setTimeout(() => map.invalidateSize(), 0);   // the map was hidden while signed out
+  loadAll();
+  clearInterval(refreshTimer);
+  refreshTimer = setInterval(loadAll, REFRESH_MS);
+}
+
+function signinError(msg) {
+  $("signin-error").textContent = msg;
+  $("signin-error").hidden = !msg;
+}
+
+$("form-phone").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  signinError("");
+  const btn = $("btn-send"); btn.disabled = true;
+  try {
+    const r = await api("/auth/request-code", { method: "POST", body: JSON.stringify({ phone: $("phone").value }) });
+    $("code-sent").textContent = `Code sent to ${r.phone}. It works for ${r.expires_in_min} minutes.`;
+    $("demo-code").hidden = !r.demo_code;
+    if (r.demo_code) $("demo-code").innerHTML = `Demo mode (no SMS yet): your code is <b>${esc(r.demo_code)}</b>`;
+    $("form-phone").hidden = true;
+    $("form-code").hidden = false;
+    $("code").value = "";
+    $("code").focus();
+  } catch (err) { signinError(err.message); }
+  finally { btn.disabled = false; }
+});
+
+$("form-code").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  signinError("");
+  const btn = $("btn-verify"); btn.disabled = true;
+  try {
+    const me = await api("/auth/verify", { method: "POST", body: JSON.stringify({ phone: $("phone").value, code: $("code").value }) });
+    showApp(me);
+    toast(`Signed in as ${me.name}`);
+  } catch (err) { signinError(err.message); }
+  finally { btn.disabled = false; }
+});
+
+$("btn-back").addEventListener("click", () => { $("form-code").hidden = true; $("form-phone").hidden = false; signinError(""); $("phone").focus(); });
+
+$("btn-logout").addEventListener("click", async () => {
+  try { await api("/auth/logout", { method: "POST" }); } catch { }
+  acknowledge();
+  alarm.seenHigh = null; alarm.seenPending = null; alarm.seenRescue = null;
+  document.body.classList.remove("role-gp", "role-ngo");
+  state.tab = "pending"; state.expanded.clear();
+  showSignIn("Signed out.");
+});
 
 // ---------- loading ----------
 async function loadAll() {
+  if (!state.signedIn) return;
   const [health, risk, sched, alerts] = await Promise.allSettled([
     api("/health"), api("/risk"), api("/system/scheduler"), api("/alerts"),
   ]);
@@ -53,6 +132,7 @@ async function loadAll() {
   if (risk.status === "fulfilled") state.risk = risk.value;
   else toast("Could not load risk: " + risk.reason.message, true);
   if (alerts.status === "fulfilled") state.alerts = alerts.value;
+  try { state.relief = await api("/relief/summary"); } catch { /* shown as empty */ }
   render();
   checkForNewDanger();
 }
@@ -64,8 +144,11 @@ const alarm = {
   audio: null,          // AudioContext, created on a click (browsers block sound before that)
   seenHigh: null,       // village ids that were HIGH at the last check (null = first load)
   seenPending: null,    // pending alert ids at the last check
+  seenRescue: null,     // village id -> number of open rescue requests at the last check
   flashTimer: null,
+  repeatTimer: null,    // replays the siren until someone clicks Acknowledge
 };
+const REPEAT_SIREN_MS = 30_000;
 
 try { alarm.soundOn = localStorage.getItem("gp-sound") === "on"; } catch { }
 
@@ -74,15 +157,30 @@ function checkForNewDanger() {
   // Test drafts are made by someone at this screen, so they don't need an alarm.
   const pending = new Set(state.alerts.filter((a) => a.status === "pending" && !a.simulated).map((a) => a.id));
 
+  const rescue = {};
+  (state.relief ? state.relief.villages : []).forEach((v) => { if (v.rescue_requests) rescue[v.village_id] = v.rescue_requests; });
+
   if (alarm.seenHigh === null) {          // first load: remember what's there, don't alarm
-    alarm.seenHigh = high; alarm.seenPending = pending;
-    if (high.size) showAlarm(describe([...high], [], true));  // still flag HIGH villages already present
+    alarm.seenHigh = high; alarm.seenPending = pending; alarm.seenRescue = rescue;
+    const already = [];
+    if (Object.keys(rescue).length) already.push(rescueText(Object.keys(rescue)));
+    if (high.size) already.push(describe([...high], [], true));
+    if (already.length) showAlarm(already.join(" · "));  // still flag what's already there
     return;
   }
   const newHigh = [...high].filter((id) => !alarm.seenHigh.has(id));
   const newPending = [...pending].filter((id) => !alarm.seenPending.has(id));
-  alarm.seenHigh = high; alarm.seenPending = pending;
-  if (newHigh.length || newPending.length) raiseAlarm(describe(newHigh, newPending, false));
+  const newRescue = Object.keys(rescue).filter((id) => rescue[id] > (alarm.seenRescue[id] || 0));
+  alarm.seenHigh = high; alarm.seenPending = pending; alarm.seenRescue = rescue;
+  const parts = [];
+  if (newRescue.length) parts.push(rescueText(newRescue));      // most urgent first
+  if (newHigh.length || newPending.length) parts.push(describe(newHigh, newPending, false));
+  if (parts.length) raiseAlarm(parts.join(" · "));
+}
+
+function rescueText(ids) {
+  const names = ids.map((id) => (state.relief.villages.find((v) => v.village_id === id) || {}).name || id);
+  return `RESCUE requested: ${names.join(", ")}`;
 }
 
 function villageName(id) {
@@ -113,11 +211,17 @@ function showAlarm(message) {
   let on = false;
   const short = "⚠ " + message.split(" · ")[0];
   alarm.flashTimer = setInterval(() => { document.title = (on = !on) ? short : BASE_TITLE; }, 1000);
+  // Like a fire alarm: keep sounding every 30 s until someone acknowledges it.
+  clearInterval(alarm.repeatTimer);
+  alarm.repeatTimer = setInterval(() => {
+    if (alarm.soundOn && !$("alarm-banner").hidden) playSiren();
+  }, REPEAT_SIREN_MS);
 }
 
 function acknowledge() {
   $("alarm-banner").hidden = true;
   clearInterval(alarm.flashTimer);
+  clearInterval(alarm.repeatTimer);
   document.title = BASE_TITLE;
 }
 
@@ -172,7 +276,7 @@ $("btn-test-alarm").addEventListener("click", () => {
   raiseAlarm("TEST: this is how a new HIGH risk alarm looks and sounds");
 });
 
-$("btn-ack").addEventListener("click", acknowledge);
+$("btn-ack").addEventListener("click", () => { acknowledge(); toast("Acknowledged. The siren stops until something new happens."); });
 
 // After a reload the browser forgets the click, so sound needs one click again.
 if (alarm.soundOn) {
@@ -191,6 +295,85 @@ function render() {
   // Don't wipe text someone is editing during an automatic refresh.
   if (state.dirty.size === 0) renderAlerts();
   renderSystem();
+  renderRelief();
+  state.expanded.forEach((vid) => loadFamilies(vid));   // keep open family lists up to date
+}
+
+// ---------- relief: where people are (from villagers' reports) ----------
+function needPills(needs) {
+  // needs is {code: count} in the summary, or [codes] for one family
+  const entries = Array.isArray(needs) ? needs.map((n) => [n, 0]) : Object.entries(needs);
+  entries.sort((a, b) => (a[0] === "rescue" ? -1 : b[0] === "rescue" ? 1 : 0));
+  return entries.map(([n, c]) => `<span class="need ${n}">${esc(NEED_LABEL[n] || n)}${c > 1 ? ` × ${c}` : ""}</span>`).join("");
+}
+
+const num = (x) => `<td class="n${x ? "" : " zero"}">${x}</td>`;
+
+function renderRelief() {
+  const r = state.relief, body = $("relief-body");
+  if (!r) { body.innerHTML = `<tr><td colspan="7" class="empty">Could not load reports.</td></tr>`; return; }
+  const t = r.totals;
+  $("relief-totals").textContent = t.families
+    ? `${t.families} famil${t.families === 1 ? "y" : "ies"} reported · ${t.at_shelter} at relief centres · ${t.unknown} unknown`
+    : "No reports yet";
+  $("n-rescue").textContent = t.rescue_requests;
+  const gp = state.role === "gp";
+  body.innerHTML = r.villages.map((v) => {
+    const row = `<tr class="village-row${gp && v.families ? " clickable" : ""}${v.families ? "" : " quiet"}" data-id="${esc(v.village_id)}"
+        ${gp && v.families ? `tabindex="0" aria-expanded="${state.expanded.has(v.village_id)}"` : ""}>
+      <td><b>${esc(v.name)}</b>${v.name_kn ? ` <span class="kn" lang="kn">${esc(v.name_kn)}</span>` : ""}</td>
+      ${num(v.families)}${num(v.at_shelter)}${num(v.with_relatives)}${num(v.at_home)}
+      <td class="n${v.unknown ? " unknown-hi" : " zero"}">${v.unknown}</td>
+      <td>${needPills(v.needs)}</td></tr>`;
+    const fam = gp && state.expanded.has(v.village_id)
+      ? `<tr class="families"><td colspan="7">${familyList(v.village_id)}</td></tr>` : "";
+    return row + fam;
+  }).join("");
+  if (gp) body.querySelectorAll("tr.clickable").forEach((tr) => {
+    const toggle = () => toggleFamilies(tr.dataset.id);
+    tr.addEventListener("click", toggle);
+    tr.addEventListener("keydown", (e) => { if (e.key === "Enter") toggle(); });
+  });
+  body.querySelectorAll("[data-handle]").forEach((b) => b.addEventListener("click", () => markHandled(b)));
+}
+
+async function markHandled(btn) {
+  btn.disabled = true;
+  try {
+    await api(`/relief/reports/${encodeURIComponent(btn.dataset.handle)}/handled`, { method: "POST" });
+    toast("Marked handled. Phone reminders for this family have stopped.");
+    state.relief = await api("/relief/summary");
+    await loadFamilies(btn.dataset.village);
+  } catch (err) { btn.disabled = false; toast(err.message, true); }
+}
+
+function familyList(vid) {
+  const fams = state.families[vid];
+  if (!fams) return `<ul class="family-list"><li>Loading…</li></ul>`;
+  if (!fams.length) return `<ul class="family-list"><li>No reports.</li></ul>`;
+  return `<ul class="family-list">` + fams.map((f) => {
+    const parts = [["at relief centre", f.at_shelter], ["with relatives", f.with_relatives], ["at home", f.at_home], ["unknown", f.unknown]]
+      .filter(([, n]) => n).map(([l, n]) => `${n} ${l}`).join(", ");
+    const rescue = f.needs.includes("rescue");
+    const status = !rescue ? "" : f.handled_at
+      ? `<span class="handled">✓ Handled by ${esc(f.handled_by)}, ${fmtTime(f.handled_at)}</span>`
+      : `<button class="btn handle" type="button" data-handle="${esc(f.phone)}" data-village="${esc(vid)}">Mark handled</button>`;
+    return `<li><a href="tel:${esc(f.phone)}">${esc(f.phone)}</a><span>${esc(parts)}</span>${needPills(f.needs)}
+      <span class="when">${fmtTime(f.reported_at)}</span>${status}</li>`;
+  }).join("") + `</ul>`;
+}
+
+async function loadFamilies(vid) {
+  try { state.families[vid] = (await api(`/relief/reports/${vid}`)).families; }
+  catch (err) { state.families[vid] = []; toast(err.message, true); }
+  renderRelief();
+}
+
+function toggleFamilies(vid) {
+  if (state.expanded.has(vid)) { state.expanded.delete(vid); renderRelief(); return; }
+  state.expanded.add(vid);
+  renderRelief();
+  loadFamilies(vid);
 }
 
 function renderStatus() {
@@ -295,12 +478,14 @@ function renderAlerts() {
   $("tab-approved").textContent = `Approved (${counts.approved})`;
   $("tab-rejected").textContent = `Rejected (${counts.rejected})`;
 
+  $("alerts-title").textContent = state.role === "gp" ? "Alerts" : "Approved alerts";
   const items = state.alerts.filter((a) => a.status === state.tab);
   const list = $("alert-list");
   if (!items.length) {
     list.innerHTML = `<p class="empty">${state.tab === "pending"
       ? "No alerts waiting. When a village turns HIGH, a draft appears here for you to check."
-      : `No ${state.tab} alerts yet.`}</p>`;
+      : state.role === "gp" ? `No ${state.tab} alerts yet.`
+      : "No approved alerts yet. When the Gram Panchayat approves a warning, it appears here."}</p>`;
     return;
   }
   list.innerHTML = items.map((a) => a.status === "pending" ? pendingCard(a) : reviewedCard(a)).join("");
@@ -364,12 +549,12 @@ async function onAlertAction(e) {
       state.dirty.delete(id);
       toast("Edits saved");
     } else {
-      if (reviewer().length < 2) { $("reviewer").focus(); throw new Error("Enter your name or role under “Reviewing as” first."); }
       if (action === "reject" && !note) { $(`note-${id}`).focus(); throw new Error("Add a note saying why it is rejected."); }
       if (state.dirty.has(id)) {   // save unsaved edits before approving, so what's approved is what's shown
         await api(`/alerts/${id}`, { method: "PUT", body: JSON.stringify({ message_kn: $(`kn-${id}`).value, message_en: $(`en-${id}`).value }) });
       }
-      await api(`/alerts/${id}/${action}`, { method: "POST", body: JSON.stringify({ reviewed_by: reviewer(), note }) });
+      // The server records the signed-in official as the reviewer.
+      await api(`/alerts/${id}/${action}`, { method: "POST", body: JSON.stringify({ note }) });
       state.dirty.delete(id);
       toast(action === "approve" ? "Approved. Villagers can now see this alert." : "Rejected. It will not be sent.");
     }
@@ -424,5 +609,8 @@ $("btn-simulate").addEventListener("click", async (e) => {
   finally { b.disabled = false; b.textContent = "Draft test alert"; }
 });
 
-loadAll();
-setInterval(loadAll, REFRESH_MS);
+// Start: already signed in (cookie still valid)? Go straight to the dashboard.
+(async () => {
+  try { showApp(await api("/auth/me")); }
+  catch { showSignIn(""); }
+})();

@@ -1,5 +1,6 @@
 """
-Alert storage in SQLite (a single file, no server to run).
+Storage in SQLite (a single file, no server to run): alerts, staff and villager sign-in,
+and evacuation reports.
 
 An alert moves through these states:
     pending  -> approved   (Gram Panchayat approved it; the villager app may show it)
@@ -33,7 +34,69 @@ CREATE TABLE IF NOT EXISTS alerts (
     reviewed_at    TEXT,
     review_note    TEXT
 );
+
+-- Staff allowed to sign in to the dashboard, added by whoever runs the server
+-- (python -m backend.app.jobs.officials add ...). role: 'gp' (Gram Panchayat) or 'ngo'.
+CREATE TABLE IF NOT EXISTS officials (
+    phone       TEXT PRIMARY KEY,      -- +91XXXXXXXXXX
+    name        TEXT NOT NULL,
+    created_at  TEXT NOT NULL,
+    role        TEXT NOT NULL DEFAULT 'gp'
+);
+
+-- Villagers who signed in to report their family's status (they register themselves).
+CREATE TABLE IF NOT EXISTS villagers (
+    phone       TEXT PRIMARY KEY,
+    village_id  TEXT NOT NULL,
+    created_at  TEXT NOT NULL
+);
+
+-- Each family's latest evacuation status (one row per phone; a new report replaces the old one).
+CREATE TABLE IF NOT EXISTS evacuation_reports (
+    phone           TEXT PRIMARY KEY,
+    village_id      TEXT NOT NULL,
+    at_shelter      INTEGER NOT NULL DEFAULT 0,   -- at a relief centre (ಕಾಳಜಿ ಕೇಂದ್ರ)
+    with_relatives  INTEGER NOT NULL DEFAULT 0,   -- relatives / another village
+    at_home         INTEGER NOT NULL DEFAULT 0,   -- stayed at home
+    unknown         INTEGER NOT NULL DEFAULT 0,   -- whereabouts unknown
+    needs           TEXT NOT NULL DEFAULT '[]',   -- JSON list, e.g. ["rescue", "water"]
+    reported_at     TEXT NOT NULL,
+    handled_by      TEXT,                         -- GP official who dealt with a rescue request
+    handled_at      TEXT
+);
+
+-- Phone alerts already sent to staff, so reminders go out on schedule and not twice.
+CREATE TABLE IF NOT EXISTS staff_notifications (
+    key            TEXT PRIMARY KEY,              -- e.g. 'alert:12' or 'rescue:+91...:<reported_at>'
+    first_sent_at  TEXT NOT NULL,
+    last_sent_at   TEXT NOT NULL,
+    times          INTEGER NOT NULL DEFAULT 1
+);
 """
+
+# Sign-in codes and sessions are short-lived, so if their layout changes we can simply
+# recreate them (everyone just signs in again). They're kept separate for that reason.
+TRANSIENT = {
+    "otp_codes": """
+CREATE TABLE IF NOT EXISTS otp_codes (
+    phone       TEXT NOT NULL,
+    purpose     TEXT NOT NULL,         -- 'staff' or 'villager'
+    code_hash   TEXT NOT NULL,         -- 'twilio' when Twilio Verify holds the code
+    sent_at     TEXT NOT NULL,
+    expires_at  TEXT NOT NULL,
+    attempts    INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (phone, purpose)
+);""",
+    "sessions": """
+CREATE TABLE IF NOT EXISTS sessions (
+    token_hash  TEXT PRIMARY KEY,
+    phone       TEXT NOT NULL,
+    kind        TEXT NOT NULL,         -- 'staff' or 'villager'
+    created_at  TEXT NOT NULL,
+    expires_at  TEXT NOT NULL
+);""",
+}
+TRANSIENT_REQUIRED = {"otp_codes": "purpose", "sessions": "kind"}
 
 
 def now() -> str:
@@ -52,9 +115,25 @@ def connect():
         conn.close()
 
 
+def _columns(c, table: str) -> set[str]:
+    return {r["name"] for r in c.execute(f"PRAGMA table_info({table})")}
+
+
 def init_db() -> None:
+    """Create tables, and upgrade a database made by an earlier version of this code."""
     with connect() as c:
         c.executescript(SCHEMA)
+        if "role" not in _columns(c, "officials"):          # added when NGOs got their own role
+            c.execute("ALTER TABLE officials ADD COLUMN role TEXT NOT NULL DEFAULT 'gp'")
+        report_cols = _columns(c, "evacuation_reports")
+        for col in ("handled_by", "handled_at"):              # added with rescue follow-up
+            if col not in report_cols:
+                c.execute(f"ALTER TABLE evacuation_reports ADD COLUMN {col} TEXT")
+        for table, ddl in TRANSIENT.items():
+            cols = _columns(c, table)
+            if cols and TRANSIENT_REQUIRED[table] not in cols:
+                c.execute(f"DROP TABLE {table}")              # old layout: recreate
+            c.executescript(ddl)
 
 
 def _row(r: sqlite3.Row | None) -> dict | None:

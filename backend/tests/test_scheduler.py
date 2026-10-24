@@ -65,6 +65,9 @@ def test_status_endpoint(monkeypatch, tmp_path):
     monkeypatch.setattr(config, "SCHEDULER_ENABLED", False)
     monkeypatch.setattr(config, "ALERTS_DB", tmp_path / "alerts.db")
     from backend.app.main import app
+    from backend.tests.conftest import sign_in
     with TestClient(app) as c:
+        assert c.get("/system/scheduler").status_code == 401      # signed out
+        sign_in(c)
         body = c.get("/system/scheduler").json()
     assert body["runs"] == 0 and body["running_now"] is False
