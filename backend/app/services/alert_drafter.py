@@ -1,11 +1,11 @@
 """
-Draft a bilingual (Kannada + English) warning for one village.
+Draft a bilingual (Kannada + English) warning for one taluk, naming its most affected villages.
 
 1. Ask Gemini to write it from the facts the risk engine produced, as JSON {"kn": ..., "en": ...}.
 2. Check the draft before trusting it:
      - both messages present and short enough for a phone screen / SMS
      - the Kannada message is actually in Kannada script
-     - the English message names the village
+     - the English message names the taluk
      - every number in it is one we gave the model (no invented rainfall,
        phone numbers or shelter capacities)
 3. If there's no API key, the call fails, or any check fails, use a fixed
@@ -19,7 +19,7 @@ import requests
 
 from .. import config
 
-MAX_CHARS = {"en": 320, "kn": 420}  # Kannada script needs more characters for the same message
+MAX_CHARS = {"en": 420, "kn": 560}   # Kannada script needs more characters; room for taluk + village names
 KANNADA = re.compile(r"[ಀ-೿]")
 
 SCHEMA = {
@@ -34,12 +34,13 @@ SCHEMA = {
 
 # ---------- facts ----------
 
-def facts_for(risk: dict, village: dict) -> dict:
-    """The only information the model is allowed to use."""
+def facts_for(risk: dict) -> dict:
+    """The only information the model is allowed to use. `risk` is a taluk risk (services/risk_view.py)."""
     return {
-        "village_en": risk["name"],
-        "village_kn": village.get("name_kn") or risk["name"],
-        "district": risk["district"],
+        "taluk": risk["name"],
+        "district_en": risk["district"],
+        "district_kn": risk.get("district_kn") or risk["district"],
+        "villages_most_affected": risk.get("places", []),
         "level": risk["level"],
         "rain_last_3_days_mm": int(round(risk["past_3d_mm"])),
         "rain_next_3_days_mm": int(round(risk["forecast_3d_mm"])),
@@ -49,19 +50,20 @@ def facts_for(risk: dict, village: dict) -> dict:
 
 
 def build_prompt(f: dict) -> str:
-    return f"""You write emergency warnings for villagers in Coastal and Malnad Karnataka.
-Write ONE short flood and landslide warning for the village below, in Kannada and in English.
+    return f"""You write emergency warnings for villagers in Karnataka.
+Write ONE short flood and landslide warning for the taluk below, in Kannada and in English.
 
 FACTS (use only these; do not add anything else):
 {json.dumps(f, ensure_ascii=False, indent=2)}
 
 RULES
-- Kannada: simple, spoken style that a villager in {f['district']} understands. Kannada script only.
+- Kannada: simple, spoken style that a villager in {f['district_en']} district understands. Kannada script only
+  (write the taluk and village names in Kannada script too).
 - English: the same message in plain English.
 - Each message at most 3 short sentences.
-- Mention the village name and the rain amount for the main cause.
+- Mention the taluk name, the most affected villages, and the rain amount for the main cause.
 - Tell people to stay away from rivers, streams and steep slopes, and to follow the
-  Gram Panchayat's instructions about moving to a shelter.
+  Gram Panchayat's instructions about moving to a relief centre.
 - End with the emergency number {f['emergency_number']}.
 - Do NOT invent shelter names, phone numbers, dates, times, or any other numbers.
 - Calm and clear. No panic words, no emojis.
@@ -177,8 +179,8 @@ def check_draft(draft: dict, f: dict) -> list[str]:
             problems.append(f"{lang} message too long ({len(text)} > {MAX_CHARS[lang]} chars)")
     if draft.get("kn") and not KANNADA.search(draft["kn"]):
         problems.append("kn message has no Kannada script")
-    if draft.get("en") and f["village_en"].lower() not in draft["en"].lower():
-        problems.append("en message does not name the village")
+    if draft.get("en") and f["taluk"].lower() not in draft["en"].lower():
+        problems.append("en message does not name the taluk")
     allowed = {str(f["rain_last_3_days_mm"]), str(f["rain_next_3_days_mm"]), f["emergency_number"], "3"}
     for lang in ("kn", "en"):
         for n in re.findall(r"\d+", draft.get(lang, "")):
@@ -199,20 +201,23 @@ def template_draft(f: dict) -> dict:
         rain_kn = f"ಕಳೆದ 3 ದಿನಗಳಲ್ಲಿ {f['rain_last_3_days_mm']} ಮಿ.ಮೀ. ಮಳೆಯಾಗಿದೆ."
     # Wording reviewed by a native speaker: everyday words (ಗುಡ್ಡ) and the government's own
     # term for flood relief camps (ಕಾಳಜಿ ಕೇಂದ್ರ), which villagers hear from officials.
-    en = (f"Warning for {f['village_en']}: high risk of floods and landslides. {rain_en} "
+    places = ", ".join(f["villages_most_affected"])
+    near_en = f" ({places} and nearby villages)" if places else ""
+    near_kn = f" ({places} ಮತ್ತು ಸುತ್ತಮುತ್ತಲಿನ ಊರುಗಳು)" if places else ""
+    en = (f"Warning for {f['taluk']} taluk{near_en}: high risk of floods and landslides. {rain_en} "
           f"Stay away from rivers, streams and hillsides. If the Gram Panchayat asks, go to the "
           f"nearest relief centre. For emergency help, call {f['emergency_number']}.")
-    kn = (f"ಎಚ್ಚರಿಕೆ: {f['village_kn']} ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರವಾಹ ಮತ್ತು ಭೂಕುಸಿತದ ಅಪಾಯ ಹೆಚ್ಚಾಗಿದೆ. {rain_kn} "
-          f"ನದಿ, ಹಳ್ಳ ಮತ್ತು ಗುಡ್ಡಗಳ ಬಳಿ ಹೋಗಬೇಡಿ. ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ಸೂಚಿಸಿದರೆ ಹತ್ತಿರದ "
+    kn = (f"ಎಚ್ಚರಿಕೆ: {f['district_kn']} ಜಿಲ್ಲೆಯ {f['taluk']} ತಾಲ್ಲೂಕಿನಲ್ಲಿ{near_kn} ಪ್ರವಾಹ ಮತ್ತು ಭೂಕುಸಿತದ ಅಪಾಯ "
+          f"ಹೆಚ್ಚಾಗಿದೆ. {rain_kn} ನದಿ, ಹಳ್ಳ ಮತ್ತು ಗುಡ್ಡಗಳ ಬಳಿ ಹೋಗಬೇಡಿ. ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ಸೂಚಿಸಿದರೆ ಹತ್ತಿರದ "
           f"ಕಾಳಜಿ ಕೇಂದ್ರಕ್ಕೆ ತೆರಳಿ. ತುರ್ತು ಸಹಾಯಕ್ಕೆ {f['emergency_number']} ಕರೆ ಮಾಡಿ.")
     return {"kn": kn, "en": en}
 
 
 # ---------- main entry ----------
 
-def draft_alert(risk: dict, village: dict) -> dict:
+def draft_alert(risk: dict) -> dict:
     """Returns {"kn", "en", "source": "gemini"|"template", "note"}."""
-    f = facts_for(risk, village)
+    f = facts_for(risk)
     if not config.GEMINI_API_KEY:
         return {**template_draft(f), "source": "template", "note": "no GEMINI_API_KEY set"}
     try:

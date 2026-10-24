@@ -1,8 +1,8 @@
 """
 Storage in SQLite (a single file, no server to run): alerts, staff and villager sign-in,
-and evacuation reports.
+evacuation reports and relief centres.
 
-An alert moves through these states:
+An alert (one per taluk) moves through these states:
     pending  -> approved   (Gram Panchayat approved it; the villager app may show it)
     pending  -> rejected   (not sent; reason kept)
 Only pending alerts can be edited. Every change is timestamped.
@@ -16,10 +16,11 @@ from zoneinfo import ZoneInfo
 from . import config
 
 SCHEMA = """
+-- One alert covers one taluk (risk_json says which villages and rain-grid squares).
 CREATE TABLE IF NOT EXISTS alerts (
     id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    village_id     TEXT NOT NULL,
-    village_name   TEXT NOT NULL,
+    taluk_id       TEXT NOT NULL,          -- e.g. 'dakshina-kannada:belthangady'
+    taluk_name     TEXT NOT NULL,
     level          TEXT NOT NULL,
     status         TEXT NOT NULL DEFAULT 'pending',
     message_kn     TEXT NOT NULL,
@@ -32,7 +33,8 @@ CREATE TABLE IF NOT EXISTS alerts (
     created_at     TEXT NOT NULL,
     reviewed_by    TEXT,
     reviewed_at    TEXT,
-    review_note    TEXT
+    review_note    TEXT,
+    district       TEXT
 );
 
 -- Staff allowed to sign in to the dashboard, added by whoever runs the server
@@ -41,7 +43,9 @@ CREATE TABLE IF NOT EXISTS officials (
     phone       TEXT PRIMARY KEY,      -- +91XXXXXXXXXX
     name        TEXT NOT NULL,
     created_at  TEXT NOT NULL,
-    role        TEXT NOT NULL DEFAULT 'gp'
+    role        TEXT NOT NULL DEFAULT 'gp',
+    district    TEXT,                  -- NGO: their district (empty = all of Karnataka)
+    taluk_id    TEXT                   -- Gram Panchayat: their taluk, e.g. 'dakshina-kannada:belthangady'
 );
 
 -- Villagers who signed in to report their family's status (they register themselves).
@@ -63,6 +67,41 @@ CREATE TABLE IF NOT EXISTS evacuation_reports (
     reported_at     TEXT NOT NULL,
     handled_by      TEXT,                         -- GP official who dealt with a rescue request
     handled_at      TEXT
+);
+
+-- Relief centres (ಕಾಳಜಿ ಕೇಂದ್ರ) and possible ones. source:
+--   official  from ml/data/shelters.csv (real lists, e.g. from district disaster plans): designated
+--   osm       schools / community halls from OpenStreetMap (ml/data/shelter_candidates.csv): NOT designated
+--             until a Gram Panchayat official marks one as a relief centre and gives its capacity
+--   gp        added by a Gram Panchayat official on the dashboard map: designated
+-- Villagers only ever see designated centres. Open/closed and the head count are set by the GP.
+CREATE TABLE IF NOT EXISTS shelters (
+    shelter_id  TEXT PRIMARY KEY,
+    village_id  TEXT,
+    name        TEXT NOT NULL,
+    name_kn     TEXT,
+    kind        TEXT,
+    lat         REAL NOT NULL,
+    lon         REAL NOT NULL,
+    capacity    INTEGER NOT NULL DEFAULT 0,
+    phone       TEXT,
+    sample      INTEGER NOT NULL DEFAULT 0,
+    is_open     INTEGER NOT NULL DEFAULT 0,
+    occupancy   INTEGER NOT NULL DEFAULT 0,   -- people inside now, as counted by the GP
+    updated_by  TEXT,
+    updated_at  TEXT,
+    source      TEXT NOT NULL DEFAULT 'official',
+    designated  INTEGER NOT NULL DEFAULT 1,
+    taluk_id    TEXT,
+    district    TEXT,
+    added_by    TEXT
+);
+CREATE INDEX IF NOT EXISTS shelters_taluk ON shelters (taluk_id, designated);
+
+-- Small facts the app keeps for itself (e.g. which version of a data file was last loaded).
+CREATE TABLE IF NOT EXISTS app_meta (
+    key    TEXT PRIMARY KEY,
+    value  TEXT
 );
 
 -- Phone alerts already sent to staff, so reminders go out on schedule and not twice.
@@ -122,9 +161,33 @@ def _columns(c, table: str) -> set[str]:
 def init_db() -> None:
     """Create tables, and upgrade a database made by an earlier version of this code."""
     with connect() as c:
+        alert_cols = _columns(c, "alerts")
+        if "village_id" in alert_cols:                       # before state-wide coverage: one alert per village
+            c.execute("ALTER TABLE alerts RENAME COLUMN village_id TO taluk_id")
+            c.execute("ALTER TABLE alerts RENAME COLUMN village_name TO taluk_name")
+        if alert_cols and "district" not in alert_cols:
+            c.execute("ALTER TABLE alerts ADD COLUMN district TEXT")
+        # Relief centres before state-wide coverage: capacity and village_id had to be filled in, which
+        # OpenStreetMap candidates can't do. SQLite can't relax that in place, so rebuild the table
+        # (keeping every row) when the old rules are still there.
+        old_shelters = None
+        info = {r["name"]: r for r in c.execute("PRAGMA table_info(shelters)")}
+        if info and ((info["capacity"]["notnull"] and info["capacity"]["dflt_value"] is None)
+                     or info["village_id"]["notnull"]):
+            c.execute("DROP INDEX IF EXISTS shelters_taluk")
+            c.execute("ALTER TABLE shelters RENAME TO shelters_old")
+            old_shelters = set(info)
         c.executescript(SCHEMA)
-        if "role" not in _columns(c, "officials"):          # added when NGOs got their own role
+        if old_shelters:
+            keep = [col for col in _columns(c, "shelters") if col in old_shelters]
+            c.execute(f"INSERT INTO shelters ({', '.join(keep)}) SELECT {', '.join(keep)} FROM shelters_old")
+            c.execute("DROP TABLE shelters_old")
+        official_cols = _columns(c, "officials")
+        if "role" not in official_cols:                      # added when NGOs got their own role
             c.execute("ALTER TABLE officials ADD COLUMN role TEXT NOT NULL DEFAULT 'gp'")
+        for col in ("district", "taluk_id"):                  # added with state-wide coverage
+            if col not in official_cols:
+                c.execute(f"ALTER TABLE officials ADD COLUMN {col} TEXT")
         report_cols = _columns(c, "evacuation_reports")
         for col in ("handled_by", "handled_at"):              # added with rescue follow-up
             if col not in report_cols:
@@ -149,10 +212,10 @@ def _row(r: sqlite3.Row | None) -> dict | None:
 def create_alert(risk: dict, draft: dict, simulated: bool = False) -> dict:
     with connect() as c:
         cur = c.execute(
-            """INSERT INTO alerts (village_id, village_name, level, message_kn, message_en,
+            """INSERT INTO alerts (taluk_id, taluk_name, district, level, message_kn, message_en,
                                    source, source_note, simulated, risk_json, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-            (risk["village_id"], risk["name"], risk["level"], draft["kn"], draft["en"],
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (risk["taluk_id"], risk["name"], risk.get("district"), risk["level"], draft["kn"], draft["en"],
              draft["source"], draft.get("note"), int(simulated),
              json.dumps(risk, ensure_ascii=False), now()),
         )
@@ -166,39 +229,44 @@ def get_alert(alert_id: int, conn=None) -> dict | None:
         return _row(c.execute("SELECT * FROM alerts WHERE id = ?", (alert_id,)).fetchone())
 
 
-def list_alerts(status: str | None = None, limit: int = 100) -> list[dict]:
+def list_alerts(status: str | None = None, limit: int = 200, taluk_ids: set[str] | None = None) -> list[dict]:
+    """Newest first. taluk_ids limits to those taluks (None = all of Karnataka)."""
+    sql, args = "SELECT * FROM alerts WHERE 1 = 1", []
+    if status:
+        sql += " AND status = ?"
+        args.append(status)
+    if taluk_ids is not None:
+        if not taluk_ids:
+            return []
+        sql += f" AND taluk_id IN ({', '.join('?' * len(taluk_ids))})"
+        args += sorted(taluk_ids)
     with connect() as c:
-        if status:
-            rows = c.execute("SELECT * FROM alerts WHERE status = ? ORDER BY id DESC LIMIT ?",
-                             (status, limit)).fetchall()
-        else:
-            rows = c.execute("SELECT * FROM alerts ORDER BY id DESC LIMIT ?", (limit,)).fetchall()
-        return [_row(r) for r in rows]
+        return [_row(r) for r in c.execute(sql + " ORDER BY id DESC LIMIT ?", (*args, limit)).fetchall()]
 
 
-def open_alert_today(village_id: str) -> dict | None:
-    """A real (non-simulated) pending/approved alert for this village created today, if any.
+def open_alert_today(taluk_id: str) -> dict | None:
+    """A real (non-simulated) pending/approved alert for this taluk created today, if any.
     Used so the scheduled job doesn't draft a new alert every few hours."""
     today = now()[:10]
     with connect() as c:
         r = c.execute(
-            """SELECT * FROM alerts WHERE village_id = ? AND simulated = 0
+            """SELECT * FROM alerts WHERE taluk_id = ? AND simulated = 0
                AND status IN ('pending', 'approved') AND substr(created_at, 1, 10) = ?
                ORDER BY id DESC LIMIT 1""",
-            (village_id, today),
+            (taluk_id, today),
         ).fetchone()
         return _row(r)
 
 
-def list_public_alerts(village_id: str, include_simulated: bool = False, days: int = 7) -> list[dict]:
-    """Alerts villagers may see: APPROVED only, for one village, approved in the last `days` days.
+def list_public_alerts(taluk_id: str, include_simulated: bool = False, days: int = 7) -> list[dict]:
+    """Alerts villagers may see: APPROVED only, for their taluk, approved in the last `days` days.
     Simulated (test) alerts are left out unless include_simulated is set (demo mode)."""
     since = (datetime.now(ZoneInfo(config.TIMEZONE)) - timedelta(days=days)).isoformat(timespec="seconds")
-    sql = ("SELECT * FROM alerts WHERE village_id = ? AND status = 'approved' AND reviewed_at >= ?"
+    sql = ("SELECT * FROM alerts WHERE taluk_id = ? AND status = 'approved' AND reviewed_at >= ?"
            + ("" if include_simulated else " AND simulated = 0")
            + " ORDER BY reviewed_at DESC")
     with connect() as c:
-        return [_row(r) for r in c.execute(sql, (village_id, since)).fetchall()]
+        return [_row(r) for r in c.execute(sql, (taluk_id, since)).fetchall()]
 
 
 def update_text(alert_id: int, message_kn: str | None, message_en: str | None) -> dict:

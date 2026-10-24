@@ -1,0 +1,2497 @@
+{
+ "source": "DataMeet Indian Village Boundaries (Census 2011), ODbL",
+ "districts": [
+  {
+   "name": "Bagalkote",
+   "name_kn": "ಬಾಗಲಕೋಟೆ",
+   "taluks": [
+    {
+     "taluk_id": "bagalkote:badami",
+     "name": "Badami",
+     "census_name": "Badami",
+     "villages": 149,
+     "cells": [
+      "15.75_75.50",
+      "15.75_75.75",
+      "16.00_75.50",
+      "16.00_75.75",
+      "16.25_75.50",
+      "16.25_75.75"
+     ]
+    },
+    {
+     "taluk_id": "bagalkote:bagalkot",
+     "name": "Bagalkot",
+     "census_name": "Bagalkot",
+     "villages": 90,
+     "cells": [
+      "16.25_75.50",
+      "16.25_75.75",
+      "16.25_76.00"
+     ]
+    },
+    {
+     "taluk_id": "bagalkote:bilgi",
+     "name": "Bilgi",
+     "census_name": "Bilgi",
+     "villages": 65,
+     "cells": [
+      "16.25_75.50",
+      "16.25_75.75",
+      "16.50_75.50",
+      "16.50_75.75"
+     ]
+    },
+    {
+     "taluk_id": "bagalkote:hungund",
+     "name": "Hungund",
+     "census_name": "Hungund",
+     "villages": 162,
+     "cells": [
+      "16.00_75.75",
+      "16.00_76.00",
+      "16.00_76.25",
+      "16.25_75.75",
+      "16.25_76.00",
+      "16.25_76.25"
+     ]
+    },
+    {
+     "taluk_id": "bagalkote:jamkhandi",
+     "name": "Jamkhandi",
+     "census_name": "Jamkhandi",
+     "villages": 74,
+     "cells": [
+      "16.50_75.00",
+      "16.50_75.25",
+      "16.50_75.50",
+      "16.75_75.25",
+      "16.75_75.50"
+     ]
+    },
+    {
+     "taluk_id": "bagalkote:mudhol",
+     "name": "Mudhol",
+     "census_name": "Mudhol",
+     "villages": 80,
+     "cells": [
+      "16.25_75.00",
+      "16.25_75.25",
+      "16.25_75.50",
+      "16.50_75.00",
+      "16.50_75.25"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Ballari",
+   "name_kn": "ಬಳ್ಳಾರಿ",
+   "taluks": [
+    {
+     "taluk_id": "ballari:ballari",
+     "name": "Ballari",
+     "census_name": "Bellary",
+     "villages": 101,
+     "cells": [
+      "15.00_76.75",
+      "15.00_77.00",
+      "15.00_77.25",
+      "15.25_76.75",
+      "15.25_77.00",
+      "15.25_77.25",
+      "15.50_76.75",
+      "15.50_77.00"
+     ]
+    },
+    {
+     "taluk_id": "ballari:sandur",
+     "name": "Sandur",
+     "census_name": "Sandur",
+     "villages": 79,
+     "cells": [
+      "14.75_76.50",
+      "15.00_76.50",
+      "15.00_76.75",
+      "15.25_76.50",
+      "15.25_76.75"
+     ]
+    },
+    {
+     "taluk_id": "ballari:siruguppa",
+     "name": "Siruguppa",
+     "census_name": "Siruguppa",
+     "villages": 85,
+     "cells": [
+      "15.50_76.75",
+      "15.50_77.00",
+      "15.75_76.75",
+      "15.75_77.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Belagavi",
+   "name_kn": "ಬೆಳಗಾವಿ",
+   "taluks": [
+    {
+     "taluk_id": "belagavi:athani",
+     "name": "Athani",
+     "census_name": "Athni",
+     "villages": 90,
+     "cells": [
+      "16.50_74.75",
+      "16.50_75.00",
+      "16.50_75.25",
+      "16.75_74.75",
+      "16.75_75.00",
+      "16.75_75.25",
+      "17.00_75.00",
+      "17.00_75.25"
+     ]
+    },
+    {
+     "taluk_id": "belagavi:bailhongal",
+     "name": "Bailhongal",
+     "census_name": "Bailhongal",
+     "villages": 127,
+     "cells": [
+      "15.50_74.75",
+      "15.75_74.75",
+      "15.75_75.00",
+      "16.00_74.75"
+     ]
+    },
+    {
+     "taluk_id": "belagavi:belagavi",
+     "name": "Belagavi",
+     "census_name": "Belgaum",
+     "villages": 132,
+     "cells": [
+      "15.75_74.25",
+      "15.75_74.50",
+      "15.75_74.75",
+      "16.00_74.50",
+      "16.00_74.75"
+     ]
+    },
+    {
+     "taluk_id": "belagavi:chikodi",
+     "name": "Chikodi",
+     "census_name": "Chikodi",
+     "villages": 106,
+     "cells": [
+      "16.25_74.25",
+      "16.25_74.50",
+      "16.25_74.75",
+      "16.50_74.25",
+      "16.50_74.50",
+      "16.50_74.75",
+      "16.75_74.50"
+     ]
+    },
+    {
+     "taluk_id": "belagavi:gokak",
+     "name": "Gokak",
+     "census_name": "Gokak",
+     "villages": 112,
+     "cells": [
+      "16.00_74.75",
+      "16.00_75.00",
+      "16.25_74.75",
+      "16.25_75.00",
+      "16.25_75.25",
+      "16.50_75.00"
+     ]
+    },
+    {
+     "taluk_id": "belagavi:hukeri",
+     "name": "Hukeri",
+     "census_name": "Hukeri",
+     "villages": 117,
+     "cells": [
+      "16.00_74.50",
+      "16.00_74.75",
+      "16.25_74.25",
+      "16.25_74.50",
+      "16.25_74.75"
+     ]
+    },
+    {
+     "taluk_id": "belagavi:khanapur",
+     "name": "Khanapur",
+     "census_name": "Khanapur",
+     "villages": 220,
+     "cells": [
+      "15.50_74.25",
+      "15.50_74.50",
+      "15.50_74.75",
+      "15.75_74.25",
+      "15.75_74.50",
+      "15.75_74.75"
+     ]
+    },
+    {
+     "taluk_id": "belagavi:raibag",
+     "name": "Raibag",
+     "census_name": "Raybag",
+     "villages": 57,
+     "cells": [
+      "16.25_74.75",
+      "16.25_75.00",
+      "16.50_74.75",
+      "16.50_75.00",
+      "16.75_74.75",
+      "16.75_75.00"
+     ]
+    },
+    {
+     "taluk_id": "belagavi:ramdurg",
+     "name": "Ramdurg",
+     "census_name": "Ramdurg",
+     "villages": 104,
+     "cells": [
+      "15.75_75.25",
+      "15.75_75.50",
+      "16.00_75.00",
+      "16.00_75.25",
+      "16.00_75.50",
+      "16.25_75.25"
+     ]
+    },
+    {
+     "taluk_id": "belagavi:saundatti",
+     "name": "Saundatti",
+     "census_name": "Saundatti",
+     "villages": 109,
+     "cells": [
+      "15.75_74.75",
+      "15.75_75.00",
+      "15.75_75.25",
+      "16.00_74.75",
+      "16.00_75.00",
+      "16.00_75.25",
+      "16.25_75.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Bengaluru Rural",
+   "name_kn": "ಬೆಂಗಳೂರು ಗ್ರಾಮಾಂತರ",
+   "taluks": [
+    {
+     "taluk_id": "bengaluru-rural:devanahalli",
+     "name": "Devanahalli",
+     "census_name": "Devanhalli",
+     "villages": 198,
+     "cells": [
+      "13.25_77.50",
+      "13.25_77.75"
+     ]
+    },
+    {
+     "taluk_id": "bengaluru-rural:doddaballapura",
+     "name": "Doddaballapura",
+     "census_name": "Dod Ballapur",
+     "villages": 280,
+     "cells": [
+      "13.25_77.25",
+      "13.25_77.50",
+      "13.25_77.75",
+      "13.50_77.25",
+      "13.50_77.50",
+      "13.50_77.75"
+     ]
+    },
+    {
+     "taluk_id": "bengaluru-rural:hoskote",
+     "name": "Hoskote",
+     "census_name": "Hoskote",
+     "villages": 260,
+     "cells": [
+      "13.00_77.75",
+      "13.00_78.00",
+      "13.25_77.75",
+      "13.25_78.00"
+     ]
+    },
+    {
+     "taluk_id": "bengaluru-rural:nelamangala",
+     "name": "Nelamangala",
+     "census_name": "Nelamagala",
+     "villages": 232,
+     "cells": [
+      "13.00_77.25",
+      "13.00_77.50",
+      "13.25_77.25",
+      "13.25_77.50"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Bengaluru Urban",
+   "name_kn": "ಬೆಂಗಳೂರು ನಗರ",
+   "taluks": [
+    {
+     "taluk_id": "bengaluru-urban:anekal",
+     "name": "Anekal",
+     "census_name": "Anekal",
+     "villages": 218,
+     "cells": [
+      "12.75_77.50",
+      "12.75_77.75",
+      "13.00_77.75"
+     ]
+    },
+    {
+     "taluk_id": "bengaluru-urban:bengaluru-north",
+     "name": "Bengaluru North",
+     "census_name": "Bangalore North",
+     "villages": 299,
+     "cells": [
+      "13.00_77.50",
+      "13.00_77.75",
+      "13.25_77.50",
+      "13.25_77.75"
+     ]
+    },
+    {
+     "taluk_id": "bengaluru-urban:bengaluru-south",
+     "name": "Bengaluru South",
+     "census_name": "Bangalore South",
+     "villages": 315,
+     "cells": [
+      "12.75_77.50",
+      "12.75_77.75",
+      "13.00_77.25",
+      "13.00_77.50",
+      "13.00_77.75",
+      "13.25_77.75"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Bidar",
+   "name_kn": "ಬೀದರ್",
+   "taluks": [
+    {
+     "taluk_id": "bidar:aurad",
+     "name": "Aurad",
+     "census_name": "Aurad",
+     "villages": 149,
+     "cells": [
+      "18.00_77.25",
+      "18.00_77.50",
+      "18.25_77.25",
+      "18.25_77.50",
+      "18.50_77.25",
+      "18.50_77.50"
+     ]
+    },
+    {
+     "taluk_id": "bidar:basavakalyan",
+     "name": "Basavakalyan",
+     "census_name": "Basavakalyan",
+     "villages": 114,
+     "cells": [
+      "17.50_77.00",
+      "17.75_76.75",
+      "17.75_77.00",
+      "18.00_76.75",
+      "18.00_77.00"
+     ]
+    },
+    {
+     "taluk_id": "bidar:bhalki",
+     "name": "Bhalki",
+     "census_name": "Bhalki",
+     "villages": 121,
+     "cells": [
+      "18.00_77.00",
+      "18.00_77.25",
+      "18.00_77.50",
+      "18.25_77.00",
+      "18.25_77.25"
+     ]
+    },
+    {
+     "taluk_id": "bidar:bidar",
+     "name": "Bidar",
+     "census_name": "Bidar",
+     "villages": 131,
+     "cells": [
+      "17.75_77.25",
+      "17.75_77.50",
+      "18.00_77.25",
+      "18.00_77.50",
+      "18.00_77.75"
+     ]
+    },
+    {
+     "taluk_id": "bidar:homnabad",
+     "name": "Homnabad",
+     "census_name": "Homnabad",
+     "villages": 86,
+     "cells": [
+      "17.50_77.25",
+      "17.50_77.50",
+      "17.75_77.00",
+      "17.75_77.25",
+      "17.75_77.50",
+      "18.00_77.00",
+      "18.00_77.25"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Chamarajanagar",
+   "name_kn": "ಚಾಮರಾಜನಗರ",
+   "taluks": [
+    {
+     "taluk_id": "chamarajanagar:chamarajanagar",
+     "name": "Chamarajanagar",
+     "census_name": "Chamarajnagar",
+     "villages": 179,
+     "cells": [
+      "11.75_76.75",
+      "11.75_77.00",
+      "11.75_77.25",
+      "12.00_76.75",
+      "12.00_77.00",
+      "12.25_76.75"
+     ]
+    },
+    {
+     "taluk_id": "chamarajanagar:gundlupet",
+     "name": "Gundlupet",
+     "census_name": "Gundlupet",
+     "villages": 148,
+     "cells": [
+      "11.75_76.50",
+      "11.75_76.75",
+      "12.00_76.50",
+      "12.00_76.75"
+     ]
+    },
+    {
+     "taluk_id": "chamarajanagar:kollegala",
+     "name": "Kollegala",
+     "census_name": "Kollegal",
+     "villages": 89,
+     "cells": [
+      "11.75_77.25",
+      "11.75_77.50",
+      "12.00_77.00",
+      "12.00_77.25",
+      "12.00_77.50",
+      "12.00_77.75",
+      "12.25_77.00",
+      "12.25_77.25",
+      "12.25_77.50"
+     ]
+    },
+    {
+     "taluk_id": "chamarajanagar:yelandur",
+     "name": "Yelandur",
+     "census_name": "Yelandur",
+     "villages": 27,
+     "cells": [
+      "12.00_77.00",
+      "12.00_77.25"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Chikkaballapura",
+   "name_kn": "ಚಿಕ್ಕಬಳ್ಳಾಪುರ",
+   "taluks": [
+    {
+     "taluk_id": "chikkaballapura:bagepalli",
+     "name": "Bagepalli",
+     "census_name": "Bagepalli",
+     "villages": 213,
+     "cells": [
+      "13.75_77.75",
+      "13.75_78.00",
+      "14.00_77.75",
+      "14.00_78.00"
+     ]
+    },
+    {
+     "taluk_id": "chikkaballapura:chikkaballapura",
+     "name": "Chikkaballapura",
+     "census_name": "Chikballapur",
+     "villages": 229,
+     "cells": [
+      "13.25_77.75",
+      "13.50_77.50",
+      "13.50_77.75",
+      "13.75_77.75"
+     ]
+    },
+    {
+     "taluk_id": "chikkaballapura:chintamani",
+     "name": "Chintamani",
+     "census_name": "Chintamani",
+     "villages": 346,
+     "cells": [
+      "13.25_78.00",
+      "13.25_78.25",
+      "13.50_78.00",
+      "13.50_78.25",
+      "13.75_78.00",
+      "13.75_78.25"
+     ]
+    },
+    {
+     "taluk_id": "chikkaballapura:gauribidanur",
+     "name": "Gauribidanur",
+     "census_name": "Gauribidanur",
+     "villages": 221,
+     "cells": [
+      "13.50_77.25",
+      "13.50_77.50",
+      "13.50_77.75",
+      "13.75_77.25",
+      "13.75_77.50",
+      "13.75_77.75"
+     ]
+    },
+    {
+     "taluk_id": "chikkaballapura:gudibanda",
+     "name": "Gudibanda",
+     "census_name": "Gudibanda",
+     "villages": 87,
+     "cells": [
+      "13.75_77.75"
+     ]
+    },
+    {
+     "taluk_id": "chikkaballapura:sidlaghatta",
+     "name": "Sidlaghatta",
+     "census_name": "Sidlaghatta",
+     "villages": 248,
+     "cells": [
+      "13.25_77.75",
+      "13.25_78.00",
+      "13.50_77.75",
+      "13.50_78.00",
+      "13.75_77.75",
+      "13.75_78.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Chikkamagaluru",
+   "name_kn": "ಚಿಕ್ಕಮಗಳೂರು",
+   "taluks": [
+    {
+     "taluk_id": "chikkamagaluru:chikkamagaluru",
+     "name": "Chikkamagaluru",
+     "census_name": "Chikmagalur",
+     "villages": 222,
+     "cells": [
+      "13.25_75.50",
+      "13.25_75.75",
+      "13.25_76.00",
+      "13.50_75.50",
+      "13.50_75.75",
+      "13.50_76.00"
+     ]
+    },
+    {
+     "taluk_id": "chikkamagaluru:kadur",
+     "name": "Kadur",
+     "census_name": "Kadur",
+     "villages": 285,
+     "cells": [
+      "13.25_76.00",
+      "13.50_75.75",
+      "13.50_76.00",
+      "13.50_76.25",
+      "13.75_76.00",
+      "13.75_76.25"
+     ]
+    },
+    {
+     "taluk_id": "chikkamagaluru:koppa",
+     "name": "Koppa",
+     "census_name": "Koppa",
+     "villages": 81,
+     "cells": [
+      "13.25_75.25",
+      "13.25_75.50",
+      "13.50_75.25",
+      "13.50_75.50"
+     ]
+    },
+    {
+     "taluk_id": "chikkamagaluru:mudigere",
+     "name": "Mudigere",
+     "census_name": "Mudigere",
+     "villages": 142,
+     "cells": [
+      "13.00_75.50",
+      "13.00_75.75",
+      "13.25_75.25",
+      "13.25_75.50",
+      "13.25_75.75"
+     ]
+    },
+    {
+     "taluk_id": "chikkamagaluru:narasimharajapura",
+     "name": "Narasimharajapura",
+     "census_name": "Narasimharajapura",
+     "villages": 59,
+     "cells": [
+      "13.25_75.50",
+      "13.50_75.50",
+      "13.50_75.75",
+      "13.75_75.50"
+     ]
+    },
+    {
+     "taluk_id": "chikkamagaluru:sringeri",
+     "name": "Sringeri",
+     "census_name": "Sringeri",
+     "villages": 49,
+     "cells": [
+      "13.25_75.00",
+      "13.25_75.25",
+      "13.50_75.25"
+     ]
+    },
+    {
+     "taluk_id": "chikkamagaluru:tarikere",
+     "name": "Tarikere",
+     "census_name": "Tarikere",
+     "villages": 219,
+     "cells": [
+      "13.50_75.75",
+      "13.75_75.75",
+      "13.75_76.00",
+      "13.75_76.25",
+      "14.00_76.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Chitradurga",
+   "name_kn": "ಚಿತ್ರದುರ್ಗ",
+   "taluks": [
+    {
+     "taluk_id": "chitradurga:challakere",
+     "name": "Challakere",
+     "census_name": "Challakere",
+     "villages": 183,
+     "cells": [
+      "14.00_76.75",
+      "14.25_76.50",
+      "14.25_76.75",
+      "14.25_77.00",
+      "14.50_76.50",
+      "14.50_76.75",
+      "14.50_77.00"
+     ]
+    },
+    {
+     "taluk_id": "chitradurga:chitradurga",
+     "name": "Chitradurga",
+     "census_name": "Chitradurga",
+     "villages": 166,
+     "cells": [
+      "14.00_76.25",
+      "14.00_76.50",
+      "14.25_76.00",
+      "14.25_76.25",
+      "14.25_76.50",
+      "14.50_76.25",
+      "14.50_76.50"
+     ]
+    },
+    {
+     "taluk_id": "chitradurga:hiriyur",
+     "name": "Hiriyur",
+     "census_name": "Hiriyur",
+     "villages": 154,
+     "cells": [
+      "13.75_76.50",
+      "13.75_76.75",
+      "14.00_76.50",
+      "14.00_76.75",
+      "14.00_77.00",
+      "14.25_76.50",
+      "14.25_76.75"
+     ]
+    },
+    {
+     "taluk_id": "chitradurga:holalkere",
+     "name": "Holalkere",
+     "census_name": "Holalkere",
+     "villages": 168,
+     "cells": [
+      "14.00_76.00",
+      "14.00_76.25",
+      "14.00_76.50",
+      "14.25_76.00",
+      "14.25_76.25"
+     ]
+    },
+    {
+     "taluk_id": "chitradurga:hosdurga",
+     "name": "Hosdurga",
+     "census_name": "Hosdurga",
+     "villages": 200,
+     "cells": [
+      "13.50_76.25",
+      "13.50_76.50",
+      "13.75_76.00",
+      "13.75_76.25",
+      "13.75_76.50",
+      "14.00_76.25",
+      "14.00_76.50"
+     ]
+    },
+    {
+     "taluk_id": "chitradurga:molakalmuru",
+     "name": "Molakalmuru",
+     "census_name": "Molakalmuru",
+     "villages": 82,
+     "cells": [
+      "14.50_76.75",
+      "14.75_76.50",
+      "14.75_76.75",
+      "15.00_76.75"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Dakshina Kannada",
+   "name_kn": "ದಕ್ಷಿಣ ಕನ್ನಡ",
+   "taluks": [
+    {
+     "taluk_id": "dakshina-kannada:bantwal",
+     "name": "Bantwal",
+     "census_name": "Bantval",
+     "villages": 82,
+     "cells": [
+      "12.75_75.00",
+      "12.75_75.25",
+      "13.00_75.00",
+      "13.00_75.25"
+     ]
+    },
+    {
+     "taluk_id": "dakshina-kannada:belthangady",
+     "name": "Belthangady",
+     "census_name": "Beltangadi",
+     "villages": 81,
+     "cells": [
+      "12.75_75.25",
+      "12.75_75.50",
+      "13.00_75.00",
+      "13.00_75.25",
+      "13.00_75.50",
+      "13.25_75.25"
+     ]
+    },
+    {
+     "taluk_id": "dakshina-kannada:mangaluru",
+     "name": "Mangaluru",
+     "census_name": "Mangalore",
+     "villages": 94,
+     "cells": [
+      "12.75_74.75",
+      "12.75_75.00",
+      "13.00_74.75",
+      "13.00_75.00"
+     ]
+    },
+    {
+     "taluk_id": "dakshina-kannada:puttur",
+     "name": "Puttur",
+     "census_name": "Puttur",
+     "villages": 68,
+     "cells": [
+      "12.50_75.25",
+      "12.75_75.25",
+      "12.75_75.50"
+     ]
+    },
+    {
+     "taluk_id": "dakshina-kannada:sullia",
+     "name": "Sullia",
+     "census_name": "Sulya",
+     "villages": 41,
+     "cells": [
+      "12.50_75.25",
+      "12.50_75.50",
+      "12.50_75.75",
+      "12.75_75.25",
+      "12.75_75.50"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Davanagere",
+   "name_kn": "ದಾವಣಗೆರೆ",
+   "taluks": [
+    {
+     "taluk_id": "davanagere:channagiri",
+     "name": "Channagiri",
+     "census_name": "Channagiri",
+     "villages": 209,
+     "cells": [
+      "13.75_76.00",
+      "14.00_75.75",
+      "14.00_76.00",
+      "14.25_75.75",
+      "14.25_76.00"
+     ]
+    },
+    {
+     "taluk_id": "davanagere:davanagere",
+     "name": "Davanagere",
+     "census_name": "Davangere",
+     "villages": 162,
+     "cells": [
+      "14.25_75.75",
+      "14.25_76.00",
+      "14.25_76.25",
+      "14.50_75.75",
+      "14.50_76.00",
+      "14.50_76.25"
+     ]
+    },
+    {
+     "taluk_id": "davanagere:harihar",
+     "name": "Harihar",
+     "census_name": "Harihar",
+     "villages": 79,
+     "cells": [
+      "14.25_75.75",
+      "14.50_75.75",
+      "14.50_76.00"
+     ]
+    },
+    {
+     "taluk_id": "davanagere:honnali",
+     "name": "Honnali",
+     "census_name": "Honnali",
+     "villages": 151,
+     "cells": [
+      "14.00_75.50",
+      "14.00_75.75",
+      "14.25_75.50",
+      "14.25_75.75"
+     ]
+    },
+    {
+     "taluk_id": "davanagere:jagalur",
+     "name": "Jagalur",
+     "census_name": "Jagalur",
+     "villages": 140,
+     "cells": [
+      "14.50_76.25",
+      "14.50_76.50",
+      "14.75_76.25",
+      "14.75_76.50"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Dharwad",
+   "name_kn": "ಧಾರವಾಡ",
+   "taluks": [
+    {
+     "taluk_id": "dharwad:dharwad",
+     "name": "Dharwad",
+     "census_name": "Dharwad",
+     "villages": 112,
+     "cells": [
+      "15.25_74.75",
+      "15.25_75.00",
+      "15.50_74.75",
+      "15.50_75.00",
+      "15.50_75.25",
+      "15.75_75.00"
+     ]
+    },
+    {
+     "taluk_id": "dharwad:hubli",
+     "name": "Hubli",
+     "census_name": "Hubli",
+     "villages": 55,
+     "cells": [
+      "15.25_75.00",
+      "15.25_75.25",
+      "15.25_75.50",
+      "15.50_75.00",
+      "15.50_75.25"
+     ]
+    },
+    {
+     "taluk_id": "dharwad:kalaghatagi",
+     "name": "Kalaghatagi",
+     "census_name": "Kalghatgi",
+     "villages": 87,
+     "cells": [
+      "15.00_75.00",
+      "15.25_74.75",
+      "15.25_75.00"
+     ]
+    },
+    {
+     "taluk_id": "dharwad:kundgol",
+     "name": "Kundgol",
+     "census_name": "Kundgol",
+     "villages": 57,
+     "cells": [
+      "15.00_75.25",
+      "15.00_75.50",
+      "15.25_75.25",
+      "15.25_75.50"
+     ]
+    },
+    {
+     "taluk_id": "dharwad:navalgund",
+     "name": "Navalgund",
+     "census_name": "Navalgund",
+     "villages": 60,
+     "cells": [
+      "15.25_75.25",
+      "15.50_75.00",
+      "15.50_75.25",
+      "15.50_75.50",
+      "15.75_75.00",
+      "15.75_75.25",
+      "15.75_75.50"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Gadag",
+   "name_kn": "ಗದಗ",
+   "taluks": [
+    {
+     "taluk_id": "gadag:gadag",
+     "name": "Gadag",
+     "census_name": "Gadag",
+     "villages": 57,
+     "cells": [
+      "15.25_75.50",
+      "15.25_75.75",
+      "15.50_75.50",
+      "15.50_75.75"
+     ]
+    },
+    {
+     "taluk_id": "gadag:mundargi",
+     "name": "Mundargi",
+     "census_name": "Mundargi",
+     "villages": 49,
+     "cells": [
+      "15.00_75.75",
+      "15.00_76.00",
+      "15.25_75.75",
+      "15.25_76.00",
+      "15.50_75.75",
+      "15.50_76.00"
+     ]
+    },
+    {
+     "taluk_id": "gadag:nargund",
+     "name": "Nargund",
+     "census_name": "Nargund",
+     "villages": 36,
+     "cells": [
+      "15.75_75.25",
+      "15.75_75.50",
+      "16.00_75.50"
+     ]
+    },
+    {
+     "taluk_id": "gadag:ron",
+     "name": "Ron",
+     "census_name": "Ron",
+     "villages": 94,
+     "cells": [
+      "15.50_75.75",
+      "15.50_76.00",
+      "15.75_75.50",
+      "15.75_75.75",
+      "15.75_76.00"
+     ]
+    },
+    {
+     "taluk_id": "gadag:shirhatti",
+     "name": "Shirhatti",
+     "census_name": "Shirhatti",
+     "villages": 85,
+     "cells": [
+      "15.00_75.50",
+      "15.00_75.75",
+      "15.25_75.50",
+      "15.25_75.75"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Hassan",
+   "name_kn": "ಹಾಸನ",
+   "taluks": [
+    {
+     "taluk_id": "hassan:alur",
+     "name": "Alur",
+     "census_name": "Alur",
+     "villages": 253,
+     "cells": [
+      "12.75_75.75",
+      "12.75_76.00",
+      "13.00_76.00"
+     ]
+    },
+    {
+     "taluk_id": "hassan:arkalgud",
+     "name": "Arkalgud",
+     "census_name": "Arkalgud",
+     "villages": 282,
+     "cells": [
+      "12.50_76.00",
+      "12.50_76.25",
+      "12.75_76.00",
+      "12.75_76.25"
+     ]
+    },
+    {
+     "taluk_id": "hassan:arsikere",
+     "name": "Arsikere",
+     "census_name": "Arsikere",
+     "villages": 345,
+     "cells": [
+      "13.00_76.25",
+      "13.25_76.00",
+      "13.25_76.25",
+      "13.25_76.50",
+      "13.50_76.00",
+      "13.50_76.25",
+      "13.50_76.50"
+     ]
+    },
+    {
+     "taluk_id": "hassan:belur",
+     "name": "Belur",
+     "census_name": "Belur",
+     "villages": 357,
+     "cells": [
+      "13.00_75.75",
+      "13.00_76.00",
+      "13.25_75.75",
+      "13.25_76.00"
+     ]
+    },
+    {
+     "taluk_id": "hassan:channarayapatna",
+     "name": "Channarayapatna",
+     "census_name": "Channarayapatna",
+     "villages": 382,
+     "cells": [
+      "12.75_76.25",
+      "12.75_76.50",
+      "13.00_76.25",
+      "13.00_76.50",
+      "13.25_76.25",
+      "13.25_76.50"
+     ]
+    },
+    {
+     "taluk_id": "hassan:hassan",
+     "name": "Hassan",
+     "census_name": "Hassan",
+     "villages": 373,
+     "cells": [
+      "12.75_76.00",
+      "12.75_76.25",
+      "13.00_76.00",
+      "13.00_76.25",
+      "13.25_76.00",
+      "13.25_76.25"
+     ]
+    },
+    {
+     "taluk_id": "hassan:holenarasipura",
+     "name": "Holenarasipura",
+     "census_name": "Hole Narsipur",
+     "villages": 214,
+     "cells": [
+      "12.50_76.25",
+      "12.75_76.25",
+      "13.00_76.25"
+     ]
+    },
+    {
+     "taluk_id": "hassan:sakleshpur",
+     "name": "Sakleshpur",
+     "census_name": "Sakleshpur",
+     "villages": 226,
+     "cells": [
+      "12.75_75.75",
+      "12.75_76.00",
+      "13.00_75.50",
+      "13.00_75.75",
+      "13.00_76.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Haveri",
+   "name_kn": "ಹಾವೇರಿ",
+   "taluks": [
+    {
+     "taluk_id": "haveri:byadgi",
+     "name": "Byadgi",
+     "census_name": "Bydagi",
+     "villages": 63,
+     "cells": [
+      "14.50_75.25",
+      "14.50_75.50",
+      "14.75_75.25",
+      "14.75_75.50"
+     ]
+    },
+    {
+     "taluk_id": "haveri:hangal",
+     "name": "Hangal",
+     "census_name": "Hangal",
+     "villages": 145,
+     "cells": [
+      "14.50_75.25",
+      "14.75_75.00",
+      "14.75_75.25",
+      "15.00_75.00",
+      "15.00_75.25"
+     ]
+    },
+    {
+     "taluk_id": "haveri:haveri",
+     "name": "Haveri",
+     "census_name": "Haveri",
+     "villages": 87,
+     "cells": [
+      "14.75_75.25",
+      "14.75_75.50",
+      "14.75_75.75",
+      "15.00_75.50",
+      "15.00_75.75"
+     ]
+    },
+    {
+     "taluk_id": "haveri:hirekerur",
+     "name": "Hirekerur",
+     "census_name": "Hirekerur",
+     "villages": 125,
+     "cells": [
+      "14.25_75.50",
+      "14.50_75.25",
+      "14.50_75.50"
+     ]
+    },
+    {
+     "taluk_id": "haveri:ranebennur",
+     "name": "Ranebennur",
+     "census_name": "Ranibenur",
+     "villages": 104,
+     "cells": [
+      "14.50_75.50",
+      "14.50_75.75",
+      "14.75_75.50",
+      "14.75_75.75"
+     ]
+    },
+    {
+     "taluk_id": "haveri:savanur",
+     "name": "Savanur",
+     "census_name": "Savanur",
+     "villages": 63,
+     "cells": [
+      "14.75_75.25",
+      "14.75_75.50",
+      "15.00_75.25",
+      "15.00_75.50"
+     ]
+    },
+    {
+     "taluk_id": "haveri:shiggaon",
+     "name": "Shiggaon",
+     "census_name": "Shiggaon",
+     "villages": 94,
+     "cells": [
+      "15.00_75.00",
+      "15.00_75.25",
+      "15.25_75.00",
+      "15.25_75.25"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Kalaburagi",
+   "name_kn": "ಕಲಬುರಗಿ",
+   "taluks": [
+    {
+     "taluk_id": "kalaburagi:afzalpur",
+     "name": "Afzalpur",
+     "census_name": "Afsalpur",
+     "villages": 87,
+     "cells": [
+      "17.00_76.50",
+      "17.25_76.00",
+      "17.25_76.25",
+      "17.25_76.50",
+      "17.25_76.75"
+     ]
+    },
+    {
+     "taluk_id": "kalaburagi:aland",
+     "name": "Aland",
+     "census_name": "Aland",
+     "villages": 129,
+     "cells": [
+      "17.25_76.50",
+      "17.50_76.25",
+      "17.50_76.50",
+      "17.50_76.75",
+      "17.50_77.00",
+      "17.75_76.50",
+      "17.75_76.75",
+      "17.75_77.00"
+     ]
+    },
+    {
+     "taluk_id": "kalaburagi:chincholi",
+     "name": "Chincholi",
+     "census_name": "Chincholi",
+     "villages": 134,
+     "cells": [
+      "17.25_77.25",
+      "17.25_77.50",
+      "17.50_77.00",
+      "17.50_77.25",
+      "17.50_77.50",
+      "17.50_77.75"
+     ]
+    },
+    {
+     "taluk_id": "kalaburagi:chitapur",
+     "name": "Chitapur",
+     "census_name": "Chitapur",
+     "villages": 124,
+     "cells": [
+      "16.75_77.00",
+      "17.00_76.75",
+      "17.00_77.00",
+      "17.00_77.25",
+      "17.25_77.00",
+      "17.25_77.25",
+      "17.50_77.00",
+      "17.50_77.25"
+     ]
+    },
+    {
+     "taluk_id": "kalaburagi:jevargi",
+     "name": "Jevargi",
+     "census_name": "Jevargi",
+     "villages": 146,
+     "cells": [
+      "16.75_76.50",
+      "16.75_76.75",
+      "17.00_76.50",
+      "17.00_76.75",
+      "17.00_77.00",
+      "17.25_76.50",
+      "17.25_76.75"
+     ]
+    },
+    {
+     "taluk_id": "kalaburagi:kalaburagi",
+     "name": "Kalaburagi",
+     "census_name": "Gulbarga",
+     "villages": 143,
+     "cells": [
+      "17.00_76.50",
+      "17.00_76.75",
+      "17.25_76.75",
+      "17.25_77.00",
+      "17.50_76.75",
+      "17.50_77.00",
+      "17.50_77.25",
+      "17.75_77.00",
+      "17.75_77.25"
+     ]
+    },
+    {
+     "taluk_id": "kalaburagi:sedam",
+     "name": "Sedam",
+     "census_name": "Sedam",
+     "villages": 105,
+     "cells": [
+      "17.00_77.25",
+      "17.00_77.50",
+      "17.25_77.25",
+      "17.25_77.50"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Kodagu",
+   "name_kn": "ಕೊಡಗು",
+   "taluks": [
+    {
+     "taluk_id": "kodagu:madikeri",
+     "name": "Madikeri",
+     "census_name": "Madikeri",
+     "villages": 68,
+     "cells": [
+      "12.25_75.50",
+      "12.25_75.75",
+      "12.50_75.50",
+      "12.50_75.75"
+     ]
+    },
+    {
+     "taluk_id": "kodagu:somwarpet",
+     "name": "Somwarpet",
+     "census_name": "Somvarpet",
+     "villages": 137,
+     "cells": [
+      "12.25_75.75",
+      "12.25_76.00",
+      "12.50_75.75",
+      "12.50_76.00",
+      "12.75_75.75",
+      "12.75_76.00"
+     ]
+    },
+    {
+     "taluk_id": "kodagu:virajpet",
+     "name": "Virajpet",
+     "census_name": "Virajpet",
+     "villages": 97,
+     "cells": [
+      "12.00_75.75",
+      "12.00_76.00",
+      "12.25_75.75",
+      "12.25_76.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Kolar",
+   "name_kn": "ಕೋಲಾರ",
+   "taluks": [
+    {
+     "taluk_id": "kolar:bangarpet",
+     "name": "Bangarpet",
+     "census_name": "Bangarpet",
+     "villages": 367,
+     "cells": [
+      "12.75_78.00",
+      "12.75_78.25",
+      "13.00_78.00",
+      "13.00_78.25",
+      "13.00_78.50"
+     ]
+    },
+    {
+     "taluk_id": "kolar:kolar",
+     "name": "Kolar",
+     "census_name": "Kolar",
+     "villages": 333,
+     "cells": [
+      "13.00_78.00",
+      "13.00_78.25",
+      "13.25_78.00",
+      "13.25_78.25"
+     ]
+    },
+    {
+     "taluk_id": "kolar:malur",
+     "name": "Malur",
+     "census_name": "Malur",
+     "villages": 314,
+     "cells": [
+      "12.75_78.00",
+      "13.00_77.75",
+      "13.00_78.00"
+     ]
+    },
+    {
+     "taluk_id": "kolar:mulbagal",
+     "name": "Mulbagal",
+     "census_name": "Mulbagal",
+     "villages": 319,
+     "cells": [
+      "13.00_78.25",
+      "13.00_78.50",
+      "13.25_78.25",
+      "13.25_78.50"
+     ]
+    },
+    {
+     "taluk_id": "kolar:srinivaspur",
+     "name": "Srinivaspur",
+     "census_name": "Srinivaspur",
+     "villages": 298,
+     "cells": [
+      "13.25_78.00",
+      "13.25_78.25",
+      "13.25_78.50",
+      "13.50_78.00",
+      "13.50_78.25",
+      "13.50_78.50"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Koppal",
+   "name_kn": "ಕೊಪ್ಪಳ",
+   "taluks": [
+    {
+     "taluk_id": "koppal:gangavathi",
+     "name": "Gangavathi",
+     "census_name": "Gangawati",
+     "villages": 151,
+     "cells": [
+      "15.25_76.50",
+      "15.50_76.25",
+      "15.50_76.50",
+      "15.50_76.75",
+      "15.75_76.25",
+      "15.75_76.50",
+      "15.75_76.75"
+     ]
+    },
+    {
+     "taluk_id": "koppal:koppal",
+     "name": "Koppal",
+     "census_name": "Koppal",
+     "villages": 147,
+     "cells": [
+      "15.25_76.00",
+      "15.25_76.25",
+      "15.25_76.50",
+      "15.50_76.00",
+      "15.50_76.25",
+      "15.50_76.50"
+     ]
+    },
+    {
+     "taluk_id": "koppal:kushtagi",
+     "name": "Kushtagi",
+     "census_name": "Kushtagi",
+     "villages": 166,
+     "cells": [
+      "15.75_75.75",
+      "15.75_76.00",
+      "15.75_76.25",
+      "15.75_76.50",
+      "16.00_75.75",
+      "16.00_76.00",
+      "16.00_76.25",
+      "16.00_76.50"
+     ]
+    },
+    {
+     "taluk_id": "koppal:yelburga",
+     "name": "Yelburga",
+     "census_name": "Yelbarga",
+     "villages": 139,
+     "cells": [
+      "15.25_76.00",
+      "15.50_75.75",
+      "15.50_76.00",
+      "15.50_76.25",
+      "15.75_76.00",
+      "15.75_76.25"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Mandya",
+   "name_kn": "ಮಂಡ್ಯ",
+   "taluks": [
+    {
+     "taluk_id": "mandya:krishnarajapete",
+     "name": "Krishnarajapete",
+     "census_name": "Krishnarajpet",
+     "villages": 299,
+     "cells": [
+      "12.50_76.50",
+      "12.75_76.25",
+      "12.75_76.50"
+     ]
+    },
+    {
+     "taluk_id": "mandya:maddur",
+     "name": "Maddur",
+     "census_name": "Maddur",
+     "villages": 155,
+     "cells": [
+      "12.50_77.00",
+      "12.50_77.25",
+      "12.75_77.00"
+     ]
+    },
+    {
+     "taluk_id": "mandya:malavalli",
+     "name": "Malavalli",
+     "census_name": "Malvalli",
+     "villages": 175,
+     "cells": [
+      "12.25_77.00",
+      "12.25_77.25",
+      "12.50_77.00",
+      "12.50_77.25"
+     ]
+    },
+    {
+     "taluk_id": "mandya:mandya",
+     "name": "Mandya",
+     "census_name": "Mandya",
+     "villages": 175,
+     "cells": [
+      "12.50_76.75",
+      "12.50_77.00",
+      "12.75_76.75",
+      "12.75_77.00"
+     ]
+    },
+    {
+     "taluk_id": "mandya:nagamangala",
+     "name": "Nagamangala",
+     "census_name": "Nagamangala",
+     "villages": 348,
+     "cells": [
+      "12.75_76.50",
+      "12.75_76.75",
+      "12.75_77.00",
+      "13.00_76.50",
+      "13.00_76.75",
+      "13.00_77.00"
+     ]
+    },
+    {
+     "taluk_id": "mandya:pandavapura",
+     "name": "Pandavapura",
+     "census_name": "Pandavapura",
+     "villages": 147,
+     "cells": [
+      "12.50_76.50",
+      "12.50_76.75",
+      "12.75_76.50",
+      "12.75_76.75"
+     ]
+    },
+    {
+     "taluk_id": "mandya:srirangapatna",
+     "name": "Srirangapatna",
+     "census_name": "Shrirangapattana",
+     "villages": 91,
+     "cells": [
+      "12.25_76.50",
+      "12.25_76.75",
+      "12.50_76.50",
+      "12.50_76.75",
+      "12.50_77.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Mysuru",
+   "name_kn": "ಮೈಸೂರು",
+   "taluks": [
+    {
+     "taluk_id": "mysuru:h-d-kote",
+     "name": "H.D. Kote",
+     "census_name": "Heggadadevankote",
+     "villages": 253,
+     "cells": [
+      "11.75_76.25",
+      "11.75_76.50",
+      "12.00_76.25",
+      "12.00_76.50",
+      "12.25_76.25",
+      "12.25_76.50"
+     ]
+    },
+    {
+     "taluk_id": "mysuru:hunsur",
+     "name": "Hunsur",
+     "census_name": "Hunsur",
+     "villages": 192,
+     "cells": [
+      "12.25_76.25",
+      "12.25_76.50",
+      "12.50_76.25",
+      "12.50_76.50"
+     ]
+    },
+    {
+     "taluk_id": "mysuru:k-r-nagar",
+     "name": "K.R. Nagar",
+     "census_name": "Krishnarajanagara",
+     "villages": 156,
+     "cells": [
+      "12.50_76.25",
+      "12.50_76.50",
+      "12.75_76.25"
+     ]
+    },
+    {
+     "taluk_id": "mysuru:mysuru",
+     "name": "Mysuru",
+     "census_name": "Mysore",
+     "villages": 156,
+     "cells": [
+      "12.25_76.50",
+      "12.25_76.75",
+      "12.50_76.50",
+      "12.50_76.75"
+     ]
+    },
+    {
+     "taluk_id": "mysuru:nanjangud",
+     "name": "Nanjangud",
+     "census_name": "Nanjangud",
+     "villages": 179,
+     "cells": [
+      "12.00_76.50",
+      "12.00_76.75",
+      "12.00_77.00",
+      "12.25_76.50",
+      "12.25_76.75"
+     ]
+    },
+    {
+     "taluk_id": "mysuru:periyapatna",
+     "name": "Periyapatna",
+     "census_name": "Piriyapatana",
+     "villages": 199,
+     "cells": [
+      "12.25_76.00",
+      "12.25_76.25",
+      "12.50_76.00",
+      "12.50_76.25"
+     ]
+    },
+    {
+     "taluk_id": "mysuru:t-narasipura",
+     "name": "T. Narasipura",
+     "census_name": "Tirumakudal Narsipur",
+     "villages": 125,
+     "cells": [
+      "12.00_77.00",
+      "12.25_76.75",
+      "12.25_77.00",
+      "12.50_76.75",
+      "12.50_77.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Raichur",
+   "name_kn": "ರಾಯಚೂರು",
+   "taluks": [
+    {
+     "taluk_id": "raichur:devadurga",
+     "name": "Devadurga",
+     "census_name": "Devadurga",
+     "villages": 175,
+     "cells": [
+      "16.25_76.75",
+      "16.25_77.00",
+      "16.25_77.25",
+      "16.50_76.75",
+      "16.50_77.00",
+      "16.50_77.25"
+     ]
+    },
+    {
+     "taluk_id": "raichur:lingsugur",
+     "name": "Lingsugur",
+     "census_name": "Lingsugur",
+     "villages": 190,
+     "cells": [
+      "15.75_76.50",
+      "16.00_76.25",
+      "16.00_76.50",
+      "16.00_76.75",
+      "16.25_76.25",
+      "16.25_76.50",
+      "16.25_76.75"
+     ]
+    },
+    {
+     "taluk_id": "raichur:manvi",
+     "name": "Manvi",
+     "census_name": "Manvi",
+     "villages": 165,
+     "cells": [
+      "15.75_77.00",
+      "16.00_76.75",
+      "16.00_77.00",
+      "16.00_77.25",
+      "16.25_76.75",
+      "16.25_77.00",
+      "16.25_77.25"
+     ]
+    },
+    {
+     "taluk_id": "raichur:raichur",
+     "name": "Raichur",
+     "census_name": "Raichur",
+     "villages": 156,
+     "cells": [
+      "16.00_77.25",
+      "16.00_77.50",
+      "16.25_77.25",
+      "16.25_77.50",
+      "16.50_77.25",
+      "16.50_77.50"
+     ]
+    },
+    {
+     "taluk_id": "raichur:sindhanur",
+     "name": "Sindhanur",
+     "census_name": "Sindhnur",
+     "villages": 161,
+     "cells": [
+      "15.50_76.75",
+      "15.75_76.50",
+      "15.75_76.75",
+      "15.75_77.00",
+      "16.00_76.50",
+      "16.00_76.75",
+      "16.00_77.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Ramanagara",
+   "name_kn": "ರಾಮನಗರ",
+   "taluks": [
+    {
+     "taluk_id": "ramanagara:channapatna",
+     "name": "Channapatna",
+     "census_name": "Channapatna",
+     "villages": 137,
+     "cells": [
+      "12.50_77.00",
+      "12.50_77.25",
+      "12.75_77.00",
+      "12.75_77.25"
+     ]
+    },
+    {
+     "taluk_id": "ramanagara:kanakapura",
+     "name": "Kanakapura",
+     "census_name": "Kankapura",
+     "villages": 242,
+     "cells": [
+      "12.25_77.25",
+      "12.25_77.50",
+      "12.50_77.25",
+      "12.50_77.50",
+      "12.75_77.25",
+      "12.75_77.50"
+     ]
+    },
+    {
+     "taluk_id": "ramanagara:magadi",
+     "name": "Magadi",
+     "census_name": "Magadi",
+     "villages": 275,
+     "cells": [
+      "12.75_77.25",
+      "13.00_77.00",
+      "13.00_77.25",
+      "13.25_77.00",
+      "13.25_77.25"
+     ]
+    },
+    {
+     "taluk_id": "ramanagara:ramanagara",
+     "name": "Ramanagara",
+     "census_name": "Ramanagaram",
+     "villages": 127,
+     "cells": [
+      "12.50_77.25",
+      "12.75_77.25",
+      "12.75_77.50"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Shivamogga",
+   "name_kn": "ಶಿವಮೊಗ್ಗ",
+   "taluks": [
+    {
+     "taluk_id": "shivamogga:bhadravathi",
+     "name": "Bhadravathi",
+     "census_name": "Bhadravathi",
+     "villages": 156,
+     "cells": [
+      "13.75_75.50",
+      "13.75_75.75",
+      "14.00_75.75"
+     ]
+    },
+    {
+     "taluk_id": "shivamogga:hosanagara",
+     "name": "Hosanagara",
+     "census_name": "Hosanagara",
+     "villages": 202,
+     "cells": [
+      "13.50_75.00",
+      "13.75_75.00",
+      "13.75_75.25",
+      "14.00_75.00",
+      "14.00_75.25"
+     ]
+    },
+    {
+     "taluk_id": "shivamogga:sagar",
+     "name": "Sagar",
+     "census_name": "Sagar",
+     "villages": 236,
+     "cells": [
+      "13.75_74.75",
+      "14.00_74.75",
+      "14.00_75.00",
+      "14.00_75.25",
+      "14.25_74.75",
+      "14.25_75.00",
+      "14.25_75.25"
+     ]
+    },
+    {
+     "taluk_id": "shivamogga:shikarpur",
+     "name": "Shikarpur",
+     "census_name": "Shikarpur",
+     "villages": 158,
+     "cells": [
+      "14.25_75.25",
+      "14.25_75.50",
+      "14.50_75.25"
+     ]
+    },
+    {
+     "taluk_id": "shivamogga:shivamogga",
+     "name": "Shivamogga",
+     "census_name": "Shimoga",
+     "villages": 215,
+     "cells": [
+      "13.75_75.50",
+      "14.00_75.25",
+      "14.00_75.50",
+      "14.00_75.75"
+     ]
+    },
+    {
+     "taluk_id": "shivamogga:soraba",
+     "name": "Soraba",
+     "census_name": "Sorab",
+     "villages": 280,
+     "cells": [
+      "14.25_75.00",
+      "14.25_75.25",
+      "14.50_75.00",
+      "14.50_75.25",
+      "14.75_75.00"
+     ]
+    },
+    {
+     "taluk_id": "shivamogga:tirthahalli",
+     "name": "Tirthahalli",
+     "census_name": "Tirthahalli",
+     "villages": 247,
+     "cells": [
+      "13.50_75.00",
+      "13.50_75.25",
+      "13.75_75.00",
+      "13.75_75.25",
+      "13.75_75.50",
+      "14.00_75.25",
+      "14.00_75.50"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Tumakuru",
+   "name_kn": "ತುಮಕೂರು",
+   "taluks": [
+    {
+     "taluk_id": "tumakuru:chikkanayakanahalli",
+     "name": "Chikkanayakanahalli",
+     "census_name": "Chiknayakanhalli",
+     "villages": 228,
+     "cells": [
+      "13.25_76.50",
+      "13.25_76.75",
+      "13.50_76.25",
+      "13.50_76.50",
+      "13.50_76.75",
+      "13.75_76.50",
+      "13.75_76.75"
+     ]
+    },
+    {
+     "taluk_id": "tumakuru:gubbi",
+     "name": "Gubbi",
+     "census_name": "Gubbi",
+     "villages": 331,
+     "cells": [
+      "13.00_76.75",
+      "13.00_77.00",
+      "13.25_76.75",
+      "13.25_77.00",
+      "13.50_76.75",
+      "13.50_77.00"
+     ]
+    },
+    {
+     "taluk_id": "tumakuru:koratagere",
+     "name": "Koratagere",
+     "census_name": "Korategere",
+     "villages": 239,
+     "cells": [
+      "13.25_77.25",
+      "13.50_77.00",
+      "13.50_77.25"
+     ]
+    },
+    {
+     "taluk_id": "tumakuru:kunigal",
+     "name": "Kunigal",
+     "census_name": "Kunigal",
+     "villages": 298,
+     "cells": [
+      "12.75_77.00",
+      "12.75_77.25",
+      "13.00_76.75",
+      "13.00_77.00",
+      "13.00_77.25",
+      "13.25_77.00"
+     ]
+    },
+    {
+     "taluk_id": "tumakuru:madhugiri",
+     "name": "Madhugiri",
+     "census_name": "Madhugiri",
+     "villages": 302,
+     "cells": [
+      "13.50_77.00",
+      "13.50_77.25",
+      "13.75_77.00",
+      "13.75_77.25",
+      "13.75_77.50",
+      "14.00_77.25"
+     ]
+    },
+    {
+     "taluk_id": "tumakuru:pavagada",
+     "name": "Pavagada",
+     "census_name": "Pavagada",
+     "villages": 145,
+     "cells": [
+      "14.00_77.00",
+      "14.00_77.25",
+      "14.00_77.50",
+      "14.25_77.00",
+      "14.25_77.25",
+      "14.25_77.50"
+     ]
+    },
+    {
+     "taluk_id": "tumakuru:sira",
+     "name": "Sira",
+     "census_name": "Sira",
+     "villages": 237,
+     "cells": [
+      "13.50_76.75",
+      "13.50_77.00",
+      "13.75_76.75",
+      "13.75_77.00",
+      "14.00_76.75",
+      "14.00_77.00"
+     ]
+    },
+    {
+     "taluk_id": "tumakuru:tiptur",
+     "name": "Tiptur",
+     "census_name": "Tiptur",
+     "villages": 228,
+     "cells": [
+      "13.00_76.50",
+      "13.25_76.25",
+      "13.25_76.50",
+      "13.25_76.75",
+      "13.50_76.50"
+     ]
+    },
+    {
+     "taluk_id": "tumakuru:tumakuru",
+     "name": "Tumakuru",
+     "census_name": "Tumkur",
+     "villages": 381,
+     "cells": [
+      "13.25_77.00",
+      "13.25_77.25",
+      "13.50_77.00",
+      "13.50_77.25"
+     ]
+    },
+    {
+     "taluk_id": "tumakuru:turuvekere",
+     "name": "Turuvekere",
+     "census_name": "Turuvekere",
+     "villages": 235,
+     "cells": [
+      "13.00_76.50",
+      "13.00_76.75",
+      "13.00_77.00",
+      "13.25_76.50",
+      "13.25_76.75"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Udupi",
+   "name_kn": "ಉಡುಪಿ",
+   "taluks": [
+    {
+     "taluk_id": "udupi:karkala",
+     "name": "Karkala",
+     "census_name": "Karkal",
+     "villages": 78,
+     "cells": [
+      "13.00_75.00",
+      "13.25_74.75",
+      "13.25_75.00",
+      "13.25_75.25",
+      "13.50_75.00"
+     ]
+    },
+    {
+     "taluk_id": "udupi:kundapura",
+     "name": "Kundapura",
+     "census_name": "Coondapur",
+     "villages": 99,
+     "cells": [
+      "13.50_74.75",
+      "13.50_75.00",
+      "13.75_74.50",
+      "13.75_74.75",
+      "13.75_75.00",
+      "14.00_74.50",
+      "14.00_74.75"
+     ]
+    },
+    {
+     "taluk_id": "udupi:udupi",
+     "name": "Udupi",
+     "census_name": "Udupi",
+     "villages": 113,
+     "cells": [
+      "13.00_74.75",
+      "13.25_74.75",
+      "13.25_75.00",
+      "13.50_74.75",
+      "13.50_75.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Uttara Kannada",
+   "name_kn": "ಉತ್ತರ ಕನ್ನಡ",
+   "taluks": [
+    {
+     "taluk_id": "uttara-kannada:ankola",
+     "name": "Ankola",
+     "census_name": "Ankola",
+     "villages": 86,
+     "cells": [
+      "14.50_74.25",
+      "14.50_74.50",
+      "14.75_74.25",
+      "14.75_74.50",
+      "14.75_74.75"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:bhatkal",
+     "name": "Bhatkal",
+     "census_name": "Bhatkal",
+     "villages": 62,
+     "cells": [
+      "14.00_74.50",
+      "14.00_74.75"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:haliyal",
+     "name": "Haliyal",
+     "census_name": "Haliyal",
+     "villages": 116,
+     "cells": [
+      "15.00_74.75",
+      "15.25_74.50",
+      "15.25_74.75",
+      "15.25_75.00",
+      "15.50_74.75"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:honavar",
+     "name": "Honavar",
+     "census_name": "Honavar",
+     "villages": 93,
+     "cells": [
+      "14.00_74.50",
+      "14.25_74.50",
+      "14.25_74.75",
+      "14.50_74.50"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:joida",
+     "name": "Joida",
+     "census_name": "Supa",
+     "villages": 117,
+     "cells": [
+      "15.00_74.25",
+      "15.00_74.50",
+      "15.25_74.25",
+      "15.25_74.50",
+      "15.50_74.25",
+      "15.50_74.50"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:karwar",
+     "name": "Karwar",
+     "census_name": "Karwar",
+     "villages": 58,
+     "cells": [
+      "14.75_74.00",
+      "14.75_74.25",
+      "14.75_74.50",
+      "15.00_74.00",
+      "15.00_74.25",
+      "15.00_74.50"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:kumta",
+     "name": "Kumta",
+     "census_name": "Kumta",
+     "villages": 114,
+     "cells": [
+      "14.25_74.50",
+      "14.50_74.25",
+      "14.50_74.50",
+      "14.50_74.75"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:mundgod",
+     "name": "Mundgod",
+     "census_name": "Mundgod",
+     "villages": 88,
+     "cells": [
+      "14.75_75.00",
+      "15.00_75.00"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:siddapur",
+     "name": "Siddapur",
+     "census_name": "Siddapur",
+     "villages": 199,
+     "cells": [
+      "14.25_74.75",
+      "14.25_75.00",
+      "14.50_74.75",
+      "14.50_75.00"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:sirsi",
+     "name": "Sirsi",
+     "census_name": "Sirsi",
+     "villages": 227,
+     "cells": [
+      "14.50_74.50",
+      "14.50_74.75",
+      "14.50_75.00",
+      "14.75_74.50",
+      "14.75_74.75",
+      "14.75_75.00"
+     ]
+    },
+    {
+     "taluk_id": "uttara-kannada:yellapur",
+     "name": "Yellapur",
+     "census_name": "Yellapur",
+     "villages": 129,
+     "cells": [
+      "14.75_74.50",
+      "14.75_74.75",
+      "14.75_75.00",
+      "15.00_74.50",
+      "15.00_74.75",
+      "15.00_75.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Vijayanagara",
+   "name_kn": "ವಿಜಯನಗರ",
+   "taluks": [
+    {
+     "taluk_id": "vijayanagara:hagaribommanahalli",
+     "name": "Hagaribommanahalli",
+     "census_name": "Hagaribommanahalli",
+     "villages": 52,
+     "cells": [
+      "14.75_76.25",
+      "15.00_76.00",
+      "15.00_76.25",
+      "15.25_76.00",
+      "15.25_76.25"
+     ]
+    },
+    {
+     "taluk_id": "vijayanagara:harapanahalli",
+     "name": "Harapanahalli",
+     "census_name": "Harpanahalli",
+     "villages": 76,
+     "cells": [
+      "14.50_75.75",
+      "14.50_76.00",
+      "14.50_76.25",
+      "14.75_75.75",
+      "14.75_76.00",
+      "14.75_76.25",
+      "15.00_75.75",
+      "15.00_76.00"
+     ]
+    },
+    {
+     "taluk_id": "vijayanagara:hosapete",
+     "name": "Hosapete",
+     "census_name": "Hospet",
+     "villages": 79,
+     "cells": [
+      "15.00_76.25",
+      "15.00_76.50",
+      "15.25_76.25",
+      "15.25_76.50",
+      "15.25_76.75",
+      "15.50_76.50",
+      "15.50_76.75"
+     ]
+    },
+    {
+     "taluk_id": "vijayanagara:huvina-hadagalli",
+     "name": "Huvina Hadagalli",
+     "census_name": "Hadagalli",
+     "villages": 54,
+     "cells": [
+      "14.75_75.75",
+      "15.00_75.75",
+      "15.00_76.00",
+      "15.25_76.00"
+     ]
+    },
+    {
+     "taluk_id": "vijayanagara:kudligi",
+     "name": "Kudligi",
+     "census_name": "Kudligi",
+     "villages": 83,
+     "cells": [
+      "14.50_76.50",
+      "14.75_76.25",
+      "14.75_76.50",
+      "14.75_76.75",
+      "15.00_76.25",
+      "15.00_76.50"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Vijayapura",
+   "name_kn": "ವಿಜಯಪುರ",
+   "taluks": [
+    {
+     "taluk_id": "vijayapura:basavana-bagevadi",
+     "name": "Basavana Bagevadi",
+     "census_name": "Basavana Bagevadi",
+     "villages": 121,
+     "cells": [
+      "16.25_75.75",
+      "16.25_76.00",
+      "16.50_75.75",
+      "16.50_76.00",
+      "16.50_76.25",
+      "16.75_75.75",
+      "16.75_76.00",
+      "16.75_76.25"
+     ]
+    },
+    {
+     "taluk_id": "vijayapura:indi",
+     "name": "Indi",
+     "census_name": "Indi",
+     "villages": 123,
+     "cells": [
+      "17.00_75.75",
+      "17.00_76.00",
+      "17.00_76.25",
+      "17.25_75.50",
+      "17.25_75.75",
+      "17.25_76.00",
+      "17.25_76.25",
+      "17.50_75.75",
+      "17.50_76.00"
+     ]
+    },
+    {
+     "taluk_id": "vijayapura:muddebihal",
+     "name": "Muddebihal",
+     "census_name": "Muddebihal",
+     "villages": 151,
+     "cells": [
+      "16.25_76.00",
+      "16.25_76.25",
+      "16.50_76.00",
+      "16.50_76.25",
+      "16.50_76.50"
+     ]
+    },
+    {
+     "taluk_id": "vijayapura:sindgi",
+     "name": "Sindgi",
+     "census_name": "Sindgi",
+     "villages": 143,
+     "cells": [
+      "16.50_76.25",
+      "16.50_76.50",
+      "16.75_76.00",
+      "16.75_76.25",
+      "16.75_76.50",
+      "17.00_76.00",
+      "17.00_76.25",
+      "17.00_76.50",
+      "17.25_76.25",
+      "17.25_76.50"
+     ]
+    },
+    {
+     "taluk_id": "vijayapura:vijayapura",
+     "name": "Vijayapura",
+     "census_name": "Bijapur",
+     "villages": 110,
+     "cells": [
+      "16.50_75.50",
+      "16.50_75.75",
+      "16.75_75.50",
+      "16.75_75.75",
+      "16.75_76.00",
+      "17.00_75.50",
+      "17.00_75.75",
+      "17.00_76.00"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Yadgir",
+   "name_kn": "ಯಾದಗಿರಿ",
+   "taluks": [
+    {
+     "taluk_id": "yadgir:shahpur",
+     "name": "Shahpur",
+     "census_name": "Shahpur",
+     "villages": 148,
+     "cells": [
+      "16.50_76.75",
+      "16.50_77.00",
+      "16.50_77.25",
+      "16.75_76.75",
+      "16.75_77.00",
+      "16.75_77.25"
+     ]
+    },
+    {
+     "taluk_id": "yadgir:shorapur",
+     "name": "Shorapur",
+     "census_name": "Shorapur",
+     "villages": 182,
+     "cells": [
+      "16.25_76.25",
+      "16.25_76.50",
+      "16.25_76.75",
+      "16.50_76.25",
+      "16.50_76.50",
+      "16.50_76.75",
+      "16.75_76.50",
+      "16.75_76.75"
+     ]
+    },
+    {
+     "taluk_id": "yadgir:yadgir",
+     "name": "Yadgir",
+     "census_name": "Yadgir",
+     "villages": 133,
+     "cells": [
+      "16.50_77.25",
+      "16.50_77.50",
+      "16.75_77.00",
+      "16.75_77.25",
+      "16.75_77.50",
+      "17.00_77.00",
+      "17.00_77.25"
+     ]
+    }
+   ]
+  }
+ ]
+}

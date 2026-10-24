@@ -1,11 +1,15 @@
-/* Gram Panchayat dashboard: reads /risk, /alerts and /system/scheduler from the same server. */
+/* Relief control centre: reads /risk, /alerts, /relief, /shelters for the signed-in person's area
+   (a Gram Panchayat official's taluk, an NGO's district, or the whole state). */
 "use strict";
 
 const REFRESH_MS = 60_000;
 const state = { risk: null, alerts: [], tab: "pending", scheduler: null, health: null, dirty: new Set(),
-                relief: null, expanded: new Set(), families: {}, role: null };
+                relief: null, expanded: new Set(), families: {}, role: null, me: null,
+                shelters: null, candidates: null, candQuery: "", designating: null };
 const NEED_LABEL = { rescue: "Rescue needed", food: "Food", water: "Drinking water", medicine: "Medicine", elderly_help: "Elderly / disabled help" };
-let map, markers = {};
+const SHELTER_STATUS = { open: "Open", full: "Full", closed: "Not open", candidate: "Possible" };
+const LEVEL_ORDER = { LOW: 0, MEDIUM: 1, HIGH: 2 };
+let map, cellLayer, villageLayer, shelterLayer, candLayer, addMarker = null;
 
 // ---------- helpers ----------
 const $ = (id) => document.getElementById(id);
@@ -23,7 +27,7 @@ function toast(msg, isError = false) {
   t.className = "toast" + (isError ? " error" : "");
   t.hidden = false;
   clearTimeout(toast._t);
-  toast._t = setTimeout(() => (t.hidden = true), isError ? 6000 : 3000);
+  toast._t = setTimeout(() => (t.hidden = true), isError ? 6000 : 3500);
 }
 
 async function api(path, options = {}) {
@@ -60,11 +64,13 @@ function showSignIn(message) {
 function showApp(me) {
   state.signedIn = true;
   state.role = me.role;
+  state.me = me;
   // body.role-gp / body.role-ngo shows or hides the parts marked gp-only / ngo-only.
   document.body.classList.toggle("role-gp", me.role === "gp");
   document.body.classList.toggle("role-ngo", me.role === "ngo");
   $("app-title").textContent = me.role === "ngo" ? "Relief Coordination" : "Gram Panchayat Control Centre";
   $("who-role").textContent = me.role === "ngo" ? "NGO" : "GP";
+  $("who-area").textContent = me.area;
   if (me.role !== "gp") state.tab = "approved";       // NGOs see approved alerts only
   $("who-name").textContent = me.name;
   $("signin").hidden = true;
@@ -117,22 +123,23 @@ $("btn-logout").addEventListener("click", async () => {
   acknowledge();
   alarm.seenHigh = null; alarm.seenPending = null; alarm.seenRescue = null;
   document.body.classList.remove("role-gp", "role-ngo");
-  state.tab = "pending"; state.expanded.clear();
+  state.tab = "pending"; state.expanded.clear(); state.candidates = null; renderMap._fitted = false;
   showSignIn("Signed out.");
 });
 
 // ---------- loading ----------
 async function loadAll() {
   if (!state.signedIn) return;
-  const [health, risk, sched, alerts] = await Promise.allSettled([
-    api("/health"), api("/risk"), api("/system/scheduler"), api("/alerts"),
+  const [health, risk, sched, alerts, relief, shelters] = await Promise.allSettled([
+    api("/health"), api("/risk"), api("/system/scheduler"), api("/alerts"), api("/relief/summary"), api("/shelters"),
   ]);
   if (health.status === "fulfilled") state.health = health.value;
   if (sched.status === "fulfilled") state.scheduler = sched.value;
   if (risk.status === "fulfilled") state.risk = risk.value;
   else toast("Could not load risk: " + risk.reason.message, true);
   if (alerts.status === "fulfilled") state.alerts = alerts.value;
-  try { state.relief = await api("/relief/summary"); } catch { /* shown as empty */ }
+  if (relief.status === "fulfilled") state.relief = relief.value;
+  if (shelters.status === "fulfilled") state.shelters = shelters.value;
   render();
   checkForNewDanger();
 }
@@ -142,7 +149,7 @@ const BASE_TITLE = document.title;
 const alarm = {
   soundOn: false,
   audio: null,          // AudioContext, created on a click (browsers block sound before that)
-  seenHigh: null,       // village ids that were HIGH at the last check (null = first load)
+  seenHigh: null,       // taluk ids that were HIGH at the last check (null = first load)
   seenPending: null,    // pending alert ids at the last check
   seenRescue: null,     // village id -> number of open rescue requests at the last check
   flashTimer: null,
@@ -152,15 +159,19 @@ const REPEAT_SIREN_MS = 30_000;
 
 try { alarm.soundOn = localStorage.getItem("gp-sound") === "on"; } catch { }
 
+function talukName(id) {
+  const t = (state.risk ? state.risk.taluks : []).find((x) => x.taluk_id === id);
+  return t ? t.name : id;
+}
+
 function checkForNewDanger() {
-  const high = new Set((state.risk ? state.risk.villages : []).filter((v) => v.level === "HIGH").map((v) => v.village_id));
+  const high = new Set((state.risk ? state.risk.taluks : []).filter((t) => t.level === "HIGH").map((t) => t.taluk_id));
   // Test drafts are made by someone at this screen, so they don't need an alarm.
   const pending = new Set(state.alerts.filter((a) => a.status === "pending" && !a.simulated).map((a) => a.id));
-
   const rescue = {};
   (state.relief ? state.relief.villages : []).forEach((v) => { if (v.rescue_requests) rescue[v.village_id] = v.rescue_requests; });
 
-  if (alarm.seenHigh === null) {          // first load: remember what's there, don't alarm
+  if (alarm.seenHigh === null) {          // first load: remember what's there, don't sound
     alarm.seenHigh = high; alarm.seenPending = pending; alarm.seenRescue = rescue;
     const already = [];
     if (Object.keys(rescue).length) already.push(rescueText(Object.keys(rescue)));
@@ -183,16 +194,11 @@ function rescueText(ids) {
   return `RESCUE requested: ${names.join(", ")}`;
 }
 
-function villageName(id) {
-  const v = (state.risk ? state.risk.villages : []).find((x) => x.village_id === id);
-  return v ? v.name : id;
-}
-
 function describe(highIds, newAlertIds, already) {
   const parts = [];
-  if (highIds.length) parts.push(`${already ? "" : "New "}HIGH risk: ${highIds.map(villageName).join(", ")}`);
+  if (highIds.length) parts.push(`${already ? "" : "New "}HIGH risk: ${highIds.map(talukName).join(", ")}`);
   if (newAlertIds.length) {
-    const names = newAlertIds.map((id) => (state.alerts.find((a) => a.id === id) || {}).village_name).filter(Boolean);
+    const names = newAlertIds.map((id) => (state.alerts.find((a) => a.id === id) || {}).taluk_name).filter(Boolean);
     parts.push(`New alert${names.length > 1 ? "s" : ""} for ${names.join(", ")} waiting for approval`);
   }
   return parts.join(" · ");
@@ -268,7 +274,7 @@ $("btn-sound").addEventListener("click", async () => {
   await alarm.audio.resume();
   setSound(true);
   if ("Notification" in window && Notification.permission === "default") await Notification.requestPermission();
-  toast(Notification.permission === "granted" ? "Sound and desktop alerts on" : "Sound alerts on (desktop notifications not allowed)");
+  toast("Notification" in window && Notification.permission === "granted" ? "Sound and desktop alerts on" : "Sound alerts on (desktop notifications not allowed)");
 });
 
 $("btn-test-alarm").addEventListener("click", () => {
@@ -290,13 +296,144 @@ if (alarm.soundOn) {
 function render() {
   renderStatus();
   renderSummary();
-  renderVillages();
+  renderArea();
   renderMap();
   // Don't wipe text someone is editing during an automatic refresh.
   if (state.dirty.size === 0) renderAlerts();
   renderSystem();
   renderRelief();
+  renderShelters();
+  renderShelterPins();
   state.expanded.forEach((vid) => loadFamilies(vid));   // keep open family lists up to date
+}
+
+function renderStatus() {
+  const r = state.risk, s = state.scheduler;
+  const parts = [];
+  if (r) parts.push(`Rain checked ${fmtTime(r.generated_at)}`);
+  if (s && s.enabled) parts.push(`next automatic check ${fmtTime(s.next_run_at)}`);
+  if (state.health) parts.push(`alerts drafted by ${state.health.alert_drafting}`);
+  $("statusline").textContent = parts.join(" · ") || "No data yet";
+  $("demo-banner").hidden = !(r && r.demo_thresholds);
+  const banner = $("stale-banner");
+  banner.hidden = !(r && r.stale);
+  if (r && r.stale) banner.textContent = `Showing older data: the forecast could not be fetched (${r.stale_reason}).`;
+}
+
+function renderSummary() {
+  const sum = state.risk ? state.risk.summary : null;
+  $("n-high").textContent = sum ? sum.HIGH : "–";
+  $("n-medium").textContent = sum ? sum.MEDIUM : "–";
+  $("n-low").textContent = sum ? sum.LOW : "–";
+  $("n-pending").textContent = state.alerts.filter((a) => a.status === "pending").length;
+}
+
+function bars(daily) {
+  const max = Math.max(60, ...daily.map((d) => d.rain_mm));   // 60 mm keeps small rain looking small
+  return `<div class="bars" title="Rain per day (mm): solid = observed/today, striped = forecast">` +
+    daily.map((d) => `<div class="bar ${d.kind}" title="${esc(d.date)}: ${d.rain_mm} mm (${d.kind})">
+        <i style="height:${Math.max(2, Math.round((d.rain_mm / max) * 30))}px"></i><span>${fmtDay(d.date)}</span></div>`).join("") +
+    `</div>`;
+}
+
+// One taluk: list its rain-grid squares (and every village below). Several taluks: one row per taluk.
+function renderArea() {
+  const r = state.risk, list = $("area-list");
+  if (!r) { list.innerHTML = `<li class="empty">No risk data yet.</li>`; return; }
+  const oneTaluk = !!r.villages;
+  $("villages-title").textContent = r.area;
+  $("area-note").textContent = oneTaluk
+    ? "Risk is worked out for each rain-grid square (about 27 km wide); every village in a square shares its level."
+    : "Most urgent first. Click a taluk to see it on the map.";
+  if (oneTaluk) {
+    list.innerHTML = r.cells.map((c) => `
+      <li class="village" data-lat="${c.lat}" data-lon="${c.lon}" tabindex="0">
+        <span class="pill ${c.level}">${c.level}</span>
+        <div>
+          <div class="names"><b>Around ${esc(c.places.join(", ") || "–")}</b></div>
+          <div class="meta">${c.villages} village${c.villages === 1 ? "" : "s"} · last 3 days ${c.past_3d_mm} mm · next 3 days ${c.forecast_3d_mm} mm</div>
+        </div>
+        ${bars(c.daily_mm || [])}
+        ${c.level !== "LOW" ? `<div class="reason">${c.reasons.map(esc).join(" · ")}</div>` : ""}
+      </li>`).join("");
+  } else {
+    list.innerHTML = r.taluks.map((t) => {
+      const cells = r.cells.filter((c) => t.cells_at_risk.includes(c.cell_id) || c.cell_id === t.worst_cell);
+      const c0 = cells[0] || {};
+      return `<li class="village" data-lat="${c0.lat || ""}" data-lon="${c0.lon || ""}" tabindex="0">
+        <span class="pill ${t.level}">${t.level}</span>
+        <div>
+          <div class="names"><b>${esc(t.name)}</b><span class="kn">${esc(t.district)}</span></div>
+          <div class="meta">${t.villages_at_risk} of ${t.villages_total} villages at risk · last 3 days ${t.past_3d_mm} mm · next 3 days ${t.forecast_3d_mm} mm</div>
+        </div>
+        ${bars(t.daily_mm || [])}
+        ${t.level !== "LOW" ? `<div class="reason">${t.places.length ? `Around ${esc(t.places.join(", "))}: ` : ""}${t.reasons.map(esc).join(" · ")}</div>` : ""}
+      </li>`;
+    }).join("");
+  }
+  list.querySelectorAll(".village").forEach((li) => {
+    const go = () => { if (li.dataset.lat && map) map.flyTo([+li.dataset.lat, +li.dataset.lon], oneTaluk ? 11 : 10, { duration: 0.6 }); };
+    li.addEventListener("click", go);
+    li.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+  });
+
+  $("all-villages").hidden = !oneTaluk;
+  if (oneTaluk) {
+    $("village-count").textContent = r.villages.length;
+    renderVillageList();
+  }
+  const sel = $("sim-taluk"), current = sel.value;
+  sel.innerHTML = r.taluks.map((t) => `<option value="${esc(t.taluk_id)}">${esc(t.name)}${r.taluks.length > 1 ? ` (${esc(t.district)})` : ""}</option>`).join("");
+  if (current) sel.value = current;
+}
+
+function renderVillageList() {
+  const q = $("village-filter").value.trim().toLowerCase();
+  const vs = (state.risk.villages || []).filter((v) => !q || v.name.toLowerCase().includes(q));
+  $("village-list").innerHTML = vs.slice(0, 400).map((v) =>
+    `<li><span class="pill ${v.level}">${v.level}</span> <button class="link-btn" type="button" data-lat="${v.lat}" data-lon="${v.lon}">${esc(v.name)}</button>
+      <span class="meta">${v.population.toLocaleString("en-IN")} people</span></li>`).join("") || `<li class="empty">No village matches.</li>`;
+  $("village-list").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+    if (map) map.flyTo([+b.dataset.lat, +b.dataset.lon], 13, { duration: 0.6 });
+  }));
+}
+$("village-filter").addEventListener("input", renderVillageList);
+
+function renderMap() {
+  if (typeof L === "undefined") { $("map").innerHTML = `<p class="empty">Map unavailable (no internet for map tiles).</p>`; return; }
+  const r = state.risk;
+  if (!map) {
+    map = L.map("map", { scrollWheelZoom: false }).setView([14.5, 76.0], 7);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 17, attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+    // featureGroups pass their layers' clicks on, so "add a centre" also works when the click lands on a
+    // rain square or a village dot (Leaflet stops a click on a layer with a popup from reaching the map).
+    cellLayer = L.featureGroup().addTo(map).on("click", onMapClick);
+    villageLayer = L.featureGroup().addTo(map).on("click", onMapClick);
+    map.on("click", onMapClick);
+  }
+  if (!r) return;
+  const colors = LEVEL_COLOR();
+  cellLayer.clearLayers();
+  // Each rain-grid square is 0.25 degrees: draw it as a coloured square.
+  [...r.cells].sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level]).forEach((c) => {
+    const h = 0.125;
+    L.rectangle([[c.lat - h, c.lon - h], [c.lat + h, c.lon + h]], {
+      color: colors[c.level], weight: c.level === "LOW" ? 1 : 2, fillColor: colors[c.level],
+      fillOpacity: c.level === "HIGH" ? 0.35 : c.level === "MEDIUM" ? 0.25 : 0.08, interactive: true,
+    }).bindPopup(`<b style="color:${colors[c.level]}">${c.level}</b> · ${c.villages} villages<br>Around ${esc(c.places.join(", "))}<br>` +
+                 `${c.reasons.map(esc).join("<br>")}`).addTo(cellLayer);
+  });
+  villageLayer.clearLayers();
+  (r.villages || []).forEach((v) => {
+    L.circleMarker([v.lat, v.lon], { radius: 3, color: colors[v.level], fillColor: colors[v.level], fillOpacity: 0.9, weight: 1 })
+      .bindTooltip(`${v.name} · ${v.level}`).addTo(villageLayer);
+  });
+  if (r.cells.length && !renderMap._fitted) {
+    map.fitBounds(L.latLngBounds(r.cells.map((c) => [[c.lat - 0.125, c.lon - 0.125], [c.lat + 0.125, c.lon + 0.125]]).flat()), { padding: [10, 10] });
+    renderMap._fitted = true;
+  }
 }
 
 // ---------- relief: where people are (from villagers' reports) ----------
@@ -318,10 +455,11 @@ function renderRelief() {
     : "No reports yet";
   $("n-rescue").textContent = t.rescue_requests;
   const gp = state.role === "gp";
+  if (!r.villages.length) { body.innerHTML = `<tr><td colspan="7" class="empty">No family has reported in the last 3 days.</td></tr>`; return; }
   body.innerHTML = r.villages.map((v) => {
-    const row = `<tr class="village-row${gp && v.families ? " clickable" : ""}${v.families ? "" : " quiet"}" data-id="${esc(v.village_id)}"
-        ${gp && v.families ? `tabindex="0" aria-expanded="${state.expanded.has(v.village_id)}"` : ""}>
-      <td><b>${esc(v.name)}</b>${v.name_kn ? ` <span class="kn" lang="kn">${esc(v.name_kn)}</span>` : ""}</td>
+    const row = `<tr class="village-row${gp ? " clickable" : ""}" data-id="${esc(v.village_id)}"
+        ${gp ? `tabindex="0" aria-expanded="${state.expanded.has(v.village_id)}"` : ""}>
+      <td><b>${esc(v.name)}</b> <span class="kn">${esc(v.taluk)}</span></td>
       ${num(v.families)}${num(v.at_shelter)}${num(v.with_relatives)}${num(v.at_home)}
       <td class="n${v.unknown ? " unknown-hi" : " zero"}">${v.unknown}</td>
       <td>${needPills(v.needs)}</td></tr>`;
@@ -334,7 +472,7 @@ function renderRelief() {
     tr.addEventListener("click", toggle);
     tr.addEventListener("keydown", (e) => { if (e.key === "Enter") toggle(); });
   });
-  body.querySelectorAll("[data-handle]").forEach((b) => b.addEventListener("click", () => markHandled(b)));
+  body.querySelectorAll("[data-handle]").forEach((b) => b.addEventListener("click", (e) => { e.stopPropagation(); markHandled(b); }));
 }
 
 async function markHandled(btn) {
@@ -364,7 +502,7 @@ function familyList(vid) {
 }
 
 async function loadFamilies(vid) {
-  try { state.families[vid] = (await api(`/relief/reports/${vid}`)).families; }
+  try { state.families[vid] = (await api(`/relief/reports/${encodeURIComponent(vid)}`)).families; }
   catch (err) { state.families[vid] = []; toast(err.message, true); }
   renderRelief();
 }
@@ -376,94 +514,211 @@ function toggleFamilies(vid) {
   loadFamilies(vid);
 }
 
-function renderStatus() {
-  const r = state.risk, s = state.scheduler;
-  const parts = [];
-  if (r) parts.push(`Risk data from ${fmtTime(r.generated_at)}`);
-  if (s && s.enabled) parts.push(`next automatic check ${fmtTime(s.next_run_at)}`);
-  if (state.health) parts.push(`alerts drafted by ${state.health.alert_drafting}`);
-  $("statusline").textContent = parts.join(" · ") || "No data yet";
-  const banner = $("stale-banner");
-  banner.hidden = !(r && r.stale);
-  if (r && r.stale) banner.textContent = `Showing older data: the forecast could not be fetched (${r.stale_reason}).`;
+// ---------- relief centres ----------
+const typing = (el) => el.contains(document.activeElement) && document.activeElement.tagName === "INPUT";
+
+function renderShelters() {
+  const box = $("shelter-list"), d = state.shelters;
+  if (typing(box)) return;     // don't redraw while someone types a head count (the 60 s refresh would wipe it)
+  if (!d) { box.innerHTML = `<p class="empty">Could not load relief centres.</p>`; return; }
+  const t = d.totals;
+  $("shelter-totals").textContent = t.centres
+    ? `${t.open} of ${t.centres} open · ${t.people} people in ${t.places} places${t.full ? ` · ${t.full} full` : ""}`
+    : "No relief centres yet";
+  if (t.candidates != null) $("cand-count").textContent = t.candidates;
+  const gp = state.role === "gp";
+  box.innerHTML = d.taluks.map((g) => {
+    const inside = g.shelters.reduce((n, s) => n + (s.is_open ? s.occupancy : 0), 0);
+    const mismatch = g.reported_at_shelter > inside;
+    return `<div class="shelter-village">
+      <div class="sv-head"><b>${esc(g.name)}</b> <span class="kn">${esc(g.district)}</span>
+        <span class="sv-say${mismatch ? " warn" : ""}" title="From families' own reports in the last 3 days">
+          Families say ${g.reported_at_shelter} at a centre${mismatch ? ` · counted ${inside}` : ""}</span></div>
+      ${g.shelters.length ? `<ul>${g.shelters.map((s) => shelterRow(s, gp)).join("")}</ul>`
+        : `<p class="fine sv-empty">No relief centres yet.${gp ? " Mark a school or hall below, or add one on the map." : ""}</p>`}</div>`;
+  }).join("") || `<p class="empty">No relief centres in your area yet.</p>`;
+  box.querySelectorAll("[data-open]").forEach((b) => b.addEventListener("click", () => {
+    const opening = b.dataset.open === "1";
+    const s = d.taluks.flatMap((g) => g.shelters).find((x) => x.shelter_id === b.dataset.id);
+    if (!opening && s && s.occupancy > 0 &&
+        !window.confirm(`${s.occupancy} people are recorded inside ${s.name}. Close it and set the count to 0?`)) return;
+    saveShelter(b, { is_open: opening });
+  }));
+  box.querySelectorAll("form.occ").forEach((f) => f.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const n = Number(f.elements.n.value);
+    if (!Number.isInteger(n) || n < 0 || n > 5000) { toast("Enter a whole number of people (0–5000).", true); return; }
+    saveShelter(f.querySelector("button"), { occupancy: n });
+  }));
+  box.querySelectorAll("[data-unmark]").forEach((b) => b.addEventListener("click", () => {
+    if (window.confirm("Stop using this building as a relief centre? Villagers will no longer see it.")) saveShelter(b, { designated: false });
+  }));
 }
 
-function renderSummary() {
-  const sum = state.risk ? state.risk.summary : null;
-  $("n-high").textContent = sum ? sum.HIGH : "–";
-  $("n-medium").textContent = sum ? sum.MEDIUM : "–";
-  $("n-low").textContent = sum ? sum.LOW : "–";
-  $("n-pending").textContent = state.alerts.filter((a) => a.status === "pending").length;
+function shelterRow(s, gp) {
+  const pct = s.capacity ? Math.min(100, Math.round((s.occupancy / s.capacity) * 100)) : 0;
+  const fill = s.status === "full" ? "full" : pct >= 90 ? "near" : "";
+  const people = s.is_open
+    ? `<div class="occ-bar" title="${s.occupancy} of ${s.capacity} places"><i class="${fill}" style="width:${pct}%"></i></div>
+       <span class="occ-num">${s.occupancy} / ${s.capacity}</span>`
+    : `<span class="occ-num muted">${s.capacity} places</span>`;
+  const id = esc(s.shelter_id);
+  const controls = !gp ? "" : s.is_open
+    ? `<form class="occ"><label class="sr-only" for="occ-${id}">People inside ${esc(s.name)}</label>
+         <input id="occ-${id}" name="n" type="number" inputmode="numeric" min="0" max="5000" value="${s.occupancy}">
+         <button class="btn" type="submit" data-id="${id}">Update</button></form>
+       <button class="btn" type="button" data-open="0" data-id="${id}">Close</button>`
+    : `<button class="btn primary" type="button" data-open="1" data-id="${id}">Open centre</button>
+       ${s.source === "osm" ? `<button class="link-btn" type="button" data-unmark="1" data-id="${id}">Un-mark</button>` : ""}`;
+  const source = s.source === "official" ? "official list" : s.source === "gp" ? `added by ${esc(s.added_by || "GP")}` : "from OpenStreetMap";
+  return `<li class="shelter">
+    <div class="sh-name"><b>${esc(s.name)}</b>${s.name_kn ? ` <span class="kn" lang="kn">${esc(s.name_kn)}</span>` : ""}
+      <span class="when">${source} · ${s.updated_at ? `updated ${fmtTime(s.updated_at)} by ${esc(s.updated_by)}` : "not opened yet"}${s.phone ? ` · <a href="tel:${esc(s.phone)}">${esc(s.phone)}</a>` : ""}</span></div>
+    <span class="pill sh-${s.status}">${SHELTER_STATUS[s.status]}</span>
+    <div class="sh-people">${people}</div>
+    <div class="sh-ctl">${controls}</div>
+  </li>`;
 }
 
-function bars(daily) {
-  const max = Math.max(60, ...daily.map((d) => d.rain_mm));   // 60 mm keeps small rain looking small
-  return `<div class="bars" title="Rain per day (mm): solid = observed/today, striped = forecast">` +
-    daily.map((d) => `<div class="bar ${d.kind}" title="${esc(d.date)}: ${d.rain_mm} mm (${d.kind})">
-        <i style="height:${Math.max(2, Math.round((d.rain_mm / max) * 30))}px"></i><span>${fmtDay(d.date)}</span></div>`).join("") +
-    `</div>`;
+async function saveShelter(btn, body) {
+  btn.disabled = true;
+  try {
+    const s = await api(`/shelters/${encodeURIComponent(btn.dataset.id)}`, { method: "PATCH", body: JSON.stringify(body) });
+    toast(body.designated === true ? `${s.name} is now a relief centre. Villagers nearby can see it.`
+      : body.designated === false ? `${s.name} is no longer a relief centre.`
+      : body.is_open === true ? `${s.name} is open. Staff phones have been told.`
+      : body.is_open === false ? `${s.name} closed.` : `${s.name}: ${s.occupancy} of ${s.capacity} places used.`);
+    if (document.activeElement) document.activeElement.blur();
+    state.shelters = await api("/shelters");
+    if (body.designated !== undefined) await loadCandidates();
+    renderShelters(); renderShelterPins();
+  } catch (err) { btn.disabled = false; toast(err.message, true); }
 }
 
-function renderVillages() {
-  const list = $("village-list");
-  const vs = state.risk ? state.risk.villages : [];
-  if (!vs.length) { list.innerHTML = `<li class="empty">No villages scored yet.</li>`; return; }
-  list.innerHTML = vs.map((v) => `
-    <li class="village" data-id="${esc(v.village_id)}" tabindex="0">
-      <span class="pill ${v.level}">${v.level}</span>
-      <div>
-        <div class="names"><b>${esc(v.name)}</b>${v.name_kn ? `<span class="kn" lang="kn">${esc(v.name_kn)}</span>` : ""}</div>
-        <div class="meta">${esc(v.district)} · last 3 days ${v.past_3d_mm} mm · next 3 days ${v.forecast_3d_mm} mm</div>
-      </div>
-      ${bars(v.daily_mm || [])}
-      ${v.level !== "LOW" ? `<div class="reason">${v.reasons.map(esc).join(" · ")}</div>` : ""}
-    </li>`).join("");
-  list.querySelectorAll(".village").forEach((li) => {
-    const go = () => focusVillage(li.dataset.id);
-    li.addEventListener("click", go);
-    li.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
-  });
-
-  const sel = $("sim-village");
-  const current = sel.value;
-  sel.innerHTML = vs.map((v) => `<option value="${esc(v.village_id)}">${esc(v.name)}</option>`).join("");
-  if (current) sel.value = current;
+// Possible centres (OpenStreetMap), loaded when the GP opens the list.
+async function loadCandidates() {
+  try { state.candidates = await api(`/shelters/candidates?limit=800${state.candQuery ? `&q=${encodeURIComponent(state.candQuery)}` : ""}`); }
+  catch (err) { state.candidates = []; toast(err.message, true); }
+  renderCandidates(); renderShelterPins();
 }
 
-function renderMap() {
-  if (typeof L === "undefined") { $("map").innerHTML = `<p class="empty">Map unavailable (no internet for map tiles).</p>`; return; }
-  const order = { LOW: 0, MEDIUM: 1, HIGH: 2 };   // draw LOW first so HIGH markers end up on top
-  const vs = (state.risk ? state.risk.villages : []).filter((v) => v.lat != null && v.lon != null)
-    .sort((a, b) => order[a.level] - order[b.level]);
-  if (!map) {
-    map = L.map("map", { scrollWheelZoom: false }).setView([13.0, 75.5], 8);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 13, attribution: "&copy; OpenStreetMap contributors",
-    }).addTo(map);
+function renderCandidates() {
+  const list = $("cand-list"), cs = state.candidates || [];
+  if (typing(list)) return;
+  if (!state.candidates) { list.innerHTML = `<li class="empty">Loading…</li>`; return; }
+  if (!cs.length) {
+    list.innerHTML = `<li class="empty">${state.candQuery ? "No building matches." :
+      "None loaded. Run python ml/scripts/fetch_osm_buildings.py on the server and restart it."}</li>`;
+    return;
   }
-  const colors = LEVEL_COLOR();
-  Object.values(markers).forEach((m) => m.remove());
-  markers = {};
-  vs.forEach((v) => {
-    const m = L.circleMarker([v.lat, v.lon], {
-      radius: v.level === "HIGH" ? 12 : v.level === "MEDIUM" ? 10 : 8,
-      color: colors[v.level], fillColor: colors[v.level], fillOpacity: 0.75, weight: 2,
-    }).addTo(map);
-    m.bindPopup(`<b>${esc(v.name)}</b> ${v.name_kn ? `<span lang="kn">${esc(v.name_kn)}</span>` : ""}<br>
-      <b style="color:${colors[v.level]}">${v.level}</b> · next 3 days ${v.forecast_3d_mm} mm<br>${v.reasons.map(esc).join("<br>")}`);
-    markers[v.village_id] = m;
-  });
-  if (vs.length && !renderMap._fitted) {
-    map.fitBounds(L.latLngBounds(vs.map((v) => [v.lat, v.lon])), { padding: [30, 30] });
-    renderMap._fitted = true;
+  list.innerHTML = cs.slice(0, 300).map((c) => {
+    const id = esc(c.shelter_id);
+    const form = state.designating === c.shelter_id
+      ? `<form class="designate" data-id="${id}"><label class="sr-only" for="cap-${id}">People it can hold</label>
+           <input id="cap-${id}" name="cap" type="number" min="1" max="5000" placeholder="People it can hold" required>
+           <button class="btn primary" type="submit" data-id="${id}">Save</button>
+           <button class="btn" type="button" data-cancel="1">Cancel</button></form>`
+      : `<button class="btn" type="button" data-designate="${id}">Mark as relief centre</button>`;
+    return `<li><div><b>${esc(c.name)}</b>${c.name_kn ? ` <span class="kn" lang="kn">${esc(c.name_kn)}</span>` : ""}
+      <span class="meta">${esc(c.kind || "")}</span>
+      <button class="link-btn" type="button" data-show="${c.lat},${c.lon}">show on map</button></div>${form}</li>`;
+  }).join("") + (cs.length > 300 ? `<li class="empty">${cs.length - 300} more: search by name to narrow down.</li>` : "");
+  list.querySelectorAll("[data-designate]").forEach((b) => b.addEventListener("click", () => {
+    state.designating = b.dataset.designate; renderCandidates();
+    const inp = list.querySelector("form.designate input"); if (inp) inp.focus();
+  }));
+  list.querySelectorAll("[data-cancel]").forEach((b) => b.addEventListener("click", () => { state.designating = null; renderCandidates(); }));
+  list.querySelectorAll("form.designate").forEach((f) => f.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const cap = Number(f.elements.cap.value);
+    if (!Number.isInteger(cap) || cap < 1 || cap > 5000) { toast("Enter how many people it can hold (1–5000).", true); return; }
+    state.designating = null;
+    saveShelter(f.querySelector("button[type=submit]"), { designated: true, capacity: cap });
+  }));
+  list.querySelectorAll("[data-show]").forEach((b) => b.addEventListener("click", () => {
+    const [lat, lon] = b.dataset.show.split(",").map(Number);
+    if (map) { map.flyTo([lat, lon], 15, { duration: 0.6 }); $("map").scrollIntoView({ behavior: "smooth", block: "center" }); }
+  }));
+}
+
+$("candidates").addEventListener("toggle", () => { if ($("candidates").open && !state.candidates) loadCandidates(); });
+let candTimer = null;
+$("cand-filter").addEventListener("input", () => {
+  clearTimeout(candTimer);
+  candTimer = setTimeout(() => { state.candQuery = $("cand-filter").value.trim(); loadCandidates(); }, 300);
+});
+
+const SHELTER_ZOOM = 11;   // centre pins only once zoomed in, so they don't hide the risk squares
+
+function renderShelterPins() {
+  if (!map || typeof L === "undefined" || !state.shelters) return;
+  if (!shelterLayer) {
+    shelterLayer = L.layerGroup();
+    candLayer = L.layerGroup();
+    const toggle = () => {
+      map.getZoom() >= SHELTER_ZOOM ? shelterLayer.addTo(map) : shelterLayer.remove();
+      map.getZoom() >= 13 ? candLayer.addTo(map) : candLayer.remove();
+    };
+    map.on("zoomend", toggle);
+    toggle();
   }
+  shelterLayer.clearLayers();
+  state.shelters.taluks.forEach((g) => g.shelters.forEach((s) => {
+    const icon = L.divIcon({ className: "", html: `<span class="sq ${s.status}"></span>`, iconSize: [14, 14], iconAnchor: [7, 7] });
+    L.marker([s.lat, s.lon], { icon, title: s.name }).addTo(shelterLayer)
+      .bindPopup(`<b>${esc(s.name)}</b><br>${SHELTER_STATUS[s.status]}` +
+        (s.is_open ? ` · ${s.occupancy} / ${s.capacity} people` : ` · ${s.capacity} places`));
+  }));
+  candLayer.clearLayers();
+  (state.candidates || []).forEach((c) => {
+    const icon = L.divIcon({ className: "", html: `<span class="sq candidate"></span>`, iconSize: [12, 12], iconAnchor: [6, 6] });
+    L.marker([c.lat, c.lon], { icon, title: c.name }).addTo(candLayer)
+      .bindPopup(`<b>${esc(c.name)}</b><br>Possible centre (${esc(c.kind || "")}), not designated`);
+  });
 }
 
-function focusVillage(id) {
-  const m = markers[id];
-  if (m && map) { map.flyTo(m.getLatLng(), 10, { duration: 0.6 }); m.openPopup(); }
+// Add a centre by clicking the map (Gram Panchayat only).
+const adding = { on: false, lat: null, lon: null };
+
+$("btn-add-centre").addEventListener("click", () => {
+  adding.on = !adding.on;
+  $("map-add").hidden = !adding.on;
+  $("add-form").hidden = true;
+  $("map-add-hint").textContent = "Click the map where the new relief centre is. Zoom in first to place it exactly.";
+  $("btn-add-centre").textContent = adding.on ? "Cancel adding" : "Add a centre on the map";
+  $("map").classList.toggle("adding", adding.on);
+  if (adding.on) $("map").scrollIntoView({ behavior: "smooth", block: "center" });
+  else if (addMarker) { addMarker.remove(); addMarker = null; }
+});
+$("add-cancel").addEventListener("click", () => $("btn-add-centre").click());
+
+function onMapClick(e) {
+  if (!adding.on) return;
+  setTimeout(() => map.closePopup(), 0);      // a click on a rain square shouldn't pop up while placing a centre
+  adding.lat = +e.latlng.lat.toFixed(6); adding.lon = +e.latlng.lng.toFixed(6);
+  if (addMarker) addMarker.remove();
+  addMarker = L.marker([adding.lat, adding.lon]).addTo(map);
+  $("map-add-hint").textContent = `Point chosen (${adding.lat.toFixed(4)}, ${adding.lon.toFixed(4)}). Click again to move it.`;
+  $("add-form").hidden = false;
+  $("add-name").focus();
 }
 
+$("add-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = $("add-name").value.trim(), cap = Number($("add-cap").value);
+  if (name.length < 2) { toast("Give the centre a name.", true); return; }
+  if (!Number.isInteger(cap) || cap < 1 || cap > 5000) { toast("Enter how many people it can hold (1–5000).", true); return; }
+  try {
+    const s = await api("/shelters", { method: "POST", body: JSON.stringify({ name, lat: adding.lat, lon: adding.lon, capacity: cap }) });
+    toast(`${s.name} added. Villagers nearby can see it; open it when needed.`);
+    $("add-name").value = ""; $("add-cap").value = "";
+    $("btn-add-centre").click();
+    state.shelters = await api("/shelters");
+    renderShelters(); renderShelterPins();
+  } catch (err) { toast(err.message, true); }
+});
+
+// ---------- alerts ----------
 function sourceBadge(a) {
   return a.source === "gemini"
     ? `<span class="badge gemini">AI · ${esc(a.source_note)}</span>`
@@ -483,7 +738,7 @@ function renderAlerts() {
   const list = $("alert-list");
   if (!items.length) {
     list.innerHTML = `<p class="empty">${state.tab === "pending"
-      ? "No alerts waiting. When a village turns HIGH, a draft appears here for you to check."
+      ? "No alerts waiting. When a taluk turns HIGH, a draft appears here for you to check."
       : state.role === "gp" ? `No ${state.tab} alerts yet.`
       : "No approved alerts yet. When the Gram Panchayat approves a warning, it appears here."}</p>`;
     return;
@@ -507,11 +762,13 @@ function autosize(t) {
 }
 
 function cardHead(a) {
+  const r = a.risk || {};
   return `<div class="alert-head">
-      <b>${esc(a.village_name)}</b><span class="pill ${a.level}">${a.level}</span>
+      <b>${esc(a.taluk_name)} taluk</b><span class="pill ${a.level}">${a.level}</span>
       ${sourceBadge(a)}${a.simulated ? `<span class="badge sim">Simulated</span>` : ""}${a.edited ? `<span class="badge">Edited</span>` : ""}
       <span class="when">drafted ${fmtTime(a.created_at)}</span>
     </div>
+    ${r.villages_at_risk != null ? `<p class="why">${r.villages_at_risk} of ${r.villages_total} villages at risk${r.places && r.places.length ? `, around ${esc(r.places.join(", "))}` : ""}.</p>` : ""}
     ${a.source === "template" && a.source_note ? `<p class="why">Template used: ${esc(a.source_note)}</p>` : ""}`;
 }
 
@@ -556,7 +813,7 @@ async function onAlertAction(e) {
       // The server records the signed-in official as the reviewer.
       await api(`/alerts/${id}/${action}`, { method: "POST", body: JSON.stringify({ note }) });
       state.dirty.delete(id);
-      toast(action === "approve" ? "Approved. Villagers can now see this alert." : "Rejected. It will not be sent.");
+      toast(action === "approve" ? "Approved. Villagers in this taluk can now see this alert." : "Rejected. It will not be sent.");
     }
     state.alerts = await api("/alerts");
     renderAlerts(); renderSummary();
@@ -566,12 +823,15 @@ async function onAlertAction(e) {
 }
 
 function renderSystem() {
-  const s = state.scheduler || {}, h = state.health || {};
+  const s = state.scheduler || {}, h = state.health || {}, me = state.me || {};
   const rows = [
-    ["Automatic scoring", h.automatic_scoring || "–"],
+    ["Your area", me.area || "–"],
+    ["Phone alerts", me.alert_topic ? `subscribe to “${me.alert_topic}” in the ntfy app` : "off (no ntfy topic set on the server)"],
+    ["Automatic checks", h.automatic_scoring || "–"],
     ["Last run", s.last_run_at ? `${fmtTime(s.last_run_at)} (${s.last_duration_s}s)` : "not yet"],
     ["Next run", s.enabled ? fmtTime(s.next_run_at) : "–"],
-    ["Rule calibrated", h.calibrated_on || "–"],
+    ["Thresholds", h.thresholds || "–"],
+    ["Coverage", h.coverage || "–"],
   ];
   $("sysinfo").innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("") +
     (s.last_error ? `<dt>Last error</dt><dd class="err">${esc(s.last_error)}</dd>` : "");
@@ -586,22 +846,23 @@ document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () 
 }));
 
 $("btn-run-now").addEventListener("click", async (e) => {
-  const b = e.currentTarget; b.disabled = true; b.textContent = "Scoring…";
+  const b = e.currentTarget; b.disabled = true; b.textContent = "Checking…";
   try {
     const r = await api("/system/scheduler/run-now", { method: "POST" });
     if (r.error) throw new Error(r.error);
-    toast(r.summary ? `Scored: ${r.summary.HIGH} high, ${r.summary.MEDIUM} medium · ${r.alerts_created.length} alert(s) drafted` : (r.detail || "Done"));
+    toast(r.summary ? `Checked: ${r.summary.HIGH} HIGH and ${r.summary.MEDIUM} MEDIUM squares in Karnataka · ${r.alerts_created.length} alert(s) drafted` : (r.detail || "Done"));
     await loadAll();
-  } catch (err) { toast("Scoring failed: " + err.message, true); }
-  finally { b.disabled = false; b.textContent = "Score all villages now"; }
+  } catch (err) { toast("Check failed: " + err.message, true); }
+  finally { b.disabled = false; b.textContent = "Check the rain now"; }
 });
 
 $("btn-simulate").addEventListener("click", async (e) => {
-  const b = e.currentTarget, id = $("sim-village").value;
+  const b = e.currentTarget, id = $("sim-taluk").value;
+  if (!id) return;
   b.disabled = true; b.textContent = "Drafting… (up to a minute)";
   try {
-    const a = await api(`/alerts/draft/${id}?simulate_high=true`, { method: "POST" });
-    toast(`Test alert drafted for ${a.village_name} (${a.source === "gemini" ? "AI" : "template"})`);
+    const a = await api(`/alerts/draft/${encodeURIComponent(id)}?simulate_high=true`, { method: "POST" });
+    toast(`Test alert drafted for ${a.taluk_name} (${a.source === "gemini" ? "AI" : "template"})`);
     state.tab = "pending";
     state.alerts = await api("/alerts");
     renderAlerts(); renderSummary();

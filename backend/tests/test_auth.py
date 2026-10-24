@@ -2,29 +2,14 @@
 from datetime import datetime, timedelta
 
 import pytest
-from fastapi.testclient import TestClient
 
 from backend.app import auth, config, database
-from backend.app.routers import alerts as alerts_router
-from backend.tests.conftest import TEST_PHONE, sign_in
-
-SNAP = {"generated_at": "2026-08-01T09:00:00+05:30", "villages": [
-    {"village_id": "V001", "name": "Ujire", "district": "Dakshina Kannada", "level": "HIGH",
-     "past_3d_mm": 60.0, "forecast_3d_mm": 260.0, "reasons": ["test"], "daily_mm": []}]}
-CFG = {"villages": [{"village_id": "V001", "name": "Ujire", "name_kn": "ಉಜಿರೆ", "district": "Dakshina Kannada"}],
-       "calibrated_on": "test", "thresholds_mm": {}}
-
+from backend.tests.conftest import TEST_PHONE, app_client, sign_in
 
 @pytest.fixture
-def client(tmp_path, monkeypatch):
-    monkeypatch.setattr(config, "ALERTS_DB", tmp_path / "alerts.db")
-    monkeypatch.setattr(config, "SCHEDULER_ENABLED", False)
-    monkeypatch.setattr(config, "GEMINI_API_KEY", "")
-    monkeypatch.setattr(config, "OTP_RESEND_S", 0)
-    monkeypatch.setattr(config, "rule_config", lambda: CFG)
-    monkeypatch.setattr(alerts_router, "_cached_or_fresh", lambda: SNAP)
-    from backend.app.main import app
-    with TestClient(app) as c:
+def client(world):
+    world.rain("13.00_75.25", past=60, future=260)          # Belthangady is HIGH, so /alerts/generate drafts one
+    with app_client() as c:
         yield c
 
 
@@ -44,7 +29,7 @@ def test_protected_endpoints_need_sign_in(client):
                          ("post", "/alerts/1/approve"), ("post", "/system/scheduler/run-now"), ("get", "/auth/me")]:
         assert getattr(client, method)(path).status_code == 401, path
     # Villagers and health checks stay open.
-    assert client.get("/public/villages").status_code == 200
+    assert client.get("/public/districts").status_code == 200
     assert client.get("/health").status_code == 200
 
 
@@ -126,3 +111,14 @@ def test_session_cookie_is_httponly_and_strict(client):
     r = client.post("/auth/verify", json={"phone": TEST_PHONE, "code": code})
     cookie = r.headers["set-cookie"].lower()
     assert "httponly" in cookie and "samesite=strict" in cookie
+
+
+def test_cookie_is_https_only_when_the_page_came_over_https(client):
+    auth.add_official(TEST_PHONE, "Ujire GP")
+    code = client.post("/auth/request-code", json={"phone": TEST_PHONE}).json()["demo_code"]
+    plain = client.post("/auth/verify", json={"phone": TEST_PHONE, "code": code}).headers["set-cookie"].lower()
+    assert "secure" not in plain                                          # localhost / Wi-Fi: http works
+    code = client.post("/auth/request-code", json={"phone": TEST_PHONE}).json()["demo_code"]
+    tunnel = client.post("/auth/verify", json={"phone": TEST_PHONE, "code": code},
+                         headers={"x-forwarded-proto": "https"}).headers["set-cookie"].lower()
+    assert "secure" in tunnel

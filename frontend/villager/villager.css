@@ -116,3 +116,33 @@ button, a { font: inherit; }
          background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 10px; max-width: calc(100% - 32px); z-index: 10; }
 
 @media (max-width: 360px) { .actions { grid-template-columns: 1fr; } }
+
+/* nearest relief centres */
+.centres { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-bottom: 18px; }
+.centres.urgent { border: 2px solid var(--danger); }
+.centres-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; }
+.centres h2 { font-size: 19px; }
+.centres > .hint { margin: 2px 0 10px; }
+.none-open { margin: 0 0 10px; background: var(--test-bg); color: var(--test); border-radius: 10px; padding: 8px 12px; font-size: 15px; font-weight: 600; }
+.centre { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--bg); }
+.centre + .centre { margin-top: 10px; }
+.c-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.c-head b { font-size: 17px; line-height: 1.4; }
+.c-status { flex: none; font-size: 14px; font-weight: 700; border-radius: 999px; padding: 2px 10px; background: var(--surface); color: var(--muted); border: 1px solid var(--line); }
+.centre.open .c-status { background: var(--calm-bg); color: var(--calm); border-color: var(--calm); }
+.centre.full .c-status { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
+.c-meta { margin: 4px 0 0; color: var(--muted); font-size: 15px; font-variant-numeric: tabular-nums; }
+.c-sample { margin: 6px 0 0; color: var(--test); font-size: 13px; font-weight: 600; }
+.c-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 10px; }
+.c-actions .big { min-height: 48px; }
+
+/* village picker for the whole state */
+.pick-label { display: block; font-weight: 600; margin-bottom: 6px; }
+.pick-input { width: 100%; font: 17px var(--font); padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+              background: var(--surface); color: var(--ink); margin-bottom: 10px; min-height: 52px; }
+.pick-or { margin: 14px 0 8px; }
+.pick-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 420px) { .pick-row { grid-template-columns: 1fr; } }
+#search-results:not(:empty) { margin-bottom: 4px; }
+.place-sub { color: var(--muted); font-size: 14px; font-weight: 400; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

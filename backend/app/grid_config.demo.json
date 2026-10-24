@@ -1,0 +1,4417 @@
+{
+ "demo": true,
+ "calibrated_on": null,
+ "source": "placeholder (no IMD data)",
+ "rule": "DEMO thresholds by longitude",
+ "wet_season_months": [
+  6,
+  7,
+  8,
+  9,
+  10,
+  11
+ ],
+ "floors_mm": {
+  "medium": 64.5,
+  "high": 115.6
+ },
+ "cells": {
+  "16.00_75.75": {
+   "lat": 16.0,
+   "lon": 75.75,
+   "villages": 73,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.00_75.50": {
+   "lat": 16.0,
+   "lon": 75.5,
+   "villages": 82,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.75_75.75": {
+   "lat": 15.75,
+   "lon": 75.75,
+   "villages": 62,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.75_75.50": {
+   "lat": 15.75,
+   "lon": 75.5,
+   "villages": 57,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.25_75.50": {
+   "lat": 16.25,
+   "lon": 75.5,
+   "villages": 59,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.25_75.75": {
+   "lat": 16.25,
+   "lon": 75.75,
+   "villages": 77,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.25_76.00": {
+   "lat": 16.25,
+   "lon": 76.0,
+   "villages": 98,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.50_75.50": {
+   "lat": 16.5,
+   "lon": 75.5,
+   "villages": 62,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.50_75.75": {
+   "lat": 16.5,
+   "lon": 75.75,
+   "villages": 50,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.00_76.00": {
+   "lat": 16.0,
+   "lon": 76.0,
+   "villages": 80,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.25_76.25": {
+   "lat": 16.25,
+   "lon": 76.25,
+   "villages": 92,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.00_76.25": {
+   "lat": 16.0,
+   "lon": 76.25,
+   "villages": 93,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.75_75.50": {
+   "lat": 16.75,
+   "lon": 75.5,
+   "villages": 21,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.50_75.25": {
+   "lat": 16.5,
+   "lon": 75.25,
+   "villages": 44,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.50_75.00": {
+   "lat": 16.5,
+   "lon": 75.0,
+   "villages": 55,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.75_75.25": {
+   "lat": 16.75,
+   "lon": 75.25,
+   "villages": 25,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.25_75.25": {
+   "lat": 16.25,
+   "lon": 75.25,
+   "villages": 61,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.25_75.00": {
+   "lat": 16.25,
+   "lon": 75.0,
+   "villages": 57,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.25_76.75": {
+   "lat": 15.25,
+   "lon": 76.75,
+   "villages": 40,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.25_77.00": {
+   "lat": 15.25,
+   "lon": 77.0,
+   "villages": 49,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.00_77.00": {
+   "lat": 15.0,
+   "lon": 77.0,
+   "villages": 18,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.25_77.25": {
+   "lat": 15.25,
+   "lon": 77.25,
+   "villages": 2,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.00_77.25": {
+   "lat": 15.0,
+   "lon": 77.25,
+   "villages": 1,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.50_76.75": {
+   "lat": 15.5,
+   "lon": 76.75,
+   "villages": 53,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.00_76.75": {
+   "lat": 15.0,
+   "lon": 76.75,
+   "villages": 48,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.50_77.00": {
+   "lat": 15.5,
+   "lon": 77.0,
+   "villages": 29,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.75_76.50": {
+   "lat": 14.75,
+   "lon": 76.5,
+   "villages": 44,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.00_76.50": {
+   "lat": 15.0,
+   "lon": 76.5,
+   "villages": 42,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.25_76.50": {
+   "lat": 15.25,
+   "lon": 76.5,
+   "villages": 69,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.75_77.00": {
+   "lat": 15.75,
+   "lon": 77.0,
+   "villages": 63,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.75_76.75": {
+   "lat": 15.75,
+   "lon": 76.75,
+   "villages": 74,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.75_75.00": {
+   "lat": 16.75,
+   "lon": 75.0,
+   "villages": 36,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "17.00_75.00": {
+   "lat": 17.0,
+   "lon": 75.0,
+   "villages": 8,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.75_74.75": {
+   "lat": 16.75,
+   "lon": 74.75,
+   "villages": 10,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "17.00_75.25": {
+   "lat": 17.0,
+   "lon": 75.25,
+   "villages": 1,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.50_74.75": {
+   "lat": 16.5,
+   "lon": 74.75,
+   "villages": 45,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.75_74.75": {
+   "lat": 15.75,
+   "lon": 74.75,
+   "villages": 93,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.75_75.00": {
+   "lat": 15.75,
+   "lon": 75.0,
+   "villages": 59,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.50_74.75": {
+   "lat": 15.5,
+   "lon": 74.75,
+   "villages": 87,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.00_74.75": {
+   "lat": 16.0,
+   "lon": 74.75,
+   "villages": 68,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.00_74.50": {
+   "lat": 16.0,
+   "lon": 74.5,
+   "villages": 74,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.75_74.50": {
+   "lat": 15.75,
+   "lon": 74.5,
+   "villages": 121,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.75_74.25": {
+   "lat": 15.75,
+   "lon": 74.25,
+   "villages": 25,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.50_74.25": {
+   "lat": 16.5,
+   "lon": 74.25,
+   "villages": 16,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.50_74.50": {
+   "lat": 16.5,
+   "lon": 74.5,
+   "villages": 53,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.25_74.75": {
+   "lat": 16.25,
+   "lon": 74.75,
+   "villages": 67,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.25_74.50": {
+   "lat": 16.25,
+   "lon": 74.5,
+   "villages": 64,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.25_74.25": {
+   "lat": 16.25,
+   "lon": 74.25,
+   "villages": 8,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.75_74.50": {
+   "lat": 16.75,
+   "lon": 74.5,
+   "villages": 1,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.00_75.00": {
+   "lat": 16.0,
+   "lon": 75.0,
+   "villages": 47,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.50_74.50": {
+   "lat": 15.5,
+   "lon": 74.5,
+   "villages": 102,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.50_74.25": {
+   "lat": 15.5,
+   "lon": 74.25,
+   "villages": 18,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.00_75.25": {
+   "lat": 16.0,
+   "lon": 75.25,
+   "villages": 61,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.75_75.25": {
+   "lat": 15.75,
+   "lon": 75.25,
+   "villages": 52,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.25_77.75": {
+   "lat": 13.25,
+   "lon": 77.75,
+   "villages": 340,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.25_77.50": {
+   "lat": 13.25,
+   "lon": 77.5,
+   "villages": 300,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.25_77.25": {
+   "lat": 13.25,
+   "lon": 77.25,
+   "villages": 302,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.50_77.50": {
+   "lat": 13.5,
+   "lon": 77.5,
+   "villages": 205,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.50_77.75": {
+   "lat": 13.5,
+   "lon": 77.75,
+   "villages": 255,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.50_77.25": {
+   "lat": 13.5,
+   "lon": 77.25,
+   "villages": 240,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.25_78.00": {
+   "lat": 13.25,
+   "lon": 78.0,
+   "villages": 330,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.00_77.75": {
+   "lat": 13.0,
+   "lon": 77.75,
+   "villages": 319,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.00_78.00": {
+   "lat": 13.0,
+   "lon": 78.0,
+   "villages": 364,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.00_77.50": {
+   "lat": 13.0,
+   "lon": 77.5,
+   "villages": 277,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.00_77.25": {
+   "lat": 13.0,
+   "lon": 77.25,
+   "villages": 251,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.75_77.75": {
+   "lat": 12.75,
+   "lon": 77.75,
+   "villages": 158,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.75_77.50": {
+   "lat": 12.75,
+   "lon": 77.5,
+   "villages": 169,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.50_77.25": {
+   "lat": 18.5,
+   "lon": 77.25,
+   "villages": 7,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.25_77.50": {
+   "lat": 18.25,
+   "lon": 77.5,
+   "villages": 51,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.00_77.50": {
+   "lat": 18.0,
+   "lon": 77.5,
+   "villages": 110,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.25_77.25": {
+   "lat": 18.25,
+   "lon": 77.25,
+   "villages": 70,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.50_77.50": {
+   "lat": 18.5,
+   "lon": 77.5,
+   "villages": 1,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.00_77.25": {
+   "lat": 18.0,
+   "lon": 77.25,
+   "villages": 84,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.75_76.75": {
+   "lat": 17.75,
+   "lon": 76.75,
+   "villages": 49,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.75_77.00": {
+   "lat": 17.75,
+   "lon": 77.0,
+   "villages": 64,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.00_77.00": {
+   "lat": 18.0,
+   "lon": 77.0,
+   "villages": 59,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.50_77.00": {
+   "lat": 17.5,
+   "lon": 77.0,
+   "villages": 72,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.00_76.75": {
+   "lat": 18.0,
+   "lon": 76.75,
+   "villages": 2,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.25_77.00": {
+   "lat": 18.25,
+   "lon": 77.0,
+   "villages": 8,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "18.00_77.75": {
+   "lat": 18.0,
+   "lon": 77.75,
+   "villages": 2,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.75_77.25": {
+   "lat": 17.75,
+   "lon": 77.25,
+   "villages": 63,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.75_77.50": {
+   "lat": 17.75,
+   "lon": 77.5,
+   "villages": 46,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.50_77.25": {
+   "lat": 17.5,
+   "lon": 77.25,
+   "villages": 54,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.50_77.50": {
+   "lat": 17.5,
+   "lon": 77.5,
+   "villages": 43,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "11.75_76.75": {
+   "lat": 11.75,
+   "lon": 76.75,
+   "villages": 119,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.25_76.75": {
+   "lat": 12.25,
+   "lon": 76.75,
+   "villages": 153,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.00_77.00": {
+   "lat": 12.0,
+   "lon": 77.0,
+   "villages": 133,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "11.75_77.00": {
+   "lat": 11.75,
+   "lon": 77.0,
+   "villages": 31,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.00_76.75": {
+   "lat": 12.0,
+   "lon": 76.75,
+   "villages": 117,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "11.75_77.25": {
+   "lat": 11.75,
+   "lon": 77.25,
+   "villages": 5,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "11.75_76.50": {
+   "lat": 11.75,
+   "lon": 76.5,
+   "villages": 27,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.00_76.50": {
+   "lat": 12.0,
+   "lon": 76.5,
+   "villages": 128,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.00_77.50": {
+   "lat": 12.0,
+   "lon": 77.5,
+   "villages": 12,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.25_77.25": {
+   "lat": 12.25,
+   "lon": 77.25,
+   "villages": 54,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.00_77.25": {
+   "lat": 12.0,
+   "lon": 77.25,
+   "villages": 20,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.25_77.50": {
+   "lat": 12.25,
+   "lon": 77.5,
+   "villages": 31,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.25_77.00": {
+   "lat": 12.25,
+   "lon": 77.0,
+   "villages": 157,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "11.75_77.50": {
+   "lat": 11.75,
+   "lon": 77.5,
+   "villages": 1,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.00_77.75": {
+   "lat": 12.0,
+   "lon": 77.75,
+   "villages": 1,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.75_77.75": {
+   "lat": 13.75,
+   "lon": 77.75,
+   "villages": 194,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.75_78.00": {
+   "lat": 13.75,
+   "lon": 78.0,
+   "villages": 152,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.00_78.00": {
+   "lat": 14.0,
+   "lon": 78.0,
+   "villages": 9,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.00_77.75": {
+   "lat": 14.0,
+   "lon": 77.75,
+   "villages": 13,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.50_78.00": {
+   "lat": 13.5,
+   "lon": 78.0,
+   "villages": 287,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.50_78.25": {
+   "lat": 13.5,
+   "lon": 78.25,
+   "villages": 250,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.75_78.25": {
+   "lat": 13.75,
+   "lon": 78.25,
+   "villages": 4,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.25_78.25": {
+   "lat": 13.25,
+   "lon": 78.25,
+   "villages": 268,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.75_77.50": {
+   "lat": 13.75,
+   "lon": 77.5,
+   "villages": 95,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.75_77.25": {
+   "lat": 13.75,
+   "lon": 77.25,
+   "villages": 191,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.25_75.75": {
+   "lat": 13.25,
+   "lon": 75.75,
+   "villages": 234,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.25_75.50": {
+   "lat": 13.25,
+   "lon": 75.5,
+   "villages": 75,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.25_76.00": {
+   "lat": 13.25,
+   "lon": 76.0,
+   "villages": 168,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.50_75.75": {
+   "lat": 13.5,
+   "lon": 75.75,
+   "villages": 56,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.50_76.00": {
+   "lat": 13.5,
+   "lon": 76.0,
+   "villages": 167,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.50_75.50": {
+   "lat": 13.5,
+   "lon": 75.5,
+   "villages": 62,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.75_76.00": {
+   "lat": 13.75,
+   "lon": 76.0,
+   "villages": 164,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.50_76.25": {
+   "lat": 13.5,
+   "lon": 76.25,
+   "villages": 176,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.75_76.25": {
+   "lat": 13.75,
+   "lon": 76.25,
+   "villages": 129,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.50_75.25": {
+   "lat": 13.5,
+   "lon": 75.25,
+   "villages": 117,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.25_75.25": {
+   "lat": 13.25,
+   "lon": 75.25,
+   "villages": 35,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.00_75.75": {
+   "lat": 13.0,
+   "lon": 75.75,
+   "villages": 218,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.00_75.50": {
+   "lat": 13.0,
+   "lon": 75.5,
+   "villages": 49,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.75_75.50": {
+   "lat": 13.75,
+   "lon": 75.5,
+   "villages": 83,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.25_75.00": {
+   "lat": 13.25,
+   "lon": 75.0,
+   "villages": 36,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.75_75.75": {
+   "lat": 13.75,
+   "lon": 75.75,
+   "villages": 155,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.00_76.00": {
+   "lat": 14.0,
+   "lon": 76.0,
+   "villages": 121,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.50_76.50": {
+   "lat": 14.5,
+   "lon": 76.5,
+   "villages": 72,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.50_76.75": {
+   "lat": 14.5,
+   "lon": 76.75,
+   "villages": 55,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.25_76.75": {
+   "lat": 14.25,
+   "lon": 76.75,
+   "villages": 65,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.25_76.50": {
+   "lat": 14.25,
+   "lon": 76.5,
+   "villages": 54,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.25_77.00": {
+   "lat": 14.25,
+   "lon": 77.0,
+   "villages": 36,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.50_77.00": {
+   "lat": 14.5,
+   "lon": 77.0,
+   "villages": 7,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.00_76.75": {
+   "lat": 14.0,
+   "lon": 76.75,
+   "villages": 81,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.25_76.25": {
+   "lat": 14.25,
+   "lon": 76.25,
+   "villages": 129,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.50_76.25": {
+   "lat": 14.5,
+   "lon": 76.25,
+   "villages": 114,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.00_76.25": {
+   "lat": 14.0,
+   "lon": 76.25,
+   "villages": 115,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.00_76.50": {
+   "lat": 14.0,
+   "lon": 76.5,
+   "villages": 63,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.25_76.00": {
+   "lat": 14.25,
+   "lon": 76.0,
+   "villages": 134,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.75_76.75": {
+   "lat": 13.75,
+   "lon": 76.75,
+   "villages": 92,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.75_76.50": {
+   "lat": 13.75,
+   "lon": 76.5,
+   "villages": 75,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.00_77.00": {
+   "lat": 14.0,
+   "lon": 77.0,
+   "villages": 54,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.50_76.50": {
+   "lat": 13.5,
+   "lon": 76.5,
+   "villages": 172,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.75_76.75": {
+   "lat": 14.75,
+   "lon": 76.75,
+   "villages": 52,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.00_75.00": {
+   "lat": 13.0,
+   "lon": 75.0,
+   "villages": 92,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "12.75_75.00": {
+   "lat": 12.75,
+   "lon": 75.0,
+   "villages": 46,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.00_75.25": {
+   "lat": 13.0,
+   "lon": 75.25,
+   "villages": 61,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "12.75_75.25": {
+   "lat": 12.75,
+   "lon": 75.25,
+   "villages": 65,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "12.75_75.50": {
+   "lat": 12.75,
+   "lon": 75.5,
+   "villages": 42,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.00_74.75": {
+   "lat": 13.0,
+   "lon": 74.75,
+   "villages": 48,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "12.75_74.75": {
+   "lat": 12.75,
+   "lon": 74.75,
+   "villages": 5,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "12.50_75.25": {
+   "lat": 12.5,
+   "lon": 75.25,
+   "villages": 6,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "12.50_75.50": {
+   "lat": 12.5,
+   "lon": 75.5,
+   "villages": 27,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "12.50_75.75": {
+   "lat": 12.5,
+   "lon": 75.75,
+   "villages": 54,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.25_75.75": {
+   "lat": 14.25,
+   "lon": 75.75,
+   "villages": 121,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.00_75.75": {
+   "lat": 14.0,
+   "lon": 75.75,
+   "villages": 162,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.50_75.75": {
+   "lat": 14.5,
+   "lon": 75.75,
+   "villages": 104,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.50_76.00": {
+   "lat": 14.5,
+   "lon": 76.0,
+   "villages": 92,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.25_75.50": {
+   "lat": 14.25,
+   "lon": 75.5,
+   "villages": 107,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.00_75.50": {
+   "lat": 14.0,
+   "lon": 75.5,
+   "villages": 153,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.75_76.25": {
+   "lat": 14.75,
+   "lon": 76.25,
+   "villages": 53,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.50_75.00": {
+   "lat": 15.5,
+   "lon": 75.0,
+   "villages": 71,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.25_75.00": {
+   "lat": 15.25,
+   "lon": 75.0,
+   "villages": 96,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.50_75.25": {
+   "lat": 15.5,
+   "lon": 75.25,
+   "villages": 37,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.25_74.75": {
+   "lat": 15.25,
+   "lon": 74.75,
+   "villages": 104,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.25_75.25": {
+   "lat": 15.25,
+   "lon": 75.25,
+   "villages": 60,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.25_75.50": {
+   "lat": 15.25,
+   "lon": 75.5,
+   "villages": 49,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.00_75.00": {
+   "lat": 15.0,
+   "lon": 75.0,
+   "villages": 81,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.00_75.25": {
+   "lat": 15.0,
+   "lon": 75.25,
+   "villages": 121,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.00_75.50": {
+   "lat": 15.0,
+   "lon": 75.5,
+   "villages": 80,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.50_75.50": {
+   "lat": 15.5,
+   "lon": 75.5,
+   "villages": 37,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.50_75.75": {
+   "lat": 15.5,
+   "lon": 75.75,
+   "villages": 31,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.25_75.75": {
+   "lat": 15.25,
+   "lon": 75.75,
+   "villages": 40,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.00_75.75": {
+   "lat": 15.0,
+   "lon": 75.75,
+   "villages": 69,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.25_76.00": {
+   "lat": 15.25,
+   "lon": 76.0,
+   "villages": 55,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.50_76.00": {
+   "lat": 15.5,
+   "lon": 76.0,
+   "villages": 55,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.00_76.00": {
+   "lat": 15.0,
+   "lon": 76.0,
+   "villages": 38,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.75_76.00": {
+   "lat": 15.75,
+   "lon": 76.0,
+   "villages": 99,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.00_76.00": {
+   "lat": 13.0,
+   "lon": 76.0,
+   "villages": 412,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "12.75_76.00": {
+   "lat": 12.75,
+   "lon": 76.0,
+   "villages": 315,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "12.75_75.75": {
+   "lat": 12.75,
+   "lon": 75.75,
+   "villages": 122,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "12.75_76.25": {
+   "lat": 12.75,
+   "lon": 76.25,
+   "villages": 279,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "12.50_76.25": {
+   "lat": 12.5,
+   "lon": 76.25,
+   "villages": 200,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "12.50_76.00": {
+   "lat": 12.5,
+   "lon": 76.0,
+   "villages": 161,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.25_76.25": {
+   "lat": 13.25,
+   "lon": 76.25,
+   "villages": 233,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.25_76.50": {
+   "lat": 13.25,
+   "lon": 76.5,
+   "villages": 237,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.00_76.25": {
+   "lat": 13.0,
+   "lon": 76.25,
+   "villages": 275,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.00_76.50": {
+   "lat": 13.0,
+   "lon": 76.5,
+   "villages": 281,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.75_76.50": {
+   "lat": 12.75,
+   "lon": 76.5,
+   "villages": 237,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.75_75.50": {
+   "lat": 14.75,
+   "lon": 75.5,
+   "villages": 76,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.50_75.50": {
+   "lat": 14.5,
+   "lon": 75.5,
+   "villages": 116,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.50_75.25": {
+   "lat": 14.5,
+   "lon": 75.25,
+   "villages": 163,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.75_75.25": {
+   "lat": 14.75,
+   "lon": 75.25,
+   "villages": 132,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.75_75.00": {
+   "lat": 14.75,
+   "lon": 75.0,
+   "villages": 135,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.75_75.75": {
+   "lat": 14.75,
+   "lon": 75.75,
+   "villages": 52,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.25_76.25": {
+   "lat": 17.25,
+   "lon": 76.25,
+   "villages": 37,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.25_76.50": {
+   "lat": 17.25,
+   "lon": 76.5,
+   "villages": 60,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.25_76.75": {
+   "lat": 17.25,
+   "lon": 76.75,
+   "villages": 60,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.00_76.50": {
+   "lat": 17.0,
+   "lon": 76.5,
+   "villages": 56,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.25_76.00": {
+   "lat": 17.25,
+   "lon": 76.0,
+   "villages": 28,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.50_76.50": {
+   "lat": 17.5,
+   "lon": 76.5,
+   "villages": 49,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.75_76.50": {
+   "lat": 17.75,
+   "lon": 76.5,
+   "villages": 18,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.50_76.75": {
+   "lat": 17.5,
+   "lon": 76.75,
+   "villages": 56,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.50_76.25": {
+   "lat": 17.5,
+   "lon": 76.25,
+   "villages": 4,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.25_77.50": {
+   "lat": 17.25,
+   "lon": 77.5,
+   "villages": 17,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.25_77.25": {
+   "lat": 17.25,
+   "lon": 77.25,
+   "villages": 68,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.50_77.75": {
+   "lat": 17.5,
+   "lon": 77.75,
+   "villages": 5,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.25_77.00": {
+   "lat": 17.25,
+   "lon": 77.0,
+   "villages": 56,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.00_77.00": {
+   "lat": 17.0,
+   "lon": 77.0,
+   "villages": 45,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.00_77.25": {
+   "lat": 17.0,
+   "lon": 77.25,
+   "villages": 59,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.75_77.00": {
+   "lat": 16.75,
+   "lon": 77.0,
+   "villages": 61,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.00_76.75": {
+   "lat": 17.0,
+   "lon": 76.75,
+   "villages": 49,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.75_76.50": {
+   "lat": 16.75,
+   "lon": 76.5,
+   "villages": 56,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.75_76.75": {
+   "lat": 16.75,
+   "lon": 76.75,
+   "villages": 74,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.00_77.50": {
+   "lat": 17.0,
+   "lon": 77.5,
+   "villages": 31,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.25_75.50": {
+   "lat": 12.25,
+   "lon": 75.5,
+   "villages": 8,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "12.25_75.75": {
+   "lat": 12.25,
+   "lon": 75.75,
+   "villages": 74,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "12.25_76.00": {
+   "lat": 12.25,
+   "lon": 76.0,
+   "villages": 90,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "12.00_75.75": {
+   "lat": 12.0,
+   "lon": 75.75,
+   "villages": 4,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "12.00_76.00": {
+   "lat": 12.0,
+   "lon": 76.0,
+   "villages": 21,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "13.00_78.25": {
+   "lat": 13.0,
+   "lon": 78.25,
+   "villages": 315,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.00_78.50": {
+   "lat": 13.0,
+   "lon": 78.5,
+   "villages": 101,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.75_78.25": {
+   "lat": 12.75,
+   "lon": 78.25,
+   "villages": 44,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.75_78.00": {
+   "lat": 12.75,
+   "lon": 78.0,
+   "villages": 34,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.25_78.50": {
+   "lat": 13.25,
+   "lon": 78.5,
+   "villages": 169,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.50_78.50": {
+   "lat": 13.5,
+   "lon": 78.5,
+   "villages": 1,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.50_76.50": {
+   "lat": 15.5,
+   "lon": 76.5,
+   "villages": 80,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.75_76.50": {
+   "lat": 15.75,
+   "lon": 76.5,
+   "villages": 68,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "15.50_76.25": {
+   "lat": 15.5,
+   "lon": 76.25,
+   "villages": 93,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.75_76.25": {
+   "lat": 15.75,
+   "lon": 76.25,
+   "villages": 95,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "15.25_76.25": {
+   "lat": 15.25,
+   "lon": 76.25,
+   "villages": 62,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.00_76.50": {
+   "lat": 16.0,
+   "lon": 76.5,
+   "villages": 70,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.50_76.50": {
+   "lat": 12.5,
+   "lon": 76.5,
+   "villages": 206,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.75_77.00": {
+   "lat": 12.75,
+   "lon": 77.0,
+   "villages": 184,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.50_77.00": {
+   "lat": 12.5,
+   "lon": 77.0,
+   "villages": 192,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.50_77.25": {
+   "lat": 12.5,
+   "lon": 77.25,
+   "villages": 196,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.75_76.75": {
+   "lat": 12.75,
+   "lon": 76.75,
+   "villages": 237,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.50_76.75": {
+   "lat": 12.5,
+   "lon": 76.75,
+   "villages": 204,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.00_76.75": {
+   "lat": 13.0,
+   "lon": 76.75,
+   "villages": 261,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.00_77.00": {
+   "lat": 13.0,
+   "lon": 77.0,
+   "villages": 237,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.25_76.50": {
+   "lat": 12.25,
+   "lon": 76.5,
+   "villages": 177,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.00_76.25": {
+   "lat": 12.0,
+   "lon": 76.25,
+   "villages": 96,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "11.75_76.25": {
+   "lat": 11.75,
+   "lon": 76.25,
+   "villages": 19,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "12.25_76.25": {
+   "lat": 12.25,
+   "lon": 76.25,
+   "villages": 139,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.25_77.00": {
+   "lat": 16.25,
+   "lon": 77.0,
+   "villages": 85,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.50_76.75": {
+   "lat": 16.5,
+   "lon": 76.75,
+   "villages": 82,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.50_77.00": {
+   "lat": 16.5,
+   "lon": 77.0,
+   "villages": 70,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.50_77.25": {
+   "lat": 16.5,
+   "lon": 77.25,
+   "villages": 63,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.25_76.75": {
+   "lat": 16.25,
+   "lon": 76.75,
+   "villages": 78,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.25_77.25": {
+   "lat": 16.25,
+   "lon": 77.25,
+   "villages": 55,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.25_76.50": {
+   "lat": 16.25,
+   "lon": 76.5,
+   "villages": 69,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.00_76.75": {
+   "lat": 16.0,
+   "lon": 76.75,
+   "villages": 81,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.00_77.25": {
+   "lat": 16.0,
+   "lon": 77.25,
+   "villages": 46,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.00_77.00": {
+   "lat": 16.0,
+   "lon": 77.0,
+   "villages": 64,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.25_77.50": {
+   "lat": 16.25,
+   "lon": 77.5,
+   "villages": 51,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.00_77.50": {
+   "lat": 16.0,
+   "lon": 77.5,
+   "villages": 28,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.50_77.50": {
+   "lat": 16.5,
+   "lon": 77.5,
+   "villages": 6,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.75_77.25": {
+   "lat": 12.75,
+   "lon": 77.25,
+   "villages": 151,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "12.50_77.50": {
+   "lat": 12.5,
+   "lon": 77.5,
+   "villages": 100,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.25_77.00": {
+   "lat": 13.25,
+   "lon": 77.0,
+   "villages": 266,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.75_75.00": {
+   "lat": 13.75,
+   "lon": 75.0,
+   "villages": 56,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.00_75.00": {
+   "lat": 14.0,
+   "lon": 75.0,
+   "villages": 129,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.75_75.25": {
+   "lat": 13.75,
+   "lon": 75.25,
+   "villages": 184,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.00_75.25": {
+   "lat": 14.0,
+   "lon": 75.25,
+   "villages": 114,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.50_75.00": {
+   "lat": 13.5,
+   "lon": 75.0,
+   "villages": 34,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.00_74.75": {
+   "lat": 14.0,
+   "lon": 74.75,
+   "villages": 49,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.25_75.00": {
+   "lat": 14.25,
+   "lon": 75.0,
+   "villages": 156,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.25_74.75": {
+   "lat": 14.25,
+   "lon": 74.75,
+   "villages": 94,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.25_75.25": {
+   "lat": 14.25,
+   "lon": 75.25,
+   "villages": 139,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.75_74.75": {
+   "lat": 13.75,
+   "lon": 74.75,
+   "villages": 49,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.50_75.00": {
+   "lat": 14.5,
+   "lon": 75.0,
+   "villages": 167,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.50_76.75": {
+   "lat": 13.5,
+   "lon": 76.75,
+   "villages": 138,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.25_76.75": {
+   "lat": 13.25,
+   "lon": 76.75,
+   "villages": 233,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.50_77.00": {
+   "lat": 13.5,
+   "lon": 77.0,
+   "villages": 238,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.75_77.00": {
+   "lat": 13.75,
+   "lon": 77.0,
+   "villages": 116,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.00_77.25": {
+   "lat": 14.0,
+   "lon": 77.25,
+   "villages": 44,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.25_77.25": {
+   "lat": 14.25,
+   "lon": 77.25,
+   "villages": 59,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.25_77.50": {
+   "lat": 14.25,
+   "lon": 77.5,
+   "villages": 10,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "14.00_77.50": {
+   "lat": 14.0,
+   "lon": 77.5,
+   "villages": 5,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "13.25_74.75": {
+   "lat": 13.25,
+   "lon": 74.75,
+   "villages": 61,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.50_74.75": {
+   "lat": 13.5,
+   "lon": 74.75,
+   "villages": 72,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "13.75_74.50": {
+   "lat": 13.75,
+   "lon": 74.5,
+   "villages": 2,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.00_74.50": {
+   "lat": 14.0,
+   "lon": 74.5,
+   "villages": 45,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.50_74.50": {
+   "lat": 14.5,
+   "lon": 74.5,
+   "villages": 104,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.50_74.25": {
+   "lat": 14.5,
+   "lon": 74.25,
+   "villages": 40,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.75_74.50": {
+   "lat": 14.75,
+   "lon": 74.5,
+   "villages": 38,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.75_74.25": {
+   "lat": 14.75,
+   "lon": 74.25,
+   "villages": 65,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.75_74.75": {
+   "lat": 14.75,
+   "lon": 74.75,
+   "villages": 110,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.00_74.75": {
+   "lat": 15.0,
+   "lon": 74.75,
+   "villages": 46,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.25_74.50": {
+   "lat": 15.25,
+   "lon": 74.5,
+   "villages": 58,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.25_74.50": {
+   "lat": 14.25,
+   "lon": 74.5,
+   "villages": 85,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.00_74.50": {
+   "lat": 15.0,
+   "lon": 74.5,
+   "villages": 45,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.25_74.25": {
+   "lat": 15.25,
+   "lon": 74.25,
+   "villages": 8,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.00_74.25": {
+   "lat": 15.0,
+   "lon": 74.25,
+   "villages": 22,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.75_74.00": {
+   "lat": 14.75,
+   "lon": 74.0,
+   "villages": 2,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.00_74.00": {
+   "lat": 15.0,
+   "lon": 74.0,
+   "villages": 1,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "14.50_74.75": {
+   "lat": 14.5,
+   "lon": 74.75,
+   "villages": 169,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "15.00_76.25": {
+   "lat": 15.0,
+   "lon": 76.25,
+   "villages": 39,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "14.75_76.00": {
+   "lat": 14.75,
+   "lon": 76.0,
+   "villages": 41,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.50_76.00": {
+   "lat": 16.5,
+   "lon": 76.0,
+   "villages": 46,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.75_76.00": {
+   "lat": 16.75,
+   "lon": 76.0,
+   "villages": 33,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.50_76.25": {
+   "lat": 16.5,
+   "lon": 76.25,
+   "villages": 61,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.75_76.25": {
+   "lat": 16.75,
+   "lon": 76.25,
+   "villages": 44,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "16.75_75.75": {
+   "lat": 16.75,
+   "lon": 75.75,
+   "villages": 24,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.00_75.75": {
+   "lat": 17.0,
+   "lon": 75.75,
+   "villages": 33,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.25_75.75": {
+   "lat": 17.25,
+   "lon": 75.75,
+   "villages": 40,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.00_76.25": {
+   "lat": 17.0,
+   "lon": 76.25,
+   "villages": 50,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.00_76.00": {
+   "lat": 17.0,
+   "lon": 76.0,
+   "villages": 32,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.50_76.00": {
+   "lat": 17.5,
+   "lon": 76.0,
+   "villages": 2,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.50_75.75": {
+   "lat": 17.5,
+   "lon": 75.75,
+   "villages": 10,
+   "past_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "forecast_3d": {
+    "medium": 100.0,
+    "high": 150.0
+   },
+   "bias": {}
+  },
+  "17.25_75.50": {
+   "lat": 17.25,
+   "lon": 75.5,
+   "villages": 1,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.50_76.50": {
+   "lat": 16.5,
+   "lon": 76.5,
+   "villages": 66,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "17.00_75.50": {
+   "lat": 17.0,
+   "lon": 75.5,
+   "villages": 13,
+   "past_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "forecast_3d": {
+    "medium": 137.0,
+    "high": 198.0
+   },
+   "bias": {}
+  },
+  "16.75_77.25": {
+   "lat": 16.75,
+   "lon": 77.25,
+   "villages": 59,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  },
+  "16.75_77.50": {
+   "lat": 16.75,
+   "lon": 77.5,
+   "villages": 18,
+   "past_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "forecast_3d": {
+    "medium": 64.5,
+    "high": 115.6
+   },
+   "bias": {}
+  }
+ },
+ "event_replay": []
+}

@@ -21,6 +21,7 @@
       <div class="who">
         <span class="who-label">Signed in as</span>
         <span><b id="who-name"></b><span class="who-role" id="who-role"></span> <button class="link-btn" id="btn-logout" type="button">Sign out</button></span>
+        <span class="who-area" id="who-area"></span>
       </div>
     </div>
   </header>
@@ -55,12 +56,14 @@
     <span id="alarm-text"></span>
     <button class="btn" id="btn-ack" type="button">Acknowledge</button>
   </div>
+  <div class="banner" id="demo-banner" hidden>Demo thresholds: risk levels use placeholder numbers, not your IMD rain history.
+    Run <code>python ml/scripts/build_grid.py</code> before relying on any warning.</div>
   <div class="banner" id="stale-banner" hidden></div>
 
   <section class="summary" aria-label="Villages by risk level">
-    <div class="count count-high"><span class="num" id="n-high">–</span><span class="lbl">High</span><span class="hint">alert villagers after approval</span></div>
-    <div class="count count-medium"><span class="num" id="n-medium">–</span><span class="lbl">Medium</span><span class="hint">watch: check shelters, prepare</span></div>
-    <div class="count count-low"><span class="num" id="n-low">–</span><span class="lbl">Low</span><span class="hint">below warning thresholds</span></div>
+    <div class="count count-high"><span class="num" id="n-high">–</span><span class="lbl">High</span><span class="hint">villages: alert after approval</span></div>
+    <div class="count count-medium"><span class="num" id="n-medium">–</span><span class="lbl">Medium</span><span class="hint">villages: check centres, prepare</span></div>
+    <div class="count count-low"><span class="num" id="n-low">–</span><span class="lbl">Low</span><span class="hint">villages below warning levels</span></div>
     <div class="count count-pending gp-only"><span class="num" id="n-pending">–</span><span class="lbl">Alerts to review</span><span class="hint">drafts waiting for approval</span></div>
     <div class="count count-rescue"><span class="num" id="n-rescue">–</span><span class="lbl">Rescue requests</span><span class="hint">families waiting for urgent help</span></div>
   </section>
@@ -68,11 +71,31 @@
   <main class="grid">
     <section class="card villages" aria-labelledby="villages-title">
       <div class="card-head">
-        <h2 id="villages-title">Villages</h2>
-        <span class="legend"><i class="dot high"></i>High <i class="dot medium"></i>Medium <i class="dot low"></i>Low</span>
+        <h2 id="villages-title">Your area</h2>
+        <span class="legend"><i class="cellkey high"></i>High <i class="cellkey medium"></i>Medium <i class="cellkey low"></i>Low <i class="sq open"></i>Relief centre</span>
       </div>
-      <div id="map" role="region" aria-label="Map of villages coloured by risk"></div>
-      <ul class="village-list" id="village-list"></ul>
+      <div class="map-wrap">
+        <div id="map" role="region" aria-label="Map: rain-grid squares coloured by risk, villages and relief centres"></div>
+        <div class="map-add" id="map-add" hidden>
+          <p id="map-add-hint">Click the map where the new relief centre is.</p>
+          <form id="add-form" hidden novalidate>
+            <label for="add-name">Name</label>
+            <input id="add-name" type="text" maxlength="120" placeholder="e.g. Govt school, Ujire" required>
+            <label for="add-cap">People it can hold</label>
+            <input id="add-cap" type="number" inputmode="numeric" min="1" max="5000" required>
+            <div class="tool-row"><button class="btn primary" type="submit">Add centre</button>
+              <button class="btn" type="button" id="add-cancel">Cancel</button></div>
+          </form>
+        </div>
+      </div>
+      <p class="fine area-note" id="area-note"></p>
+      <ul class="village-list" id="area-list"></ul>
+      <details class="all-villages" id="all-villages" hidden>
+        <summary>All villages in the taluk (<span id="village-count">0</span>)</summary>
+        <label class="sr-only" for="village-filter">Find a village</label>
+        <input id="village-filter" type="search" placeholder="Find a village…">
+        <ul class="vlist" id="village-list"></ul>
+      </details>
     </section>
 
     <div class="side">
@@ -92,15 +115,15 @@
         <div class="card-head"><h2 id="tools-title">System</h2></div>
         <dl class="sysinfo" id="sysinfo"></dl>
         <div class="tool-row">
-          <button class="btn gp-only" id="btn-run-now" type="button">Score all villages now</button>
+          <button class="btn gp-only" id="btn-run-now" type="button">Check the rain now</button>
           <button class="btn" id="btn-test-alarm" type="button">Test alarm</button>
         </div>
         <div class="tool-row gp-only">
-          <label for="sim-village" class="sr-only">Village for a test alert</label>
-          <select id="sim-village"></select>
+          <label for="sim-taluk" class="sr-only">Taluk for a test alert</label>
+          <select id="sim-taluk"></select>
           <button class="btn" id="btn-simulate" type="button">Draft test alert</button>
         </div>
-        <p class="fine gp-only">Test alerts pretend the village is HIGH and are marked <b>Simulated</b>, so they are never shown to villagers as real.
+        <p class="fine gp-only">Test alerts pretend the taluk is HIGH and are marked <b>Simulated</b>, so they are never shown to villagers as real.
           <a href="/villager/?demo=true" target="_blank" rel="noopener">Open the villager page in demo mode</a> to see how approved test alerts look to villagers.</p>
         <p class="fine ngo-only">NGO view: you see risk, approved alerts and where people are. Alerts are drafted and approved by the Gram Panchayat.</p>
       </section>
@@ -122,6 +145,25 @@
         <tbody id="relief-body"></tbody>
       </table>
     </div>
+  </section>
+
+  <section class="card shelters" aria-labelledby="shelters-title">
+    <div class="card-head">
+      <h2 id="shelters-title">Relief centres <span class="kn" lang="kn">ಕಾಳಜಿ ಕೇಂದ್ರ</span></h2>
+      <span class="relief-totals" id="shelter-totals"></span>
+      <button class="btn gp-only" id="btn-add-centre" type="button">Add a centre on the map</button>
+    </div>
+    <p class="fine relief-note"><span class="gp-only">Villagers only see centres listed here. Open one when people need to move and update how many are inside;
+      staff phones get a push when a centre opens or fills up.</span>
+      <span class="ngo-only">Designated, opened and counted by the Gram Panchayat. "Families say" is from villagers' own reports.</span></p>
+    <div id="shelter-list" class="shelter-list"></div>
+    <details class="candidates gp-only" id="candidates">
+      <summary>Possible centres from OpenStreetMap (<span id="cand-count">…</span>): schools, colleges, community halls, GP offices</summary>
+      <p class="fine">Not shown to villagers until you mark one as a relief centre. Check the building is safe from floods and landslides first.</p>
+      <label class="sr-only" for="cand-filter">Find a building</label>
+      <input id="cand-filter" type="search" placeholder="Find a school or hall…">
+      <ul class="cand-list" id="cand-list"></ul>
+    </details>
   </section>
   </div>
 

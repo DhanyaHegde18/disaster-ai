@@ -11,9 +11,14 @@ BACKEND_DIR = APP_DIR.parent
 PROJECT_DIR = BACKEND_DIR.parent
 load_dotenv(PROJECT_DIR / ".env")  # secrets like GEMINI_API_KEY live in .env (git-ignored)
 
-RULE_CONFIG = APP_DIR / "rule_config.json"          # written by ml/scripts/calibrate_rule.py
+GRID_CONFIG = APP_DIR / "grid_config.json"          # written by ml/scripts/build_grid.py (your IMD data)
+GRID_CONFIG_DEMO = APP_DIR / "grid_config.demo.json"  # placeholder thresholds, used until you run build_grid.py
+VILLAGES_CSV = PROJECT_DIR / "ml" / "data" / "karnataka_villages.csv"   # ml/scripts/build_villages.py
+AREAS_JSON = PROJECT_DIR / "ml" / "data" / "karnataka_areas.json"
+SHELTER_CANDIDATES_CSV = PROJECT_DIR / "ml" / "data" / "shelter_candidates.csv"  # ml/scripts/fetch_osm_buildings.py
 LATEST_RISK_FILE = BACKEND_DIR / "data" / "latest_risk.json"
 ALERTS_DB = BACKEND_DIR / "data" / "alerts.db"
+SHELTERS_CSV = PROJECT_DIR / "ml" / "data" / "shelters.csv"   # relief centres; edit this file to add real ones
 
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 TIMEZONE = "Asia/Kolkata"
@@ -51,14 +56,17 @@ OTP_TTL_MIN = 5            # a code works for 5 minutes
 OTP_MAX_ATTEMPTS = 5       # then a new code must be requested
 OTP_RESEND_S = 30          # minimum gap between code requests for one number
 SESSION_HOURS = 12         # stay signed in for one working day
-COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").lower() == "true"  # set true when served over https
+# Session cookies are made https-only automatically when the page came over https; true forces it always.
+COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").lower() == "true"
 
 # Phone push alerts for staff (ntfy: free app for Android/iOS). Each person installs the ntfy app
 # and subscribes to their role's topic. Topic names act like passwords: make them long and random.
 NTFY_SERVER = os.getenv("NTFY_SERVER", "https://ntfy.sh").rstrip("/")
 NTFY_TOPIC_GP = os.getenv("NTFY_TOPIC_GP", "")
 NTFY_TOPIC_NGO = os.getenv("NTFY_TOPIC_NGO", "")
-PUBLIC_URL = os.getenv("PUBLIC_URL", "http://127.0.0.1:8000").rstrip("/")   # link opened from a notification
+# Link opened from a phone notification. Normally leave it unset: the app learns its public address
+# (tunnel, Tailscale, Wi-Fi IP) from the dashboard itself. Set it only to force a particular address.
+PUBLIC_URL = os.getenv("PUBLIC_URL", "").rstrip("/")
 ESCALATE_AFTER_MIN = float(os.getenv("ESCALATE_AFTER_MIN", "15"))  # re-alert if nobody acted for this long
 ESCALATE_MAX_TIMES = int(os.getenv("ESCALATE_MAX_TIMES", "8"))     # stop after this many alerts per item
 ESCALATION_CHECK_S = 60                                              # how often the server checks
@@ -70,10 +78,17 @@ ALERT_LEVELS = ("HIGH",)    # levels that get an alert drafted automatically
 CORS_ORIGINS = ["http://localhost:3000", "http://localhost:5173"]
 
 
+FORECAST_BATCH = 100        # grid squares per Open-Meteo request
+FORECAST_PAUSE_S = 2        # pause between those requests
+
+
 @lru_cache
-def rule_config() -> dict:
-    if not RULE_CONFIG.exists():
-        raise RuntimeError(
-            f"{RULE_CONFIG} is missing. Run: python ml/scripts/calibrate_rule.py"
-        )
-    return json.loads(RULE_CONFIG.read_text())
+def grid_config() -> dict:
+    """Thresholds per rain-grid square. Falls back to the demo file (marked demo=True) until
+    ml/scripts/build_grid.py has been run on your IMD data."""
+    path = GRID_CONFIG if GRID_CONFIG.exists() else GRID_CONFIG_DEMO
+    if not path.exists():
+        raise RuntimeError(f"{GRID_CONFIG} is missing. Run: python ml/scripts/build_grid.py")
+    cfg = json.loads(path.read_text())
+    cfg["demo"] = path == GRID_CONFIG_DEMO or cfg.get("demo", False)
+    return cfg

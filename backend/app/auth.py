@@ -26,7 +26,7 @@ from zoneinfo import ZoneInfo
 
 from fastapi import HTTPException, Request
 
-from . import config, database, sms
+from . import areas, config, database, sms
 
 STAFF, VILLAGER = "staff", "villager"
 COOKIES = {STAFF: "gp_session", VILLAGER: "v_session"}
@@ -65,21 +65,54 @@ def mask(phone: str) -> str:
     return phone[:3] + "•" * 6 + phone[-4:]
 
 
-def _village_ids() -> set[str]:
-    return {v["village_id"] for v in config.rule_config()["villages"]}
-
-
 # ---------- staff accounts ----------
 
-def add_official(phone: str, name: str, role: str = "gp") -> dict:
+def add_official(phone: str, name: str, role: str = "gp", taluk_id: str | None = None,
+                 district: str | None = None) -> dict:
+    """Gram Panchayat officials work in one taluk (they see and approve only that taluk).
+    NGO staff may be limited to a district. Leaving both empty means all of Karnataka."""
     phone, role = normalize_phone(phone), role.lower()
     if role not in ROLES:
         raise AuthError(f"Role must be one of: {', '.join(ROLES)}")
+    a = areas.get()
+    if taluk_id:
+        t = a.taluk(taluk_id)
+        if not t:
+            raise AuthError(f"Unknown taluk '{taluk_id}'.")
+        district = t["district"]
+    elif district:
+        district = a.find_district(district)
+        if not district:
+            raise AuthError("Unknown district.")
     with database.connect() as c:
-        c.execute("INSERT INTO officials (phone, name, created_at, role) VALUES (?, ?, ?, ?) "
-                  "ON CONFLICT(phone) DO UPDATE SET name = excluded.name, role = excluded.role",
-                  (phone, name.strip(), database.now(), role))
-    return {"phone": phone, "name": name.strip(), "role": role}
+        c.execute("INSERT INTO officials (phone, name, created_at, role, district, taluk_id) VALUES (?, ?, ?, ?, ?, ?) "
+                  "ON CONFLICT(phone) DO UPDATE SET name = excluded.name, role = excluded.role, "
+                  "district = excluded.district, taluk_id = excluded.taluk_id",
+                  (phone, name.strip(), database.now(), role, district, taluk_id))
+    return get_official(phone)
+
+
+def _with_scope(o: dict) -> dict:
+    """Add a readable area name: 'Belthangady taluk, Dakshina Kannada', 'Udupi district' or 'All of Karnataka'."""
+    t = areas.get().taluk(o["taluk_id"]) if o.get("taluk_id") else None
+    o["taluk_name"] = t["name"] if t else None
+    o["area"] = (f"{t['name']} taluk, {t['district']}" if t
+                 else f"{o['district']} district" if o.get("district") else "All of Karnataka")
+    return o
+
+
+def scope_taluks(user: dict) -> set[str] | None:
+    """Taluks this staff member may see; None means all of Karnataka."""
+    if user.get("taluk_id"):
+        return {user["taluk_id"]}
+    if user.get("district"):
+        return set(areas.get().taluks_in_district(user["district"]))
+    return None
+
+
+def in_scope(user: dict, taluk_id: str | None) -> bool:
+    allowed = scope_taluks(user)
+    return allowed is None or taluk_id in allowed
 
 
 def remove_official(phone: str) -> bool:
@@ -92,13 +125,15 @@ def remove_official(phone: str) -> bool:
 
 def list_officials() -> list[dict]:
     with database.connect() as c:
-        return [dict(r) for r in c.execute("SELECT phone, name, role, created_at FROM officials ORDER BY role, name")]
+        rows = [dict(r) for r in c.execute("SELECT phone, name, role, district, taluk_id, created_at "
+                                           "FROM officials ORDER BY role, district, name")]
+    return [_with_scope(o) for o in rows]
 
 
 def get_official(phone: str) -> dict | None:
     with database.connect() as c:
-        r = c.execute("SELECT phone, name, role FROM officials WHERE phone = ?", (phone,)).fetchone()
-        return dict(r) if r else None
+        r = c.execute("SELECT phone, name, role, district, taluk_id FROM officials WHERE phone = ?", (phone,)).fetchone()
+    return _with_scope(dict(r)) if r else None
 
 
 # ---------- codes ----------
@@ -155,7 +190,7 @@ def verify_code(raw_phone: str, code: str, purpose: str = STAFF, village_id: str
     """Check the code; on success return (session token, user)."""
     phone = normalize_phone(raw_phone)
     code = (code or "").strip()
-    if purpose == VILLAGER and village_id not in _village_ids():
+    if purpose == VILLAGER and not areas.get().village(village_id or ""):
         raise AuthError("Choose your village first.", 422)
     now = _now()
     with database.connect() as c:

@@ -24,12 +24,23 @@
   <main>
     <section id="picker" hidden>
       <h2 data-t="choose"></h2>
+      <label class="pick-label" for="v-search" data-t="searchLabel"></label>
+      <input class="pick-input" id="v-search" type="search" autocomplete="off" placeholder="Ujire, Dharmasthala…">
+      <div class="village-buttons" id="search-results"></div>
+      <p class="hint pick-or" data-t="orBrowse"></p>
+      <div class="pick-row">
+        <label for="pick-district" class="sr-only" data-t="district"></label>
+        <select id="pick-district" class="pick-input"></select>
+        <label for="pick-taluk" class="sr-only" data-t="taluk"></label>
+        <select id="pick-taluk" class="pick-input" disabled></select>
+      </div>
+      <input class="pick-input" id="v-filter" type="search" autocomplete="off" hidden>
       <div class="village-buttons" id="village-buttons"></div>
     </section>
 
     <section id="home" hidden>
       <div class="place">
-        <span id="place-name"></span>
+        <span><span id="place-name"></span> <span class="place-sub" id="place-sub"></span></span>
         <button class="link" id="btn-change" type="button" data-t="change"></button>
       </div>
 
@@ -39,6 +50,16 @@
         <button class="big secondary" id="btn-sound" type="button" aria-pressed="false" data-t="soundOff"></button>
         <a class="big call" id="call" href="tel:112"><span data-t="call"></span></a>
       </div>
+
+      <section class="centres" id="centres" aria-labelledby="centres-title">
+        <div class="centres-top">
+          <h2 id="centres-title" data-t="shelterTitle"></h2>
+          <button class="link" id="btn-locate" type="button" data-t="useLocation"></button>
+        </div>
+        <p class="hint" id="centres-from"></p>
+        <p class="none-open" id="none-open" hidden data-t="noneOpen"></p>
+        <div id="centre-list"></div>
+      </section>
 
       <section class="report" id="report" aria-labelledby="report-title">
         <h2 id="report-title" data-t="reportTitle"></h2>

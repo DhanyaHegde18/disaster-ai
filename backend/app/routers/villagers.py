@@ -9,7 +9,7 @@ import json
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response
 from pydantic import BaseModel, Field, field_validator
 
-from .. import auth, database, notify
+from .. import areas, auth, database, notify
 from .auth import fail, set_session_cookie
 
 router = APIRouter(prefix="/public", tags=["villagers"])
@@ -64,12 +64,12 @@ def request_code(body: PhoneIn):
 
 
 @router.post("/auth/verify")
-def verify(body: VerifyIn, response: Response):
+def verify(body: VerifyIn, request: Request, response: Response):
     try:
         token, user = auth.verify_code(body.phone, body.code, auth.VILLAGER, body.village_id)
     except auth.AuthError as err:
         fail(err)
-    set_session_cookie(response, auth.VILLAGER, token)
+    set_session_cookie(response, auth.VILLAGER, token, request)
     return {"phone": auth.mask(user["phone"]), "village_id": user["village_id"]}
 
 
@@ -82,14 +82,15 @@ def logout(request: Request, response: Response):
 
 @router.get("/me")
 def me(user: dict = Depends(auth.require_villager)):
+    v = areas.get().village(user["village_id"])
     return {"phone": auth.mask(user["phone"]), "village_id": user["village_id"],
-            "report": latest_report(user["phone"])}
+            "village_name": v["name"] if v else None, "report": latest_report(user["phone"])}
 
 
 @router.post("/report")
 def report(body: ReportIn, background: BackgroundTasks, user: dict = Depends(auth.require_villager)):
     """Send (or update) this family's evacuation status. A rescue request alerts staff phones."""
-    if body.village_id not in {v["village_id"] for v in auth.config.rule_config()["villages"]}:
+    if not areas.get().village(body.village_id):
         raise HTTPException(status_code=422, detail="Unknown village.")
     if body.at_shelter + body.with_relatives + body.at_home + body.unknown == 0:
         raise HTTPException(status_code=422, detail="Report at least one person.")
@@ -106,7 +107,6 @@ def report(body: ReportIn, background: BackgroundTasks, user: dict = Depends(aut
                    body.unknown, json.dumps(body.needs), database.now()))
         c.execute("UPDATE villagers SET village_id = ? WHERE phone = ?", (body.village_id, user["phone"]))
     saved = latest_report(user["phone"])
-    if "rescue" in body.needs:
-        village = next(v for v in auth.config.rule_config()["villages"] if v["village_id"] == body.village_id)
-        background.add_task(notify.notify_rescue, {"phone": user["phone"], **saved}, village["name"])
+    if "rescue" in body.needs:     # rings that taluk's GP phones and the district's NGOs
+        background.add_task(notify.notify_rescue, {"phone": user["phone"], **saved})
     return {"saved": True, "report": saved}

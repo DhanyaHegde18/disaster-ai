@@ -1,8 +1,8 @@
 """
 Reminders until someone acts. Runs every minute while the server runs (if ntfy topics are set).
 
-  Open rescue request (not marked handled)   -> remind GP + NGO phones every ESCALATE_AFTER_MIN
-  Real alert still pending (not reviewed)     -> remind GP phones every ESCALATE_AFTER_MIN (urgent)
+  Open rescue request (not marked handled)   -> remind that taluk's GP + district's NGO phones every ESCALATE_AFTER_MIN
+  Real alert still pending (not reviewed)     -> remind that taluk's GP phones every ESCALATE_AFTER_MIN (urgent)
 Each item is alerted at most ESCALATE_MAX_TIMES times, then the reminders stop.
 """
 import asyncio
@@ -34,7 +34,6 @@ def check_once(now: datetime | None = None) -> dict:
     sent = {"alerts": 0, "rescues": 0}
     if not notify.topics_for(("gp", "ngo")):
         return sent                          # no phones configured: nothing to do
-    names = {v["village_id"]: v["name"] for v in config.rule_config()["villages"]}
 
     for alert in database.list_alerts("pending"):
         if alert["simulated"]:
@@ -54,7 +53,7 @@ def check_once(now: datetime | None = None) -> dict:
             continue
         due, times = _due(notify.rescue_key(report), now)
         if due:
-            notify.notify_rescue(report, names.get(report["village_id"], report["village_id"]), repeat=times)
+            notify.notify_rescue(report, repeat=times)
             sent["rescues"] += 1
     return sent
 

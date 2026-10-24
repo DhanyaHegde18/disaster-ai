@@ -19,16 +19,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import config, database
+from . import areas, config, database
 from .auth import require_gp, require_official
 from .jobs import escalation, scheduler
 from . import notify
-from .routers import alerts, auth, public, relief, risk, villagers
+from .routers import alerts, auth, public, relief, risk, shelters, villagers
+from .services import shelters as shelter_data
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     database.init_db()  # create the tables on first run
+    areas.get()                    # load the ~28,000 villages once
+    shelter_data.sync_from_csv()   # relief centres + OpenStreetMap candidates (only if the files changed)
     tasks = []
     if config.SCHEDULER_ENABLED:
         tasks.append(asyncio.create_task(scheduler.scheduler_loop()))
@@ -41,22 +44,25 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Disaster AI: Flood & Landslide Early Warning",
-    description="Village-level flood and landslide risk for Coastal and Malnad Karnataka, "
-                "with AI-drafted bilingual alerts reviewed by the Gram Panchayat.",
-    version="0.5.0",
+    description="Flood and landslide risk for all of Karnataka on IMD's rain grid, "
+                "with AI-drafted bilingual alerts per taluk reviewed by the Gram Panchayat.",
+    version="0.7.0",
     lifespan=lifespan,
 )
 app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_credentials=True,
                    allow_methods=["*"], allow_headers=["*"])
 # Open to everyone: /health, /public/status + /public/villages (warnings), sign-in endpoints, the two pages.
 # Villager session: /public/me, /public/report.  Staff session (GP or NGO): /risk, /alerts (NGO: approved only),
-# /relief/summary.  Gram Panchayat only: drafting/reviewing alerts, /relief/reports, running checks.
+# /relief/summary, /shelters.  Gram Panchayat only: drafting/reviewing alerts, /relief/reports,
+# opening/closing relief centres (PATCH /shelters), running checks.  Open: /public/shelters (nearest centres).
 app.include_router(auth.router)
 app.include_router(risk.router)
 app.include_router(alerts.router)
 app.include_router(public.router)
 app.include_router(villagers.router)
 app.include_router(relief.router)
+app.include_router(shelters.router)
+app.include_router(shelters.public_router)
 
 # Pages served by this same server (plain HTML/JS, no build step):
 #   /dashboard/  Gram Panchayat control centre    /villager/  villagers' warning page
@@ -75,15 +81,20 @@ def root():
 
 @app.get("/health", tags=["system"])
 def health():
-    cfg = config.rule_config()
-    return {"status": "ok", "engine": "rule-v1", "calibrated_on": cfg["calibrated_on"],
-            "villages": len(cfg["villages"]),
+    grid = config.grid_config()
+    a = areas.get()
+    return {"status": "ok", "engine": "rule-v2-grid",
+            "thresholds": ("DEMO placeholders: run ml/scripts/build_grid.py" if grid["demo"]
+                           else f"from {grid.get('source', 'IMD')}, calibrated {grid.get('calibrated_on')}"),
+            "coverage": f"{len(a.villages)} villages, {len(a.taluks)} taluks, {len(a.districts)} districts, "
+                        f"{len(grid['cells'])} rain-grid squares",
             "alert_drafting": f"gemini ({config.GEMINI_MODEL})" if config.GEMINI_API_KEY else "template only (no GEMINI_API_KEY)",
             "automatic_scoring": f"every {config.SCORING_INTERVAL_MIN:g} min" if config.SCHEDULER_ENABLED else "off",
             "sign_in": "demo codes on screen" if config.OTP_DEMO_MODE else f"SMS codes via {config.SMS_PROVIDER}",
-            "phone_alerts": (f"ntfy to {', '.join(r for r in ('gp', 'ngo') if notify.topics_for((r,)))}, "
-                             f"reminders every {config.ESCALATE_AFTER_MIN:g} min")
-                            if notify.topics_for(("gp", "ngo")) else "off (set NTFY_TOPIC_GP / NTFY_TOPIC_NGO)"}
+            "public_address": notify.public_url() + ("" if config.PUBLIC_URL else " (learned from the dashboard)"),
+            "phone_alerts": (f"ntfy, a topic per taluk (GP) and district (NGO), reminders every "
+                             f"{config.ESCALATE_AFTER_MIN:g} min") if notify.topics_for(("gp", "ngo"))
+                            else "off (set NTFY_TOPIC_GP / NTFY_TOPIC_NGO)"}
 
 
 @app.get("/system/scheduler", tags=["system"], dependencies=[Depends(require_official)])

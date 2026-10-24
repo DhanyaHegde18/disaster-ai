@@ -1,6 +1,6 @@
 """
-Automatic scoring: while the server runs, score every village on a fixed interval
-and draft alerts for villages that turn HIGH.
+Automatic scoring: while the server runs, score every rain-grid square in Karnataka on a
+fixed interval and draft alerts for taluks that turn HIGH.
 
 How it runs
   * Started by main.py when the server starts (if SCHEDULER_ENABLED), stopped when it stops.
@@ -21,7 +21,7 @@ from zoneinfo import ZoneInfo
 
 from .. import config
 from ..services.alerts import generate_for_snapshot
-from .score_villages import score_now
+from .score_grid import score_now
 
 state = {
     "enabled": False,
@@ -42,7 +42,7 @@ def _now() -> datetime:
 
 
 def run_cycle() -> dict:
-    """One full pass: score all villages, then draft alerts for new HIGH villages."""
+    """One full pass: score the whole state, then draft alerts for new HIGH taluks."""
     snapshot = score_now()
     created = generate_for_snapshot(snapshot)
     return {"summary": snapshot["summary"], "alerts_created": [a["id"] for a in created]}
@@ -57,7 +57,7 @@ async def run_once_tracked() -> dict:
         state.update(last_summary=result["summary"], last_alerts_created=result["alerts_created"],
                      last_error=None)
         s = result["summary"]
-        print(f"[scheduler] {started:%H:%M} scored villages: HIGH {s['HIGH']}  MEDIUM {s['MEDIUM']}  "
+        print(f"[scheduler] {started:%H:%M} scored rain-grid squares: HIGH {s['HIGH']}  MEDIUM {s['MEDIUM']}  "
               f"LOW {s['LOW']}  | alerts drafted: {len(result['alerts_created'])}", flush=True)
         return result
     except Exception as err:

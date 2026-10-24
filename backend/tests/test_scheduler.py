@@ -2,12 +2,11 @@
 import asyncio
 
 import pytest
-from fastapi.testclient import TestClient
 
 from backend.app import config
 from backend.app.jobs import scheduler
 
-SNAP = {"summary": {"HIGH": 1, "MEDIUM": 2, "LOW": 5}, "villages": []}
+SNAP = {"summary": {"HIGH": 1, "MEDIUM": 2, "LOW": 5}, "cells": []}
 
 
 @pytest.fixture(autouse=True)
@@ -61,13 +60,18 @@ def test_loop_keeps_running_after_a_failure(monkeypatch):
     assert scheduler.state["last_error"] is None  # and the later run succeeded
 
 
-def test_status_endpoint(monkeypatch, tmp_path):
-    monkeypatch.setattr(config, "SCHEDULER_ENABLED", False)
-    monkeypatch.setattr(config, "ALERTS_DB", tmp_path / "alerts.db")
-    from backend.app.main import app
-    from backend.tests.conftest import sign_in
-    with TestClient(app) as c:
+def test_status_endpoint():
+    from backend.tests.conftest import app_client, sign_in
+    with app_client() as c:
         assert c.get("/system/scheduler").status_code == 401      # signed out
         sign_in(c)
         body = c.get("/system/scheduler").json()
     assert body["runs"] == 0 and body["running_now"] is False
+
+
+def test_real_cycle_scores_the_grid_and_drafts(world):
+    world.rain("13.00_75.25", past=60, future=260)
+    from backend.tests.conftest import app_client
+    with app_client():
+        result = scheduler.run_cycle()
+    assert result["summary"] == {"HIGH": 1, "MEDIUM": 0, "LOW": 3} and len(result["alerts_created"]) == 1

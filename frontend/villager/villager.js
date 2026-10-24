@@ -9,6 +9,13 @@ const T = {
     app: "ಊರಿನ ಎಚ್ಚರಿಕೆ",
     tagline: "ಪ್ರವಾಹ ಮತ್ತು ಭೂಕುಸಿತ ಮುನ್ನೆಚ್ಚರಿಕೆ",
     choose: "ನಿಮ್ಮ ಊರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    searchLabel: "ಊರಿನ ಹೆಸರು ಬರೆಯಿರಿ (ಇಂಗ್ಲಿಷ್ ಅಕ್ಷರಗಳಲ್ಲಿ)",
+    orBrowse: "ಅಥವಾ ಜಿಲ್ಲೆ ಮತ್ತು ತಾಲ್ಲೂಕು ಆಯ್ಕೆಮಾಡಿ:",
+    district: "ಜಿಲ್ಲೆ", taluk: "ತಾಲ್ಲೂಕು",
+    pickDistrict: "ಜಿಲ್ಲೆ ಆಯ್ಕೆಮಾಡಿ", pickTaluk: "ತಾಲ್ಲೂಕು ಆಯ್ಕೆಮಾಡಿ",
+    filterVillages: "ಈ ತಾಲ್ಲೂಕಿನಲ್ಲಿ ಊರು ಹುಡುಕಿ",
+    noMatch: "ಈ ಹೆಸರಿನ ಊರು ಸಿಗಲಿಲ್ಲ. ಬೇರೆ ರೀತಿ ಬರೆದು ನೋಡಿ, ಅಥವಾ ಕೆಳಗೆ ಜಿಲ್ಲೆ ಮತ್ತು ತಾಲ್ಲೂಕು ಆಯ್ಕೆಮಾಡಿ.",
+    talukWord: "ತಾಲ್ಲೂಕು",
     change: "ಊರು ಬದಲಿಸಿ",
     warnHead: "ಎಚ್ಚರಿಕೆ!",
     calmHead: "ಸದ್ಯ ಯಾವುದೇ ಎಚ್ಚರಿಕೆ ಇಲ್ಲ",
@@ -56,6 +63,18 @@ const T = {
     atLeastOne: "ಕನಿಷ್ಠ ಒಬ್ಬರ ಸ್ಥಿತಿ ತಿಳಿಸಿ.",
     logout: "ಲಾಗ್ ಔಟ್",
     less: "ಕಡಿಮೆ", more: "ಹೆಚ್ಚು",
+    shelterTitle: "ಹತ್ತಿರದ ಕಾಳಜಿ ಕೇಂದ್ರ",
+    useLocation: "ನನ್ನ ಸ್ಥಳದಿಂದ ಅಳೆಯಿರಿ",
+    fromVillage: "ದೂರವನ್ನು ಊರಿನ ಮಧ್ಯದಿಂದ ಅಳೆಯಲಾಗಿದೆ (ನೇರ ದೂರ, ರಸ್ತೆ ಇನ್ನೂ ಉದ್ದ).",
+    fromMe: "ದೂರವನ್ನು ನಿಮ್ಮ ಸ್ಥಳದಿಂದ ಅಳೆಯಲಾಗಿದೆ (ನೇರ ದೂರ, ರಸ್ತೆ ಇನ್ನೂ ಉದ್ದ).",
+    locating: "ನಿಮ್ಮ ಸ್ಥಳ ಹುಡುಕಲಾಗುತ್ತಿದೆ…",
+    locFail: "ನಿಮ್ಮ ಸ್ಥಳ ಸಿಗಲಿಲ್ಲ. ಊರಿನ ಮಧ್ಯದಿಂದ ದೂರ ತೋರಿಸಲಾಗಿದೆ.",
+    km: (d) => `${d} ಕಿ.ಮೀ`,
+    st: { open: "ತೆರೆದಿದೆ", full: "ತುಂಬಿದೆ", closed: "ಇನ್ನೂ ತೆರೆದಿಲ್ಲ" },
+    spaces: (n) => `${n} ಜನರಿಗೆ ಸ್ಥಳವಿದೆ`,
+    noneOpen: "ಸದ್ಯ ಯಾವ ಕಾಳಜಿ ಕೇಂದ್ರವೂ ತೆರೆದಿಲ್ಲ. ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ತೆರೆದಾಗ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ. ಅಪಾಯವಿದ್ದರೆ ಎತ್ತರದ ಸುರಕ್ಷಿತ ಸ್ಥಳಕ್ಕೆ ಹೋಗಿ, 112 ಗೆ ಕರೆ ಮಾಡಿ.",
+    directions: "ದಾರಿ ತೋರಿಸಿ",
+    callCentre: "ಕೇಂದ್ರಕ್ಕೆ ಕರೆ",
     err: { 400: "ಸರಿಯಾದ 10 ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ.", 401: "ಕೋಡ್ ತಪ್ಪಾಗಿದೆ ಅಥವಾ ಅವಧಿ ಮುಗಿದಿದೆ.",
            429: "ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.", 502: "SMS ಕಳುಹಿಸಲು ಆಗಲಿಲ್ಲ. ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಪ್ರಯತ್ನಿಸಿ." },
   },
@@ -63,6 +82,13 @@ const T = {
     app: "Village Alert",
     tagline: "Flood and landslide warnings",
     choose: "Choose your village",
+    searchLabel: "Type your village's name",
+    orBrowse: "Or choose your district and taluk:",
+    district: "District", taluk: "Taluk",
+    pickDistrict: "Choose district", pickTaluk: "Choose taluk",
+    filterVillages: "Find a village in this taluk",
+    noMatch: "No village with that name. Try another spelling, or choose your district and taluk below.",
+    talukWord: "taluk",
     change: "Change village",
     warnHead: "Warning!",
     calmHead: "No warnings right now",
@@ -110,13 +136,26 @@ const T = {
     atLeastOne: "Report at least one person.",
     logout: "Log out",
     less: "Fewer", more: "More",
+    shelterTitle: "Nearest relief centre",
+    useLocation: "Measure from where I am",
+    fromVillage: "Distance from the village centre (straight line; the road is longer).",
+    fromMe: "Distance from where you are (straight line; the road is longer).",
+    locating: "Finding your location…",
+    locFail: "Could not get your location. Showing distance from the village centre.",
+    km: (d) => `${d} km`,
+    st: { open: "Open", full: "Full", closed: "Not open yet" },
+    spaces: (n) => `Room for ${n} more`,
+    noneOpen: "No relief centre is open right now. It will appear here when the Gram Panchayat opens one. If you are in danger, move to high, safe ground and call 112.",
+    directions: "Directions",
+    callCentre: "Call centre",
     err: {},
   },
 };
 
 const S = {
-  lang: "kn", village: null, data: null, villages: [],
+  lang: "kn", village: null, data: null, districts: [], talukVillages: [], searchHits: null,
   seen: null, sound: false, audio: null,
+  centres: null, loc: null,        // loc = {lat, lon} only after the person taps "measure from where I am"
 };
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -146,6 +185,7 @@ function applyLang() {
   renderPicker();
   renderReportForm();
   if (S.data) renderStatus();
+  if (S.centres) renderCentres();
 }
 
 $("btn-lang").addEventListener("click", () => {
@@ -154,19 +194,82 @@ $("btn-lang").addEventListener("click", () => {
   applyLang();
 });
 
-// ---------- village choice ----------
-function renderPicker() {
-  $("village-buttons").innerHTML = S.villages.map((v) => `
+// ---------- village choice: search the whole state, or district -> taluk -> village ----------
+const districtName = (d) => S.lang === "kn" ? (d.name_kn || d.name) : d.name;
+
+function villageButtons(list, withPlace) {
+  return list.map((v) => `
     <button type="button" data-id="${esc(v.village_id)}">
       <b>${esc(S.lang === "kn" ? (v.name_kn || v.name) : v.name)}</b>
-      <span>${esc(S.lang === "kn" ? v.name : (v.name_kn || ""))} · ${esc(v.district)}</span>
+      <span>${withPlace ? `${esc(v.taluk)} · ${esc(districtName(S.districts.find((d) => d.name === v.district) || { name: v.district }))}` : ""}</span>
     </button>`).join("");
-  $("village-buttons").querySelectorAll("button").forEach((b) =>
-    b.addEventListener("click", () => chooseVillage(b.dataset.id)));
 }
 
+function bindVillageButtons(box) {
+  box.querySelectorAll("button[data-id]").forEach((b) => b.addEventListener("click", () => chooseVillage(b.dataset.id)));
+}
+
+function renderPicker() {
+  const ds = $("pick-district"), current = ds.value;
+  ds.innerHTML = `<option value="">${esc(t("pickDistrict"))}</option>` +
+    S.districts.map((d) => `<option value="${esc(d.name)}">${esc(districtName(d))}</option>`).join("");
+  ds.value = current;
+  renderTaluks();
+  $("v-filter").placeholder = t("filterVillages");
+  renderSearchHits();
+  renderTalukVillages();
+}
+
+function renderTaluks() {
+  const d = S.districts.find((x) => x.name === $("pick-district").value);
+  const ts = $("pick-taluk"), current = ts.value;
+  ts.disabled = !d;
+  ts.innerHTML = `<option value="">${esc(t("pickTaluk"))}</option>` +
+    (d ? d.taluks.map((x) => `<option value="${esc(x.taluk_id)}">${esc(x.name)}</option>`).join("") : "");
+  if (d && d.taluks.some((x) => x.taluk_id === current)) ts.value = current;
+}
+
+function renderSearchHits() {
+  const box = $("search-results");
+  if (S.searchHits === null) { box.innerHTML = ""; return; }
+  box.innerHTML = S.searchHits.length ? villageButtons(S.searchHits, true) : `<p class="hint">${esc(t("noMatch"))}</p>`;
+  bindVillageButtons(box);
+}
+
+function renderTalukVillages() {
+  const q = $("v-filter").value.trim().toLowerCase();
+  const list = S.talukVillages.filter((v) => !q || v.name.toLowerCase().includes(q));
+  $("v-filter").hidden = !S.talukVillages.length;
+  $("village-buttons").innerHTML = villageButtons(list, false);
+  bindVillageButtons($("village-buttons"));
+}
+
+let searchTimer = null;
+$("v-search").addEventListener("input", () => {
+  clearTimeout(searchTimer);
+  const q = $("v-search").value.trim();
+  if (q.length < 2) { S.searchHits = null; renderSearchHits(); return; }
+  searchTimer = setTimeout(async () => {
+    try { S.searchHits = await (await fetch(`/public/villages?q=${encodeURIComponent(q)}&limit=12`)).json(); }
+    catch { S.searchHits = []; }
+    renderSearchHits();
+  }, 250);
+});
+$("pick-district").addEventListener("change", () => { S.talukVillages = []; renderTaluks(); renderTalukVillages(); });
+$("pick-taluk").addEventListener("change", async () => {
+  const id = $("pick-taluk").value;
+  S.talukVillages = [];
+  if (id) {
+    try { S.talukVillages = await (await fetch(`/public/villages?taluk_id=${encodeURIComponent(id)}&limit=600`)).json(); }
+    catch { S.talukVillages = []; }
+  }
+  $("v-filter").value = "";
+  renderTalukVillages();
+});
+$("v-filter").addEventListener("input", renderTalukVillages);
+
 function chooseVillage(id) {
-  S.village = id; S.seen = null; S.data = null;
+  S.village = id; S.seen = null; S.data = null; S.centres = null;
   store("v-village", id);
   showHome();
   refresh();
@@ -195,12 +298,60 @@ async function refresh() {
     store("v-last", JSON.stringify(S.data));      // shown if the network drops later
     renderStatus();
     checkNew();
+    loadCentres();
   } catch {
     const cached = load("v-last");
     if (cached && !S.data) { S.data = JSON.parse(cached); renderStatus(); }
+    const cachedCentres = load(`v-centres-${S.village}`);
+    if (cachedCentres && !S.centres) { S.centres = JSON.parse(cachedCentres); renderCentres(); }
     toast(t("offline"));
   }
 }
+
+// ---------- nearest relief centres ----------
+async function loadCentres() {
+  const q = S.loc ? `?lat=${S.loc.lat.toFixed(4)}&lon=${S.loc.lon.toFixed(4)}` : "";
+  try {
+    const res = await fetch(`/public/shelters/${encodeURIComponent(S.village)}${q}`);
+    if (!res.ok) throw new Error(res.statusText);
+    S.centres = await res.json();
+    if (!S.loc) store(`v-centres-${S.village}`, JSON.stringify(S.centres));   // kept for when the network drops
+    renderCentres();
+  } catch { /* keep what is shown */ }
+}
+
+function renderCentres() {
+  const c = S.centres, list = c ? c.shelters.slice(0, 2) : [];
+  $("centres").hidden = !list.length;
+  $("centres").classList.toggle("urgent", !!(S.data && S.data.active.length));   // stands out during a warning
+  if (!list.length) return;
+  $("centres-from").textContent = c.measured_from === "your_location" ? t("fromMe") : t("fromVillage");
+  $("none-open").hidden = c.any_open;
+  const kn = S.lang === "kn";
+  $("centre-list").innerHTML = list.map((s) => {
+    const name = kn ? (s.name_kn || s.name) : s.name;
+    const meta = [t("km")(s.distance_km), s.status === "open" ? t("spaces")(s.spaces_left) : ""].filter(Boolean).join(" · ");
+    const maps = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}`;
+    return `<article class="centre ${s.status}">
+      <div class="c-head"><b lang="${S.lang}">${esc(name)}</b><span class="c-status">${esc(t("st")[s.status])}</span></div>
+      <p class="c-meta">${esc(meta)}</p>
+      <div class="c-actions">
+        <a class="big ${s.status === "open" ? "primary" : "secondary"}" href="${maps}" target="_blank" rel="noopener">${esc(t("directions"))}</a>
+        ${s.phone ? `<a class="big secondary" href="tel:${esc(s.phone)}">${esc(t("callCentre"))}</a>` : ""}
+      </div>
+    </article>`;
+  }).join("");
+}
+
+$("btn-locate").addEventListener("click", () => {
+  // Phones only share location on https pages (or on the laptop itself as localhost).
+  if (!("geolocation" in navigator) || !window.isSecureContext) { toast(t("locFail")); return; }
+  toast(t("locating"));
+  navigator.geolocation.getCurrentPosition(
+    (pos) => { S.loc = { lat: pos.coords.latitude, lon: pos.coords.longitude }; loadCentres(); },
+    () => toast(t("locFail")),
+    { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 });
+});
 
 // ---------- rendering ----------
 const WARN_ICON = `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 1 21h22L12 2zm0 6 .01 0c.55 0 1 .45 1 1v5a1 1 0 1 1-2 0V9c0-.55.45-1 1-1zm0 9.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z"/></svg>`;
@@ -211,6 +362,7 @@ function renderStatus() {
   const d = S.data;
   const v = d.village;
   $("place-name").textContent = S.lang === "kn" ? (v.name_kn || v.name) : v.name;
+  $("place-sub").textContent = `${v.taluk} ${t("talukWord")}, ${S.lang === "kn" ? (v.district_kn || v.district) : v.district}`;
   $("call").href = `tel:${d.emergency_number || "112"}`;
 
   if (d.active.length) {
@@ -228,6 +380,7 @@ function renderStatus() {
     $("status").innerHTML = `<article class="card calm"><div class="head">${t("calmHead")}</div><p>${t("calmText")}</p></article>`;
   }
 
+  $("centres").classList.toggle("urgent", !!d.active.length);
   $("recent-wrap").hidden = !d.recent.length;
   $("recent").innerHTML = d.recent.map((a) => `
     <div class="past">${a.test ? `<span class="testtag">${t("test")}</span>` : ""}
@@ -422,7 +575,7 @@ async function start() {
   S.lang = load("v-lang") === "en" ? "en" : "kn";
   S.village = load("v-village") || null;
   $("demo-banner").hidden = !DEMO;
-  try { S.villages = await (await fetch("/public/villages")).json(); } catch { S.villages = []; }
+  try { S.districts = await (await fetch("/public/districts")).json(); } catch { S.districts = []; }
   applyLang();
   showHome();
   refresh();
