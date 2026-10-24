@@ -11,22 +11,31 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from .. import areas, config
+from ..services import landslide
 from ..services.forecast import fetch_daily_rain
-from ..services.risk_engine import assess_all
+from ..services.risk_engine import assess_all, scaled_split
 
 
 def score_now() -> dict:
     grid = config.grid_config()
     now = datetime.now(ZoneInfo(config.TIMEZONE))
-    daily = fetch_daily_rain({cid: (c["lat"], c["lon"]) for cid, c in grid["cells"].items()})
-    cells = assess_all(daily, now.date(), grid)
+    loaded = landslide.model()
+    past_days = landslide.PAST_DAYS_NEEDED if loaded else 2
+    daily = fetch_daily_rain({cid: (c["lat"], c["lon"]) for cid, c in grid["cells"].items()}, past_days=past_days)
+    ls = {}
+    if loaded:                                   # landslide chance per square from slope + rain
+        rows = {cid: landslide.rain_features(*scaled_split(grid["cells"][cid], d, now.date()))
+                for cid, d in daily.items() if cid in grid["cells"]}
+        ls = landslide.predict_cells(rows)
+    cells = assess_all(daily, now.date(), grid, ls, loaded[1]["budgets"] if loaded else None)
     a = areas.get()
     villages = {lv: 0 for lv in ("HIGH", "MEDIUM", "LOW")}
     for c in cells:
         villages[c["level"]] += len(a.by_cell.get(c["cell_id"], []))
     snapshot = {
         "generated_at": now.isoformat(timespec="seconds"),
-        "engine": "rule-v2-grid",
+        "engine": "rule-v2-grid" + (f" + landslide {loaded[1]['model']}" if loaded else ""),
+        "landslide_model": ({k: loaded[1][k] for k in ("model", "created", "years")} if loaded else None),
         "calibrated_on": grid.get("calibrated_on"),
         "demo_thresholds": grid.get("demo", False),
         "summary": {lv: sum(c["level"] == lv for c in cells) for lv in ("HIGH", "MEDIUM", "LOW")},

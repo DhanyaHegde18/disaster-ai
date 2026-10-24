@@ -106,3 +106,32 @@ uvicorn backend.app.main:app --reload --host 0.0.0.0
 Limits: the rain rule suits flash floods and landslides; river floods in North Karnataka driven by dam
 releases upstream (Krishna, Bhima, Tungabhadra) need river-level data it doesn't have. Taluks created
 after 2011 still appear under their old taluk. Village names are English only for now.
+
+## Offline (villager page)
+
+The villager page installs like an app ("Add as an app on this phone") and keeps working with no network,
+over https (Tailscale / tunnel) or on localhost:
+- the page, the last warning, the nearest relief centres and the tips open from the phone's storage (`frontend/villager/sw.js`)
+- a family report sent with no network is saved on the phone and sent by itself when signal returns
+  (the dashboard shows "written … with no network, arrived …")
+- "Ask for help by SMS" opens the SMS app with village, people and GPS position filled in (SMS needs no data)
+- villagers stay signed in for 30 days, so a saved report can still be sent later
+When you change the villager page files, bump `SHELL_CACHE` in `sw.js` so phones fetch the new copy.
+
+## Landslide model (AI)
+
+A learned model on top of the rain rule: "landslide in this rain-grid square in the next 3 days?"
+
+| Step | Command | What it makes |
+|---|---|---|
+| 1. landslide records | download the CSV from NASA's Landslide Viewer into `ml/data/raw/landslides/`, then `python ml/scripts/fetch_landslides.py` | `ml/data/landslides_karnataka.csv` |
+| 2. slopes | `pip install rasterio`, then `python ml/scripts/fetch_cell_terrain.py` (downloads ~40 Copernicus DEM tiles once) | `ml/data/cell_terrain.csv` |
+| 3. train + test | `python ml/training/train_landslide.py` | `backend/app/landslide_model.joblib/.json`, `ml/reports/landslide_model.md` |
+
+Features (same code for training and live use: `backend/app/services/landslide.py`): rain over the last 3, 7 and
+15 days, rain in the next 3 days, the wettest coming day, and the square's slope (90th percentile), share of
+steep ground and relief. Logistic regression and gradient boosting are tested year by year against the rain
+rule; the better one is used live. Its MEDIUM/HIGH are set at the riskiest 2% / 0.5% of past monsoon days, and a
+square's level is the higher of the rule's and the model's. Without the model files the app runs on the rule alone.
+Data: NASA Global Landslide Catalog / COOLR (cite Kirschbaum et al. 2010, 2015; Juang et al. 2019),
+Copernicus DEM GLO-90 tiles from AWS Open Data.

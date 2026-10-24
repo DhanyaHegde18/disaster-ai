@@ -74,6 +74,27 @@ const T = {
     spaces: (n) => `${n} ಜನರಿಗೆ ಸ್ಥಳವಿದೆ`,
     noneOpen: "ಸದ್ಯ ಯಾವ ಕಾಳಜಿ ಕೇಂದ್ರವೂ ತೆರೆದಿಲ್ಲ. ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ತೆರೆದಾಗ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ. ಅಪಾಯವಿದ್ದರೆ ಎತ್ತರದ ಸುರಕ್ಷಿತ ಸ್ಥಳಕ್ಕೆ ಹೋಗಿ, 112 ಗೆ ಕರೆ ಮಾಡಿ.",
     directions: "ದಾರಿ ತೋರಿಸಿ",
+    showRoute: "ನಕ್ಷೆಯಲ್ಲಿ ದಾರಿ ನೋಡಿ",
+    offlineBanner: "ಸಂಪರ್ಕ ಇಲ್ಲ. ಕೊನೆಯದಾಗಿ ಪಡೆದ ಮಾಹಿತಿ ತೋರಿಸಲಾಗುತ್ತಿದೆ.",
+    outboxWaiting: (when) => `ನಿಮ್ಮ ವರದಿ (${when}) ಫೋನಿನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ. ಸಂಪರ್ಕ ಸಿಕ್ಕ ತಕ್ಷಣ ತಾನಾಗಿ ಕಳುಹಿಸಲಾಗುತ್ತದೆ.`,
+    outboxRescue: "ಜೀವಕ್ಕೆ ಅಪಾಯವಿದ್ದರೆ ಕಾಯಬೇಡಿ: 112 ಗೆ ಕರೆ ಮಾಡಿ ಅಥವಾ SMS ಮೂಲಕ ಸಹಾಯ ಕೇಳಿ.",
+    outboxSent: "ಉಳಿಸಿದ ವರದಿ ಈಗ ಕಳುಹಿಸಲಾಗಿದೆ.",
+    outboxSignIn: "ಉಳಿಸಿದ ವರದಿ ಕಳುಹಿಸಲು ಮತ್ತೆ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯಿಂದ ಪ್ರವೇಶಿಸಿ.",
+    savedOffline: "ಸಂಪರ್ಕ ಇಲ್ಲ. ವರದಿ ಫೋನಿನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ, ಸಂಪರ್ಕ ಸಿಕ್ಕಾಗ ತಾನಾಗಿ ಕಳುಹಿಸಲಾಗುತ್ತದೆ.",
+    smsSos: "SMS ಮೂಲಕ ಸಹಾಯ ಕೇಳಿ",
+    smsHint: "ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದಿದ್ದರೂ SMS ಹೋಗುತ್ತದೆ. ಸಂದೇಶ ಸಿದ್ಧವಾಗಿರುತ್ತದೆ; ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ಸದಸ್ಯರು ಅಥವಾ ಸಂಬಂಧಿಕರ ಸಂಖ್ಯೆ ಆಯ್ಕೆಮಾಡಿ ಕಳುಹಿಸಿ.",
+    smsBody: (place, people, unknown, loc) => `SOS: ತುರ್ತು ರಕ್ಷಣೆ ಬೇಕು. ಊರು: ${place}.` +
+      (people ? ` ಜನ: ${people}.` : "") + (unknown ? ` ಎಲ್ಲಿದ್ದಾರೆ ಗೊತ್ತಿಲ್ಲ: ${unknown}.` : "") + (loc ? ` ಸ್ಥಳ: ${loc}` : ""),
+    install: "ಫೋನಿಗೆ ಆ್ಯಪ್ ಆಗಿ ಸೇರಿಸಿ",
+    routeLoading: "ದಾರಿ ಹುಡುಕಲಾಗುತ್ತಿದೆ…",
+    routeTo: (name) => `${name} ಗೆ ದಾರಿ`,
+    routeInfo: (km, min) => `ರಸ್ತೆಯಲ್ಲಿ ${km} ಕಿ.ಮೀ · ನಡೆದರೆ ಸುಮಾರು ${min} ನಿಮಿಷ`,
+    routeNone: "ರಸ್ತೆ ದಾರಿ ಸಿಗಲಿಲ್ಲ. ಗೆರೆಯು ಕೇಂದ್ರದ ದಿಕ್ಕನ್ನು ಮಾತ್ರ ತೋರಿಸುತ್ತದೆ. \"ದಾರಿ ತೋರಿಸಿ\" ಒತ್ತಿ Google Maps ನಲ್ಲಿ ನೋಡಿ.",
+    routeFromMe: "ನೀವು ಇರುವ ಸ್ಥಳದಿಂದ",
+    routeFromVillage: "ಊರಿನ ಮಧ್ಯದಿಂದ (ನಿಮ್ಮ ಸ್ಥಳ ಸಿಗಲಿಲ್ಲ)",
+    routeSafety: "ಈ ದಾರಿಗೆ ಪ್ರವಾಹ ಅಥವಾ ಭೂಕುಸಿತದ ಮಾಹಿತಿ ಇಲ್ಲ. ನೀರು ಹರಿಯುವ ರಸ್ತೆ, ಸೇತುವೆ ಮತ್ತು ಗುಡ್ಡದ ಬದಿ ತಪ್ಪಿಸಿ; ಊರಿನವರು ಹೇಳುವ ಸುರಕ್ಷಿತ ದಾರಿ ಬಳಸಿ.",
+    youHere: "ನೀವು", villageHere: "ಊರು",
+    mapOffline: "ನಕ್ಷೆ ತೆರೆಯಲು ಇಂಟರ್ನೆಟ್ ಬೇಕು. \"ದಾರಿ ತೋರಿಸಿ\" ಬಳಸಿ.",
     callCentre: "ಕೇಂದ್ರಕ್ಕೆ ಕರೆ",
     err: { 400: "ಸರಿಯಾದ 10 ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ.", 401: "ಕೋಡ್ ತಪ್ಪಾಗಿದೆ ಅಥವಾ ಅವಧಿ ಮುಗಿದಿದೆ.",
            429: "ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.", 502: "SMS ಕಳುಹಿಸಲು ಆಗಲಿಲ್ಲ. ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಪ್ರಯತ್ನಿಸಿ." },
@@ -147,6 +168,27 @@ const T = {
     spaces: (n) => `Room for ${n} more`,
     noneOpen: "No relief centre is open right now. It will appear here when the Gram Panchayat opens one. If you are in danger, move to high, safe ground and call 112.",
     directions: "Directions",
+    showRoute: "See route on map",
+    offlineBanner: "No connection. Showing the last information received.",
+    outboxWaiting: (when) => `Your report (${when}) is saved on this phone. It will be sent by itself as soon as there is a connection.`,
+    outboxRescue: "If a life is in danger, don't wait: call 112 or ask for help by SMS.",
+    outboxSent: "Your saved report has now been sent.",
+    outboxSignIn: "To send your saved report, sign in again with your mobile number.",
+    savedOffline: "No connection. Your report is saved on this phone and will be sent by itself when there is a connection.",
+    smsSos: "Ask for help by SMS",
+    smsHint: "SMS works without internet. The message is ready; choose a Gram Panchayat member or a relative and send it.",
+    smsBody: (place, people, unknown, loc) => `SOS: Need urgent rescue. Village: ${place}.` +
+      (people ? ` People: ${people}.` : "") + (unknown ? ` Missing: ${unknown}.` : "") + (loc ? ` Location: ${loc}` : ""),
+    install: "Add as an app on this phone",
+    routeLoading: "Finding the route…",
+    routeTo: (name) => `Route to ${name}`,
+    routeInfo: (km, min) => `${km} km by road · about ${min} min on foot`,
+    routeNone: "Couldn't find a road route. The line only shows the direction of the centre. Tap \"Directions\" to use Google Maps.",
+    routeFromMe: "From where you are",
+    routeFromVillage: "From the village centre (your location wasn't available)",
+    routeSafety: "This route knows nothing about floods or landslides. Avoid flooded roads, bridges and hillsides; use the safe way local people tell you.",
+    youHere: "You", villageHere: "Village",
+    mapOffline: "The map needs internet. Use \"Directions\" instead.",
     callCentre: "Call centre",
     err: {},
   },
@@ -186,6 +228,7 @@ function applyLang() {
   renderReportForm();
   if (S.data) renderStatus();
   if (S.centres) renderCentres();
+  renderOutbox();
 }
 
 $("btn-lang").addEventListener("click", () => {
@@ -294,6 +337,7 @@ async function refresh() {
     const res = await fetch(`/public/status/${encodeURIComponent(S.village)}${DEMO ? "?demo=true" : ""}`);
     if (res.status === 404) { S.village = null; showHome(); return; }
     if (!res.ok) throw new Error(res.statusText);
+    setOffline(res.headers.get("X-From-Cache") === "1" || !navigator.onLine);   // answered from the saved copy
     S.data = await res.json();
     store("v-last", JSON.stringify(S.data));      // shown if the network drops later
     renderStatus();
@@ -304,7 +348,7 @@ async function refresh() {
     if (cached && !S.data) { S.data = JSON.parse(cached); renderStatus(); }
     const cachedCentres = load(`v-centres-${S.village}`);
     if (cachedCentres && !S.centres) { S.centres = JSON.parse(cachedCentres); renderCentres(); }
-    toast(t("offline"));
+    setOffline(true);
   }
 }
 
@@ -337,10 +381,96 @@ function renderCentres() {
       <p class="c-meta">${esc(meta)}</p>
       <div class="c-actions">
         <a class="big ${s.status === "open" ? "primary" : "secondary"}" href="${maps}" target="_blank" rel="noopener">${esc(t("directions"))}</a>
+        <button class="big secondary" type="button" data-route="${esc(s.shelter_id)}">${esc(t("showRoute"))}</button>
         ${s.phone ? `<a class="big secondary" href="tel:${esc(s.phone)}">${esc(t("callCentre"))}</a>` : ""}
       </div>
     </article>`;
   }).join("");
+  $("centre-list").querySelectorAll("[data-route]").forEach((b) => b.addEventListener("click", () =>
+    showRoute(list.find((s) => s.shelter_id === b.dataset.route))));
+}
+
+// ---------- route on a map: from the phone's location (or the village centre) to a centre ----------
+// The map library is downloaded only when someone asks for a route, to keep the page light.
+// Walking route by road from the free OpenStreetMap routing service used by openstreetmap.org.
+const ROUTE_URL = "https://routing.openstreetmap.de/routed-foot/route/v1/foot/";
+let routeMap = null, routeLayer = null, leafletLoading = null;
+
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  if (leafletLoading) return leafletLoading;
+  leafletLoading = new Promise((resolve, reject) => {
+    const css = document.createElement("link");
+    css.rel = "stylesheet"; css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    document.head.appendChild(css);
+    const js = document.createElement("script");
+    js.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    js.onload = () => resolve();
+    js.onerror = () => { leafletLoading = null; reject(new Error("map library unavailable")); };
+    document.head.appendChild(js);
+  });
+  return leafletLoading;
+}
+
+function myLocation() {
+  // Phones only share location on https pages (or on the laptop itself as localhost).
+  if (S.loc) return Promise.resolve(S.loc);
+  if (!("geolocation" in navigator) || !window.isSecureContext) return Promise.resolve(null);
+  return new Promise((resolve) => navigator.geolocation.getCurrentPosition(
+    (pos) => { S.loc = { lat: pos.coords.latitude, lon: pos.coords.longitude }; resolve(S.loc); },
+    () => resolve(null), { enableHighAccuracy: true, timeout: 10000, maximumAge: 120000 }));
+}
+
+async function roadRoute(from, to) {
+  const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 12000);
+  try {
+    const res = await fetch(`${ROUTE_URL}${from.lon},${from.lat};${to.lon},${to.lat}?overview=full&geometries=geojson`,
+                            { signal: ctl.signal });
+    if (!res.ok) return null;
+    const r = (await res.json()).routes?.[0];
+    if (!r) return null;
+    return { line: r.geometry.coordinates.map(([lon, lat]) => [lat, lon]), km: r.distance / 1000, min: r.duration / 60 };
+  } catch { return null; } finally { clearTimeout(timer); }
+}
+
+async function showRoute(s) {
+  if (!s) return;
+  const box = $("route-box"), info = $("route-info");
+  const name = S.lang === "kn" ? (s.name_kn || s.name) : s.name;
+  box.hidden = false;
+  $("route-title").textContent = t("routeTo")(name);
+  info.textContent = t("routeLoading");
+  box.scrollIntoView({ behavior: "smooth", block: "start" });
+  try { await loadLeaflet(); } catch { info.textContent = t("mapOffline"); return; }
+
+  const me = await myLocation();
+  const v = S.data && S.data.village;
+  const from = me || (v ? { lat: v.lat, lon: v.lon } : null);
+  if (!from) { info.textContent = t("routeNone"); return; }
+  if (!routeMap) {
+    routeMap = L.map("route-map", { scrollWheelZoom: false });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                { maxZoom: 18, attribution: "&copy; OpenStreetMap contributors" }).addTo(routeMap);
+    routeLayer = L.layerGroup().addTo(routeMap);
+  }
+  routeLayer.clearLayers();
+  const css = getComputedStyle(document.documentElement);
+  const brand = css.getPropertyValue("--brand").trim(), calm = css.getPropertyValue("--calm").trim();
+  L.circleMarker([from.lat, from.lon], { radius: 9, color: "#fff", weight: 3, fillColor: brand, fillOpacity: 1 })
+    .bindTooltip(me ? t("youHere") : t("villageHere"), { permanent: true, direction: "top", offset: [0, -8] }).addTo(routeLayer);
+  L.marker([s.lat, s.lon], { icon: L.divIcon({ className: "", html: `<span class="centre-pin"></span>`, iconSize: [22, 22], iconAnchor: [11, 11] }) })
+    .bindTooltip(name.length > 26 ? name.slice(0, 25) + "…" : name, { permanent: true, direction: "top", offset: [0, -10] })
+    .addTo(routeLayer);
+
+  const route = await roadRoute(from, s);
+  const line = route ? route.line : [[from.lat, from.lon], [s.lat, s.lon]];
+  L.polyline(line, route ? { color: brand, weight: 6, opacity: 0.85 } : { color: calm, weight: 4, dashArray: "8 8" }).addTo(routeLayer);
+  routeMap.invalidateSize();
+  routeMap.fitBounds(L.latLngBounds(line), { padding: [36, 36], maxZoom: 16 });
+  const where = me ? t("routeFromMe") : t("routeFromVillage");
+  info.textContent = route
+    ? `${where}: ${t("routeInfo")(route.km.toFixed(1), Math.max(1, Math.round(route.min)))}`
+    : `${where}. ${t("routeNone")}`;
 }
 
 $("btn-locate").addEventListener("click", () => {
@@ -520,10 +650,17 @@ async function initReport() {
   reportError("");
   try {
     const me = await call("/public/me");
+    store("v-signed-in", "1");
     loadReport(me.report);
     renderReportForm();
     showReportStep("form");
-  } catch {
+  } catch (err) {
+    if (!err.status && load("v-signed-in") === "1") {      // no network, but signed in earlier: allow a report
+      renderReportForm();
+      showReportStep("form");
+      return;
+    }
+    if (err.status === 401) store("v-signed-in", "0");
     showReportStep("phone");
   }
 }
@@ -545,23 +682,147 @@ $("r-code-form").addEventListener("submit", async (e) => {
   e.preventDefault(); reportError("");
   try {
     await call("/public/auth/verify", { phone: $("r-phone").value, code: $("r-code").value, village_id: S.village });
+    store("v-signed-in", "1");
     await initReport();
+    flushOutbox();
   } catch (err) { reportError(err.message); }
 });
 
 $("r-form").addEventListener("submit", async (e) => {
   e.preventDefault(); reportError("");
   if (CATS.every((c) => R.counts[c] === 0)) { reportError(t("atLeastOne")); return; }
+  const body = { village_id: S.village, ...R.counts, needs: [...R.needs] };
   try {
-    const r = await call("/public/report", { village_id: S.village, ...R.counts, needs: [...R.needs] });
+    const r = await call("/public/report", body);
     R.last = r.report.reported_at;
     $("r-last").textContent = t("lastReport")(fmt(R.last));
+    await outbox("del");                                    // a newer report replaces any saved one
+    renderOutbox();
     toast(t("saved"));
   } catch (err) {
-    if (err.status === 401) { showReportStep("phone"); }
+    if (!err.status) {                                      // no network: keep it on the phone, send later
+      await queueReport(body);
+      toast(t("savedOffline"));
+      return;
+    }
+    if (err.status === 401) { store("v-signed-in", "0"); showReportStep("phone"); }
     reportError(err.message);
   }
 });
+
+// ---------- offline: saved reports, sent when signal returns ----------
+function idb() {
+  return new Promise((resolve, reject) => {
+    const r = indexedDB.open("village-alert", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("outbox");
+    r.onsuccess = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+  });
+}
+
+async function outbox(mode, value) {
+  if (!("indexedDB" in window)) {                           // very old browser: fall back to localStorage
+    if (mode === "get") { const v = load("v-outbox"); return v ? JSON.parse(v) : undefined; }
+    store("v-outbox", mode === "del" ? "" : JSON.stringify(value));
+    return;
+  }
+  try {
+    const d = await idb();
+    return await new Promise((resolve, reject) => {
+      const tx = d.transaction("outbox", mode === "get" ? "readonly" : "readwrite");
+      const st = tx.objectStore("outbox");
+      const r = mode === "get" ? st.get("report") : mode === "del" ? st.delete("report") : st.put(value, "report");
+      r.onsuccess = () => resolve(r.result);
+      r.onerror = () => reject(r.error);
+    });
+  } catch { return undefined; }
+}
+
+async function queueReport(body) {
+  await outbox("put", { body: { ...body, queued_at: new Date().toISOString() }, saved_at: Date.now() });
+  try {     // Android Chrome can send it in the background even after the page is closed
+    const reg = await navigator.serviceWorker.ready;
+    if (reg.sync) await reg.sync.register("send-report");
+  } catch { }
+  renderOutbox();
+}
+
+async function renderOutbox() {
+  const item = await outbox("get");
+  $("outbox").hidden = !item;
+  if (!item) return;
+  $("outbox-text").textContent = t("outboxWaiting")(fmt(item.body.queued_at));
+  $("outbox-rescue").hidden = !(item.body.needs || []).includes("rescue");
+}
+
+let flushing = false;
+async function flushOutbox() {
+  if (flushing) return;
+  const item = await outbox("get");
+  if (!item) { renderOutbox(); return; }
+  flushing = true;
+  try {
+    const r = await call("/public/report", item.body);
+    await outbox("del");
+    R.last = r.report.reported_at;
+    $("r-last").textContent = t("lastReport")(fmt(R.last));
+    toast(t("outboxSent"));
+  } catch (err) {
+    if (err.status === 401) { store("v-signed-in", "0"); showReportStep("phone"); reportError(t("outboxSignIn")); }
+    else if (err.status >= 400 && err.status < 500) { await outbox("del"); reportError(err.message); }   // refused: don't retry forever
+    // no status = still no network: keep it and try again later
+  } finally {
+    flushing = false;
+    renderOutbox();
+  }
+}
+
+function setOffline(off) {
+  $("net-banner").hidden = !off;
+  if (!off) flushOutbox();
+}
+
+window.addEventListener("online", () => { setOffline(false); refresh(); });
+window.addEventListener("offline", () => setOffline(true));
+document.addEventListener("visibilitychange", () => { if (!document.hidden) flushOutbox(); });
+
+// ---------- SOS by SMS (works with no mobile data) ----------
+function gpsOnce() {
+  if (!("geolocation" in navigator) || !window.isSecureContext) return Promise.resolve(null);
+  return new Promise((resolve) => navigator.geolocation.getCurrentPosition(
+    (p) => resolve({ lat: p.coords.latitude, lon: p.coords.longitude }), () => resolve(null),
+    { enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 }));      // GPS works without internet
+}
+
+$("btn-sms").addEventListener("click", async () => {
+  const v = S.data && S.data.village;
+  const place = v ? `${v.name}, ${v.taluk}, ${v.district}` : "";
+  const people = CATS.reduce((n, c) => n + R.counts[c], 0);
+  const pos = S.loc || await gpsOnce();
+  const loc = pos ? `https://maps.google.com/?q=${pos.lat.toFixed(5)},${pos.lon.toFixed(5)}` : "";
+  const text = t("smsBody")(place, people, R.counts.unknown, loc);
+  openUrl(`sms:?&body=${encodeURIComponent(text)}`);        // opens the SMS app with the message ready
+});
+function openUrl(u) { window.location.href = u; }
+
+// ---------- install as an app ----------
+let installPrompt = null;
+window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installPrompt = e; $("btn-install").hidden = false; });
+$("btn-install").addEventListener("click", async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  try { await installPrompt.userChoice; } catch { }
+  installPrompt = null; $("btn-install").hidden = true;
+});
+window.addEventListener("appinstalled", () => { $("btn-install").hidden = true; });
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/villager/sw.js").catch(() => { /* http on a phone: no offline mode */ });
+  navigator.serviceWorker.addEventListener("message", (e) => {
+    if (e.data && e.data.type === "outbox-sent") { toast(t("outboxSent")); renderOutbox(); initReport(); }
+    if (e.data && e.data.type === "outbox-refused") renderOutbox();
+  });
+}
 
 $("r-logout").addEventListener("click", async () => {
   try { await call("/public/auth/logout", {}); } catch { }
@@ -581,5 +842,9 @@ async function start() {
   refresh();
   if (S.village) initReport();
   setInterval(refresh, POLL_MS);
+  setOffline(!navigator.onLine);
+  renderOutbox();
+  flushOutbox();
+  setInterval(flushOutbox, 30_000);       // keep trying while a saved report waits
 }
 start();

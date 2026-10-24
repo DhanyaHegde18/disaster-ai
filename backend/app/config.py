@@ -55,7 +55,8 @@ SMS_TIMEOUT_S = 20
 OTP_TTL_MIN = 5            # a code works for 5 minutes
 OTP_MAX_ATTEMPTS = 5       # then a new code must be requested
 OTP_RESEND_S = 30          # minimum gap between code requests for one number
-SESSION_HOURS = 12         # stay signed in for one working day
+SESSION_HOURS = 12         # staff stay signed in for one working day
+VILLAGER_SESSION_DAYS = 30  # villagers stay signed in a month, so a report saved offline can still be sent later
 # Session cookies are made https-only automatically when the page came over https; true forces it always.
 COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").lower() == "true"
 

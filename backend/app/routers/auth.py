@@ -24,7 +24,7 @@ def set_session_cookie(response: Response, kind: str, token: str, request: Reque
     """httpOnly + SameSite=Strict always; https-only when the page came over https (or COOKIE_SECURE=true),
     so the same server works on localhost, on the Wi-Fi address and through an https tunnel."""
     https = request is not None and notify.request_base(request)[0] == "https"
-    response.set_cookie(auth.COOKIES[kind], token, max_age=config.SESSION_HOURS * 3600, httponly=True,
+    response.set_cookie(auth.COOKIES[kind], token, max_age=int(auth.session_length(kind).total_seconds()), httponly=True,
                         samesite="strict", secure=config.COOKIE_SECURE or https, path="/")
 
 

@@ -31,8 +31,9 @@ def _get(params: dict) -> list:
     raise RuntimeError(f"Open-Meteo forecast unavailable after {config.RETRIES} tries: {last_err}")
 
 
-def fetch_daily_rain(points: dict[str, tuple[float, float]]) -> dict[str, list[tuple[date, float]]]:
-    """points: {id: (lat, lon)} -> {id: [(day, mm), ...]}"""
+def fetch_daily_rain(points: dict[str, tuple[float, float]], past_days: int = 2) -> dict[str, list[tuple[date, float]]]:
+    """points: {id: (lat, lon)} -> {id: [(day, mm), ...]}: `past_days` before today, today, and 3 days ahead.
+    The landslide model needs 15 past days (soaked soil); the rain rule alone needs 2."""
     ids = list(points)
     out = {}
     for i in range(0, len(ids), config.FORECAST_BATCH):
@@ -41,7 +42,7 @@ def fetch_daily_rain(points: dict[str, tuple[float, float]]) -> dict[str, list[t
             "latitude": ",".join(str(points[k][0]) for k in batch),
             "longitude": ",".join(str(points[k][1]) for k in batch),
             "daily": "precipitation_sum",
-            "past_days": 2,
+            "past_days": past_days,
             "forecast_days": 4,
             "timezone": config.TIMEZONE,
         }

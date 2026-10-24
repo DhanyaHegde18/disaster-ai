@@ -148,8 +148,10 @@ def notify_rescue(report: dict, repeat: int = 0) -> None:
     v = areas.get().village(report["village_id"]) or {"name": report["village_id"], "taluk": "", "taluk_id": None}
     people = sum(report[k] for k in ("at_shelter", "with_relatives", "at_home", "unknown"))
     again = f" (reminder {repeat}: still not handled)" if repeat else ""
+    late = (f" Written at {report['queued_at'][11:16]} with no network, so it may be urgent already."
+            if report.get("queued_at") else "")
     push(("gp", "ngo"), f"RESCUE requested: {v['name']}, {v['taluk']}".rstrip(", "),
-         f"A family in {v['name']} ({people} people, {report['unknown']} unknown) asked for urgent rescue{again}. "
+         f"A family in {v['name']} ({people} people, {report['unknown']} unknown) asked for urgent rescue{again}.{late} "
          f"Open the dashboard, call them and mark it handled.",
          priority=URGENT, tags="rotating_light,sos", taluk_id=v["taluk_id"])
     record(rescue_key(report))

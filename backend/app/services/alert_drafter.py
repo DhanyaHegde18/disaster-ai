@@ -45,6 +45,7 @@ def facts_for(risk: dict) -> dict:
         "rain_last_3_days_mm": int(round(risk["past_3d_mm"])),
         "rain_next_3_days_mm": int(round(risk["forecast_3d_mm"])),
         "main_cause": "forecast" if risk["forecast_3d_mm"] >= risk["past_3d_mm"] else "recent rain",
+        "landslide_risk": risk.get("landslide_level", "LOW"),
         "emergency_number": config.EMERGENCY_NUMBER,
     }
 
@@ -62,6 +63,8 @@ RULES
 - English: the same message in plain English.
 - Each message at most 3 short sentences.
 - Mention the taluk name, the most affected villages, and the rain amount for the main cause.
+- If landslide_risk is HIGH or MEDIUM, say clearly that hillsides may slide and people living below steep
+  slopes should move early.
 - Tell people to stay away from rivers, streams and steep slopes, and to follow the
   Gram Panchayat's instructions about moving to a relief centre.
 - End with the emergency number {f['emergency_number']}.

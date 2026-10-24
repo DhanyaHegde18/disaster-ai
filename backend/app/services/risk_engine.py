@@ -65,8 +65,32 @@ def assess_cell(cell_id: str, cell: dict, daily: list[tuple[date, float]], today
     }
 
 
-def assess_all(daily_by_cell: dict, today: date, grid: dict) -> list[dict]:
-    results = [assess_cell(cid, c, daily_by_cell[cid], today)
+def scaled_split(cell: dict, daily: list[tuple[date, float]], today: date) -> tuple[list[float], list[float]]:
+    """(past days up to today, next 3 days) of bias-scaled rain, for the landslide model."""
+    bias = cell.get("bias") or {}
+    s = {d: v * float(bias.get(str(d.month), 1.0)) for d, v in daily}
+    days = sorted(s)
+    return [s[d] for d in days if d <= today], [s[d] for d in days if d > today][:3]
+
+
+def add_landslide(result: dict, ls: dict | None, budgets: dict) -> dict:
+    """Merge the landslide model's view into a square's result: the level is the higher of the two."""
+    if not ls:
+        return result
+    result["landslide_prob"], result["landslide_level"] = ls["prob"], ls["level"]
+    if ls["level"] != "LOW":
+        share = budgets.get(ls["level"].lower(), 0)
+        result["reasons"] = [r for r in result["reasons"] if r != "Rainfall below warning thresholds"]
+        result["reasons"].append(f"Landslide model: {ls['level']} (among the riskiest {share:.1%} of past monsoon days, "
+                                 f"from slope, soaked soil and coming rain)")
+        if LEVELS.index(ls["level"]) > LEVELS.index(result["level"]):
+            result["level"] = ls["level"]
+    return result
+
+
+def assess_all(daily_by_cell: dict, today: date, grid: dict, landslide_by_cell: dict | None = None,
+               budgets: dict | None = None) -> list[dict]:
+    results = [add_landslide(assess_cell(cid, c, daily_by_cell[cid], today), (landslide_by_cell or {}).get(cid), budgets or {})
                for cid, c in grid["cells"].items() if cid in daily_by_cell]
     # Most urgent first: HIGH, then MEDIUM, then LOW; wetter forecast first within a level.
     results.sort(key=lambda r: (-LEVELS.index(r["level"]), -r["forecast_3d_mm"]))

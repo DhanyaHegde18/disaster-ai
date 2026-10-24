@@ -149,3 +149,122 @@ def test_old_shelters_table_rebuilt_even_after_a_half_upgrade(tmp_path, monkeypa
     assert shelters.get("osm-n1")["capacity"] == 0
     with database.connect() as cx:
         assert cx.execute("SELECT name FROM sqlite_master WHERE name = 'shelters_taluk'").fetchone()
+
+
+def test_fetch_landslides_reads_the_nasa_export(tmp_path, monkeypatch):
+    fl = load("fetch_landslides")
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    (raw / "nasa.csv").write_text(
+        "event_date,event_title,location_accuracy,landslide_category,landslide_trigger,country_name,longitude,latitude\n"
+        "08/16/2018 12:00:00 AM,Slide near Ujre,5km,landslide,downpour,India,75.331,12.991\n"
+        "08/16/2018 03:00:00 PM,Same slide again,1km,landslide,rain,India,75.300,12.950\n"     # same square, same day
+        "2018-08-17,Vague one,50km,landslide,downpour,India,75.33,12.99\n"
+        "2018-08-18,Quake slide,5km,landslide,earthquake,India,75.33,12.99\n"
+        "2018-08-19,Far away,5km,landslide,rain,India,77.0,28.6\n"
+        "2019-08-09,Laila slide,10km,mudslide,monsoon,India,75.201,12.801\n", encoding="utf-8")
+    monkeypatch.setattr(fl, "IN_DIR", raw)
+    monkeypatch.setattr(fl, "OUT", tmp_path / "out.csv")
+    monkeypatch.setattr(fl, "ROOT", tmp_path)                    # no events.csv here
+    monkeypatch.setattr("sys.argv", ["fetch_landslides.py"])
+    fl.main()
+    rows = list(csv.DictReader(open(tmp_path / "out.csv", encoding="utf-8")))
+    assert [(r["date"], r["cell_id"]) for r in rows] == [("2018-08-16", "13.00_75.25"), ("2019-08-09", "12.75_75.25")]
+
+
+def test_training_runs_and_saves_a_usable_model(tmp_path, world):
+    tl = load_training("train_landslide")
+    rng = np.random.default_rng(1)
+    cells = ["13.00_75.25", "12.75_75.25", "12.75_75.50", "13.25_74.75"] + [f"14.{i:02d}_76.00" for i in range(8)]
+    days = pd.date_range("2016-01-01", "2018-12-31")
+    season = np.exp(-((days.dayofyear.values - 200) / 50.0) ** 2)
+    daily = pd.DataFrame({c: rng.gamma(0.7, 30, len(days)) * season for c in cells}, index=days)
+    slopes = [35, 30, 38, 4] + [3 + i for i in range(8)]
+    terrain = pd.DataFrame({"slope_p90": slopes, "steep_share": [s / 80 for s in slopes], "relief": [s * 30 for s in slopes]}, index=cells)
+    ev = []
+    for c, sl in zip(cells, slopes):
+        s = daily[c]
+        risk = (sl / 35) ** 3 * (s.rolling(15).sum() / 250) * ((s.shift(-1) + s.shift(-2) + s.shift(-3)) / 100)
+        ev += [{"date": (d + pd.Timedelta(days=2)).date().isoformat(), "cell_id": c} for d in days[risk.fillna(0) > 0.8]][::3]
+    events = pd.DataFrame(ev).drop_duplicates()
+    grid = {"cells": {c: {"past_3d": {"medium": 100, "high": 150}, "forecast_3d": {"medium": 100, "high": 150}} for c in cells}}
+    t = tl.build_table(daily, terrain, events)
+    meta = tl.train_and_save(t, terrain, grid, events, tmp_path / "m.joblib", tmp_path / "m.json", tmp_path / "r.md")
+    assert set(meta["metrics"]) >= {"rule", meta["model"]}
+    assert meta["metrics"][meta["model"]]["PR-AUC"] > meta["metrics"]["rule"]["PR-AUC"]      # slope matters; the rule ignores it
+    assert 0 < meta["thresholds"]["medium"] < meta["thresholds"]["high"] < 1
+    assert "caught @ 2% budget" in (tmp_path / "r.md").read_text()
+    from backend.app.services import landslide
+    landslide.MODEL_FILE.write_bytes((tmp_path / "m.joblib").read_bytes())
+    landslide.META_FILE.write_text((tmp_path / "m.json").read_text())
+    p = landslide.predict_cells({"12.75_75.50": landslide.rain_features([30.0] * 15, [60.0, 60.0, 60.0]),
+                                 "13.25_74.75": landslide.rain_features([30.0] * 15, [60.0, 60.0, 60.0])})
+    assert p["12.75_75.50"]["prob"] > p["13.25_74.75"]["prob"]                               # steep beats flat
+
+
+def load_training(name):
+    spec = importlib.util.spec_from_file_location(name, SCRIPTS.parent / "training" / f"{name}.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_slope_from_elevation_tiles(tmp_path):
+    import math
+    import pytest
+    rasterio = pytest.importorskip("rasterio")
+    from rasterio.transform import from_origin
+    ft = load("fetch_cell_terrain")
+    n, res = 300, 1 / 1200
+    xx = np.mgrid[0:n, 0:n][1]
+    ramp = (xx * res * 111320 * math.tan(math.radians(30))).astype("float32") + 10
+    path = tmp_path / "t.tif"
+    with rasterio.open(path, "w", driver="GTiff", height=n, width=n, count=1, dtype="float32", crs="EPSG:4326",
+                       transform=from_origin(75.375, 12.625, res, res)) as f:
+        f.write(ramp, 1)
+    with rasterio.open(path) as ds:
+        z, rx, ry = ft.read_square([ds], 12.5, 75.5)
+    s = ft.stats(z, rx, ry, 12.5)
+    assert 29.5 < s["slope_p90"] < 31.5 and s["steep_share"] > 0.95       # 30 deg ramp (a bit more after cos(lat))
+    assert ft.stats(np.full((60, 60), 50.0), res, res, 12.5)["slope_p90"] == 0.0
+    assert ft.stats(np.zeros((60, 60)), res, res, 12.5) == {"slope_p90": 0.0, "steep_share": 0.0, "relief": 0.0, "elev_mean": 0.0}
+    assert ft.tile_name(12, 75) == "Copernicus_DSM_COG_30_N12_00_E075_00_DEM"
+
+
+def test_fetch_landslides_auto_download(tmp_path, monkeypatch):
+    fl = load("fetch_landslides")
+
+    class Resp:
+        def __init__(self, data): self.data = data
+        def raise_for_status(self): pass
+        def json(self): return self.data
+
+    pages = {"offset0": {"features": [
+                {"attributes": {"event_date": 1534377600000, "event_title": "Slide near Ujre", "location_accuracy": "5km",
+                                "landslide_trigger": "downpour"}, "geometry": {"x": 75.331, "y": 12.991}},
+                {"attributes": {"title": "Manual, Laila, 2019-08-09", "method": "Manual"}, "geometry": {"x": 75.201, "y": 12.801}}],
+             "exceededTransferLimit": True},
+             "offset2": {"features": [], "exceededTransferLimit": False}}
+
+    class Session:
+        headers = {}
+        def get(self, url, params, timeout):
+            if url.endswith("/Landslides"):
+                return Resp({"services": [{"name": "Landslides/COOLR_Reports_Points", "type": "MapServer"}]})
+            if url.endswith("/MapServer"):
+                return Resp({"layers": [{"id": 0, "name": "reports", "geometryType": "esriGeometryPoint"}]})
+            if url.endswith("/query"):
+                return Resp(pages[f"offset{params['resultOffset']}"])
+            return Resp({"error": "nope"})
+
+    import requests
+    monkeypatch.setattr(requests, "Session", Session)
+    raw = tmp_path / "raw"
+    monkeypatch.setattr(fl, "IN_DIR", raw)
+    monkeypatch.setattr(fl, "OUT", tmp_path / "out.csv")
+    monkeypatch.setattr(fl, "ROOT", tmp_path)
+    monkeypatch.setattr("sys.argv", ["x", "--auto"])
+    fl.main()
+    assert list(raw.glob("auto_*.csv"))
+    rows = list(csv.DictReader(open(tmp_path / "out.csv", encoding="utf-8")))
+    assert [(r["date"], r["cell_id"]) for r in rows] == [("2018-08-16", "13.00_75.25"), ("2019-08-09", "12.75_75.25")]

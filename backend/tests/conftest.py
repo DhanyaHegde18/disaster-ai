@@ -37,18 +37,24 @@ class World:
     def __init__(self, tmp_path):
         self.tmp = tmp_path
         self._rain = {}
+        self.asked_past_days = None
 
-    def rain(self, cell: str, past: float = 0.0, future: float = 0.0) -> None:
-        """Set a square's 3-day rain: `past` over day -2..today, `future` over day +1..+3."""
-        self._rain[cell] = (past, future)
+    def rain(self, cell: str, past: float = 0.0, future: float = 0.0, soaked: float = 0.0) -> None:
+        """Set a square's rain: `past` over day -2..today, `future` over day +1..+3,
+        `soaked` spread over the 12 days before that (for the landslide model)."""
+        self._rain[cell] = (past, future, soaked)
+        self.asked_past_days = None
 
-    def daily(self, points: dict) -> dict:
+    def daily(self, points: dict, past_days: int = 2) -> dict:
+        self.asked_past_days = past_days
         today = dt.date.today()
-        days = [today + dt.timedelta(days=i - 2) for i in range(6)]
         out = {}
         for k in points:
-            past, fut = self._rain.get(k, (3.0, 3.0))
-            out[k] = list(zip(days, [past / 3] * 3 + [fut / 3] * 3))
+            past, fut, soaked = self._rain.get(k, (3.0, 3.0, 0.0))
+            early = past_days - 2
+            vals = [soaked / max(early, 1)] * early + [past / 3] * 3 + [fut / 3] * 3
+            days = [today + dt.timedelta(days=i - past_days) for i in range(len(vals))]
+            out[k] = list(zip(days, vals))
         return out
 
 
@@ -92,6 +98,9 @@ def world(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "COOKIE_SECURE", False)      # the test client talks plain http, even if .env says https
     from backend.app.jobs import score_grid
     monkeypatch.setattr(score_grid, "fetch_daily_rain", w.daily)
+    from backend.app.services import landslide                 # no landslide model unless a test trains one
+    monkeypatch.setattr(landslide, "MODEL_FILE", tmp_path / "landslide_model.joblib")
+    monkeypatch.setattr(landslide, "META_FILE", tmp_path / "landslide_model.json")
     from backend.app import database
     database.init_db()
     return w

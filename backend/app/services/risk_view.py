@@ -35,6 +35,7 @@ def taluk_risk(snapshot: dict, taluk_id: str, cells: dict | None = None) -> dict
         "cells_at_risk": sorted(at_risk_cells),
         "villages_total": len(villages), "villages_at_risk": len(at_risk),
         "places": [v["name"] for v in places[:PLACES_IN_ALERT]],
+        "landslide_level": max((c.get("landslide_level", "LOW") for c in mine), key=LEVELS.index),
     }
 
 

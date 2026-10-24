@@ -24,6 +24,7 @@ from .auth import require_gp, require_official
 from .jobs import escalation, scheduler
 from . import notify
 from .routers import alerts, auth, public, relief, risk, shelters, villagers
+from .services import landslide
 from .services import shelters as shelter_data
 
 
@@ -88,10 +89,14 @@ def health():
                            else f"from {grid.get('source', 'IMD')}, calibrated {grid.get('calibrated_on')}"),
             "coverage": f"{len(a.villages)} villages, {len(a.taluks)} taluks, {len(a.districts)} districts, "
                         f"{len(grid['cells'])} rain-grid squares",
+            "landslide_model": (lambda m: f"{m[1]['model']}, trained {m[1]['created']} on {m[1]['years'][0]}-{m[1]['years'][-1]}"
+                                if m else "not trained yet (rain rule only)")(landslide.model()),
             "alert_drafting": f"gemini ({config.GEMINI_MODEL})" if config.GEMINI_API_KEY else "template only (no GEMINI_API_KEY)",
             "automatic_scoring": f"every {config.SCORING_INTERVAL_MIN:g} min" if config.SCHEDULER_ENABLED else "off",
             "sign_in": "demo codes on screen" if config.OTP_DEMO_MODE else f"SMS codes via {config.SMS_PROVIDER}",
-            "public_address": notify.public_url() + ("" if config.PUBLIC_URL else " (learned from the dashboard)"),
+            "public_address": (f"{config.PUBLIC_URL} (from .env)" if config.PUBLIC_URL
+                               else f"{notify.learned_public_url()} (learned from the dashboard)" if notify.learned_public_url()
+                               else "not learned yet: sign in to the dashboard through your public address"),
             "phone_alerts": (f"ntfy, a topic per taluk (GP) and district (NGO), reminders every "
                              f"{config.ESCALATE_AFTER_MIN:g} min") if notify.topics_for(("gp", "ngo"))
                             else "off (set NTFY_TOPIC_GP / NTFY_TOPIC_NGO)"}

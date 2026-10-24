@@ -66,7 +66,8 @@ CREATE TABLE IF NOT EXISTS evacuation_reports (
     needs           TEXT NOT NULL DEFAULT '[]',   -- JSON list, e.g. ["rescue", "water"]
     reported_at     TEXT NOT NULL,
     handled_by      TEXT,                         -- GP official who dealt with a rescue request
-    handled_at      TEXT
+    handled_at      TEXT,
+    queued_at       TEXT                          -- when it was written on a phone with no network (sent later)
 );
 
 -- Relief centres (ಕಾಳಜಿ ಕೇಂದ್ರ) and possible ones. source:
@@ -189,7 +190,7 @@ def init_db() -> None:
             if col not in official_cols:
                 c.execute(f"ALTER TABLE officials ADD COLUMN {col} TEXT")
         report_cols = _columns(c, "evacuation_reports")
-        for col in ("handled_by", "handled_at"):              # added with rescue follow-up
+        for col in ("handled_by", "handled_at", "queued_at"):  # rescue follow-up; offline reports
             if col not in report_cols:
                 c.execute(f"ALTER TABLE evacuation_reports ADD COLUMN {col} TEXT")
         for table, ddl in TRANSIENT.items():

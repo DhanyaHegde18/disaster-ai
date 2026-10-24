@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600&display=swap">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="icon-192.png">
   <link rel="stylesheet" href="villager.css">
 </head>
 <body>
@@ -20,6 +23,7 @@
   </header>
 
   <div class="demo" id="demo-banner" hidden data-t="demo"></div>
+  <div class="net" id="net-banner" role="status" hidden data-t="offlineBanner"></div>
 
   <main>
     <section id="picker" hidden>
@@ -46,10 +50,18 @@
 
       <div id="status"></div>
 
+      <div class="outbox" id="outbox" role="status" hidden>
+        <p id="outbox-text"></p>
+        <p class="urgent" id="outbox-rescue" hidden data-t="outboxRescue"></p>
+      </div>
+
       <div class="actions">
         <button class="big secondary" id="btn-sound" type="button" aria-pressed="false" data-t="soundOff"></button>
         <a class="big call" id="call" href="tel:112"><span data-t="call"></span></a>
+        <button class="big secondary sms" id="btn-sms" type="button" data-t="smsSos"></button>
+        <button class="big secondary" id="btn-install" type="button" hidden data-t="install"></button>
       </div>
+      <p class="hint sms-hint" data-t="smsHint"></p>
 
       <section class="centres" id="centres" aria-labelledby="centres-title">
         <div class="centres-top">
@@ -59,6 +71,12 @@
         <p class="hint" id="centres-from"></p>
         <p class="none-open" id="none-open" hidden data-t="noneOpen"></p>
         <div id="centre-list"></div>
+        <div class="route-box" id="route-box" hidden>
+          <p class="route-title" id="route-title"></p>
+          <div id="route-map" role="region" aria-label="Map: route to the relief centre"></div>
+          <p class="route-info" id="route-info" aria-live="polite"></p>
+          <p class="hint urgent" data-t="routeSafety"></p>
+        </div>
       </section>
 
       <section class="report" id="report" aria-labelledby="report-title">

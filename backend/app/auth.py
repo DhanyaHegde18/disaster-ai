@@ -212,13 +212,17 @@ def verify_code(raw_phone: str, code: str, purpose: str = STAFF, village_id: str
         c.execute("DELETE FROM otp_codes WHERE phone = ? AND purpose = ?", (phone, purpose))   # works once
         c.execute("INSERT INTO sessions (token_hash, phone, kind, created_at, expires_at) VALUES (?, ?, ?, ?, ?)",
                   (_hash(token), phone, purpose, now.isoformat(timespec="seconds"),
-                   (now + timedelta(hours=config.SESSION_HOURS)).isoformat(timespec="seconds")))
+                   (now + session_length(purpose)).isoformat(timespec="seconds")))
         if purpose == VILLAGER:
             c.execute("INSERT INTO villagers (phone, village_id, created_at) VALUES (?, ?, ?) "
                       "ON CONFLICT(phone) DO UPDATE SET village_id = excluded.village_id",
                       (phone, village_id, now.isoformat(timespec="seconds")))
     user = get_official(phone) if purpose == STAFF else get_villager(phone)
     return token, user
+
+
+def session_length(kind: str) -> timedelta:
+    return timedelta(days=config.VILLAGER_SESSION_DAYS) if kind == VILLAGER else timedelta(hours=config.SESSION_HOURS)
 
 
 # ---------- villagers ----------

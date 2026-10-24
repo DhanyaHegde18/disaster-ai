@@ -497,7 +497,8 @@ function familyList(vid) {
       ? `<span class="handled">✓ Handled by ${esc(f.handled_by)}, ${fmtTime(f.handled_at)}</span>`
       : `<button class="btn handle" type="button" data-handle="${esc(f.phone)}" data-village="${esc(vid)}">Mark handled</button>`;
     return `<li><a href="tel:${esc(f.phone)}">${esc(f.phone)}</a><span>${esc(parts)}</span>${needPills(f.needs)}
-      <span class="when">${fmtTime(f.reported_at)}</span>${status}</li>`;
+      <span class="when">${f.queued_at ? `written ${fmtTime(f.queued_at)} with no network, arrived ${fmtTime(f.reported_at)}`
+                                        : fmtTime(f.reported_at)}</span>${status}</li>`;
   }).join("") + `</ul>`;
 }
 
@@ -831,6 +832,7 @@ function renderSystem() {
     ["Last run", s.last_run_at ? `${fmtTime(s.last_run_at)} (${s.last_duration_s}s)` : "not yet"],
     ["Next run", s.enabled ? fmtTime(s.next_run_at) : "–"],
     ["Thresholds", h.thresholds || "–"],
+    ["Landslide model", h.landslide_model || "–"],
     ["Coverage", h.coverage || "–"],
   ];
   $("sysinfo").innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("") +

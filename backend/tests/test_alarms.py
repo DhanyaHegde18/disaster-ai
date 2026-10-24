@@ -181,3 +181,27 @@ def test_env_public_url_wins(pushes, monkeypatch):
         sign_in(c)
         c.get("/auth/me", headers={"host": "other.trycloudflare.com", "x-forwarded-proto": "https"})
     assert notify.public_url() == "https://fixed.example"
+
+
+def test_report_written_offline_keeps_its_time(pushes):
+    from datetime import datetime, timedelta
+    written = (datetime.now().astimezone() - timedelta(hours=2)).isoformat(timespec="seconds")
+    with app_client() as v, app_client() as gp:
+        villager_sign_in(v)
+        r = v.post("/public/report", json={"village_id": "KA001", "unknown": 1, "needs": ["rescue"], "queued_at": written})
+        assert r.status_code == 200 and r.json()["report"]["queued_at"][:16] == written[:16]
+        assert "with no network" in pushes[-1]["body"]
+        sign_in(gp)
+        fam = gp.get("/relief/reports/KA001").json()["families"][0]
+        assert fam["queued_at"][:16] == written[:16]
+        # a phone with a wrong clock: treated as written now
+        r = v.post("/public/report", json={"village_id": "KA001", "unknown": 1, "queued_at": "2030-01-01T10:00:00+05:30"})
+        assert r.json()["report"]["queued_at"] is None
+        assert v.post("/public/report", json={"village_id": "KA001", "unknown": 1, "queued_at": "yesterday"}).status_code == 422
+
+
+def test_villagers_stay_signed_in_for_a_month():
+    with app_client() as v:
+        code = v.post("/public/auth/request-code", json={"phone": "9000000001"}).json()["demo_code"]
+        r = v.post("/public/auth/verify", json={"phone": "9000000001", "code": code, "village_id": "KA001"})
+    assert f"max-age={30 * 24 * 3600}" in r.headers["set-cookie"].lower()

@@ -1,0 +1,1643 @@
+{
+ "created": "2026-10-24",
+ "model": "boosting",
+ "features": [
+  "rain_past_3d",
+  "rain_past_7d",
+  "rain_past_15d",
+  "rain_next_3d",
+  "rain_max_day_next3",
+  "slope_p90",
+  "steep_share",
+  "relief"
+ ],
+ "lead_days": 3,
+ "thresholds": {
+  "medium": 0.7636597625171648,
+  "high": 0.9363534308865977
+ },
+ "budgets": {
+  "medium": 0.02,
+  "high": 0.005
+ },
+ "years": [
+  2007,
+  2008,
+  2009,
+  2010,
+  2011,
+  2013,
+  2015,
+  2016,
+  2017,
+  2018
+ ],
+ "rows": 572790,
+ "landslide_days": 38,
+ "positive_rows": 97,
+ "metrics": {
+  "logistic": {
+   "ROC-AUC": 0.9593,
+   "PR-AUC": 0.0045,
+   "base rate": 0.0002,
+   "caught @ 2.0%": 0.6667,
+   "caught @ 0.5%": 0.2121
+  },
+  "boosting": {
+   "ROC-AUC": 0.948,
+   "PR-AUC": 0.0053,
+   "base rate": 0.0002,
+   "caught @ 2.0%": 0.6061,
+   "caught @ 0.5%": 0.3636
+  },
+  "rule": {
+   "ROC-AUC": 0.9456,
+   "PR-AUC": 0.0029,
+   "base rate": 0.0002,
+   "caught @ 2.0%": 0.6061,
+   "caught @ 0.5%": 0.1212
+  }
+ },
+ "importance": {
+  "slope_p90": 0.3019,
+  "rain_max_day_next3": 0.2862,
+  "rain_past_3d": 0.233,
+  "rain_next_3d": 0.2321,
+  "rain_past_15d": 0.2097,
+  "rain_past_7d": 0.198,
+  "relief": 0.1816,
+  "steep_share": 0.1352
+ },
+ "terrain": {
+  "11.75_76.25": {
+   "slope_p90": 9.88,
+   "steep_share": 0.0021,
+   "relief": 311.1
+  },
+  "11.75_76.50": {
+   "slope_p90": 9.71,
+   "steep_share": 0.0083,
+   "relief": 477.5
+  },
+  "11.75_76.75": {
+   "slope_p90": 9.08,
+   "steep_share": 0.007,
+   "relief": 326.8
+  },
+  "11.75_77.00": {
+   "slope_p90": 13.63,
+   "steep_share": 0.02,
+   "relief": 499.9
+  },
+  "11.75_77.25": {
+   "slope_p90": 23.39,
+   "steep_share": 0.0754,
+   "relief": 965.2
+  },
+  "11.75_77.50": {
+   "slope_p90": 27.97,
+   "steep_share": 0.169,
+   "relief": 1131.8
+  },
+  "12.00_75.75": {
+   "slope_p90": 24.32,
+   "steep_share": 0.0905,
+   "relief": 1032.3
+  },
+  "12.00_76.00": {
+   "slope_p90": 19.95,
+   "steep_share": 0.0519,
+   "relief": 1007.5
+  },
+  "12.00_76.25": {
+   "slope_p90": 4.8,
+   "steep_share": 0.0,
+   "relief": 190.9
+  },
+  "12.00_76.50": {
+   "slope_p90": 4.75,
+   "steep_share": 0.0012,
+   "relief": 247.9
+  },
+  "12.00_76.75": {
+   "slope_p90": 2.49,
+   "steep_share": 0.0002,
+   "relief": 159.8
+  },
+  "12.00_77.00": {
+   "slope_p90": 5.12,
+   "steep_share": 0.0104,
+   "relief": 474.1
+  },
+  "12.00_77.25": {
+   "slope_p90": 21.6,
+   "steep_share": 0.0553,
+   "relief": 998.4
+  },
+  "12.00_77.50": {
+   "slope_p90": 27.63,
+   "steep_share": 0.1561,
+   "relief": 883.2
+  },
+  "12.00_77.75": {
+   "slope_p90": 23.93,
+   "steep_share": 0.0864,
+   "relief": 813.8
+  },
+  "12.25_75.50": {
+   "slope_p90": 28.32,
+   "steep_share": 0.1806,
+   "relief": 1452.0
+  },
+  "12.25_75.75": {
+   "slope_p90": 18.0,
+   "steep_share": 0.0353,
+   "relief": 990.8
+  },
+  "12.25_76.00": {
+   "slope_p90": 7.78,
+   "steep_share": 0.0015,
+   "relief": 240.1
+  },
+  "12.25_76.25": {
+   "slope_p90": 3.45,
+   "steep_share": 0.0,
+   "relief": 158.8
+  },
+  "12.25_76.50": {
+   "slope_p90": 3.75,
+   "steep_share": 0.0,
+   "relief": 163.1
+  },
+  "12.25_76.75": {
+   "slope_p90": 3.08,
+   "steep_share": 0.0016,
+   "relief": 139.6
+  },
+  "12.25_77.00": {
+   "slope_p90": 2.18,
+   "steep_share": 0.001,
+   "relief": 91.5
+  },
+  "12.25_77.25": {
+   "slope_p90": 19.47,
+   "steep_share": 0.044,
+   "relief": 620.3
+  },
+  "12.25_77.50": {
+   "slope_p90": 21.12,
+   "steep_share": 0.0472,
+   "relief": 664.0
+  },
+  "12.50_75.25": {
+   "slope_p90": 19.82,
+   "steep_share": 0.0307,
+   "relief": 699.5
+  },
+  "12.50_75.50": {
+   "slope_p90": 25.17,
+   "steep_share": 0.1033,
+   "relief": 1118.0
+  },
+  "12.50_75.75": {
+   "slope_p90": 20.98,
+   "steep_share": 0.0478,
+   "relief": 1195.2
+  },
+  "12.50_76.00": {
+   "slope_p90": 5.96,
+   "steep_share": 0.0029,
+   "relief": 248.7
+  },
+  "12.50_76.25": {
+   "slope_p90": 3.21,
+   "steep_share": 0.0,
+   "relief": 136.8
+  },
+  "12.50_76.50": {
+   "slope_p90": 3.35,
+   "steep_share": 0.0002,
+   "relief": 155.7
+  },
+  "12.50_76.75": {
+   "slope_p90": 3.49,
+   "steep_share": 0.0001,
+   "relief": 169.8
+  },
+  "12.50_77.00": {
+   "slope_p90": 2.35,
+   "steep_share": 0.0002,
+   "relief": 116.0
+  },
+  "12.50_77.25": {
+   "slope_p90": 10.01,
+   "steep_share": 0.0158,
+   "relief": 356.6
+  },
+  "12.50_77.50": {
+   "slope_p90": 11.92,
+   "steep_share": 0.0081,
+   "relief": 397.4
+  },
+  "12.75_74.75": {
+   "slope_p90": 4.47,
+   "steep_share": 0.0,
+   "relief": 49.3
+  },
+  "12.75_75.00": {
+   "slope_p90": 11.91,
+   "steep_share": 0.0007,
+   "relief": 211.1
+  },
+  "12.75_75.25": {
+   "slope_p90": 10.15,
+   "steep_share": 0.0006,
+   "relief": 207.2
+  },
+  "12.75_75.50": {
+   "slope_p90": 17.4,
+   "steep_share": 0.0322,
+   "relief": 893.9
+  },
+  "12.75_75.75": {
+   "slope_p90": 22.34,
+   "steep_share": 0.0609,
+   "relief": 1075.0
+  },
+  "12.75_76.00": {
+   "slope_p90": 6.55,
+   "steep_share": 0.0014,
+   "relief": 258.9
+  },
+  "12.75_76.25": {
+   "slope_p90": 3.93,
+   "steep_share": 0.0001,
+   "relief": 143.2
+  },
+  "12.75_76.50": {
+   "slope_p90": 3.56,
+   "steep_share": 0.0009,
+   "relief": 233.0
+  },
+  "12.75_76.75": {
+   "slope_p90": 4.18,
+   "steep_share": 0.0004,
+   "relief": 309.2
+  },
+  "12.75_77.00": {
+   "slope_p90": 3.34,
+   "steep_share": 0.0006,
+   "relief": 189.8
+  },
+  "12.75_77.25": {
+   "slope_p90": 8.37,
+   "steep_share": 0.0054,
+   "relief": 217.3
+  },
+  "12.75_77.50": {
+   "slope_p90": 6.57,
+   "steep_share": 0.0021,
+   "relief": 285.5
+  },
+  "12.75_77.75": {
+   "slope_p90": 3.18,
+   "steep_share": 0.0,
+   "relief": 143.5
+  },
+  "12.75_78.00": {
+   "slope_p90": 7.0,
+   "steep_share": 0.0027,
+   "relief": 298.3
+  },
+  "12.75_78.25": {
+   "slope_p90": 10.73,
+   "steep_share": 0.0096,
+   "relief": 315.4
+  },
+  "13.00_74.75": {
+   "slope_p90": 6.17,
+   "steep_share": 0.0,
+   "relief": 81.6
+  },
+  "13.00_75.00": {
+   "slope_p90": 10.02,
+   "steep_share": 0.0002,
+   "relief": 155.0
+  },
+  "13.00_75.25": {
+   "slope_p90": 14.31,
+   "steep_share": 0.0235,
+   "relief": 989.8
+  },
+  "13.00_75.50": {
+   "slope_p90": 25.07,
+   "steep_share": 0.1013,
+   "relief": 1151.4
+  },
+  "13.00_75.75": {
+   "slope_p90": 11.41,
+   "steep_share": 0.0082,
+   "relief": 286.4
+  },
+  "13.00_76.00": {
+   "slope_p90": 4.86,
+   "steep_share": 0.0006,
+   "relief": 170.2
+  },
+  "13.00_76.25": {
+   "slope_p90": 3.31,
+   "steep_share": 0.0,
+   "relief": 157.6
+  },
+  "13.00_76.50": {
+   "slope_p90": 2.84,
+   "steep_share": 0.0,
+   "relief": 96.7
+  },
+  "13.00_76.75": {
+   "slope_p90": 2.96,
+   "steep_share": 0.0004,
+   "relief": 163.9
+  },
+  "13.00_77.00": {
+   "slope_p90": 3.06,
+   "steep_share": 0.0005,
+   "relief": 161.2
+  },
+  "13.00_77.25": {
+   "slope_p90": 6.47,
+   "steep_share": 0.0026,
+   "relief": 184.3
+  },
+  "13.00_77.50": {
+   "slope_p90": 3.66,
+   "steep_share": 0.0,
+   "relief": 166.7
+  },
+  "13.00_77.75": {
+   "slope_p90": 2.21,
+   "steep_share": 0.0,
+   "relief": 68.0
+  },
+  "13.00_78.00": {
+   "slope_p90": 2.65,
+   "steep_share": 0.0024,
+   "relief": 162.7
+  },
+  "13.00_78.25": {
+   "slope_p90": 2.59,
+   "steep_share": 0.0003,
+   "relief": 128.4
+  },
+  "13.00_78.50": {
+   "slope_p90": 4.91,
+   "steep_share": 0.0029,
+   "relief": 287.5
+  },
+  "13.25_74.75": {
+   "slope_p90": 5.04,
+   "steep_share": 0.0,
+   "relief": 89.7
+  },
+  "13.25_75.00": {
+   "slope_p90": 11.24,
+   "steep_share": 0.0131,
+   "relief": 807.5
+  },
+  "13.25_75.25": {
+   "slope_p90": 24.09,
+   "steep_share": 0.0865,
+   "relief": 1468.1
+  },
+  "13.25_75.50": {
+   "slope_p90": 19.62,
+   "steep_share": 0.0338,
+   "relief": 914.9
+  },
+  "13.25_75.75": {
+   "slope_p90": 11.39,
+   "steep_share": 0.0036,
+   "relief": 421.0
+  },
+  "13.25_76.00": {
+   "slope_p90": 7.43,
+   "steep_share": 0.0018,
+   "relief": 323.6
+  },
+  "13.25_76.25": {
+   "slope_p90": 5.99,
+   "steep_share": 0.0054,
+   "relief": 294.6
+  },
+  "13.25_76.50": {
+   "slope_p90": 2.86,
+   "steep_share": 0.0,
+   "relief": 105.6
+  },
+  "13.25_76.75": {
+   "slope_p90": 2.73,
+   "steep_share": 0.0001,
+   "relief": 179.1
+  },
+  "13.25_77.00": {
+   "slope_p90": 2.34,
+   "steep_share": 0.0,
+   "relief": 77.6
+  },
+  "13.25_77.25": {
+   "slope_p90": 5.23,
+   "steep_share": 0.0047,
+   "relief": 206.7
+  },
+  "13.25_77.50": {
+   "slope_p90": 2.46,
+   "steep_share": 0.0005,
+   "relief": 87.1
+  },
+  "13.25_77.75": {
+   "slope_p90": 2.2,
+   "steep_share": 0.004,
+   "relief": 160.8
+  },
+  "13.25_78.00": {
+   "slope_p90": 2.23,
+   "steep_share": 0.0044,
+   "relief": 214.8
+  },
+  "13.25_78.25": {
+   "slope_p90": 1.62,
+   "steep_share": 0.0005,
+   "relief": 66.6
+  },
+  "13.25_78.50": {
+   "slope_p90": 2.46,
+   "steep_share": 0.0009,
+   "relief": 146.4
+  },
+  "13.50_74.75": {
+   "slope_p90": 4.99,
+   "steep_share": 0.0,
+   "relief": 67.6
+  },
+  "13.50_75.00": {
+   "slope_p90": 17.95,
+   "steep_share": 0.0394,
+   "relief": 749.3
+  },
+  "13.50_75.25": {
+   "slope_p90": 14.39,
+   "steep_share": 0.0146,
+   "relief": 354.2
+  },
+  "13.50_75.50": {
+   "slope_p90": 16.96,
+   "steep_share": 0.0176,
+   "relief": 602.3
+  },
+  "13.50_75.75": {
+   "slope_p90": 21.03,
+   "steep_share": 0.0519,
+   "relief": 1003.2
+  },
+  "13.50_76.00": {
+   "slope_p90": 4.41,
+   "steep_share": 0.0084,
+   "relief": 406.6
+  },
+  "13.50_76.25": {
+   "slope_p90": 3.05,
+   "steep_share": 0.0058,
+   "relief": 366.1
+  },
+  "13.50_76.50": {
+   "slope_p90": 2.85,
+   "steep_share": 0.0,
+   "relief": 153.7
+  },
+  "13.50_76.75": {
+   "slope_p90": 9.56,
+   "steep_share": 0.0038,
+   "relief": 292.5
+  },
+  "13.50_77.00": {
+   "slope_p90": 3.38,
+   "steep_share": 0.001,
+   "relief": 232.2
+  },
+  "13.50_77.25": {
+   "slope_p90": 10.19,
+   "steep_share": 0.0165,
+   "relief": 404.8
+  },
+  "13.50_77.50": {
+   "slope_p90": 5.92,
+   "steep_share": 0.0044,
+   "relief": 282.9
+  },
+  "13.50_77.75": {
+   "slope_p90": 11.77,
+   "steep_share": 0.0133,
+   "relief": 392.5
+  },
+  "13.50_78.00": {
+   "slope_p90": 3.8,
+   "steep_share": 0.0024,
+   "relief": 250.4
+  },
+  "13.50_78.25": {
+   "slope_p90": 5.53,
+   "steep_share": 0.0077,
+   "relief": 357.5
+  },
+  "13.50_78.50": {
+   "slope_p90": 15.41,
+   "steep_share": 0.0235,
+   "relief": 485.1
+  },
+  "13.75_74.50": {
+   "slope_p90": 4.02,
+   "steep_share": 0.0,
+   "relief": 54.3
+  },
+  "13.75_74.75": {
+   "slope_p90": 13.24,
+   "steep_share": 0.0188,
+   "relief": 714.1
+  },
+  "13.75_75.00": {
+   "slope_p90": 18.21,
+   "steep_share": 0.0349,
+   "relief": 814.3
+  },
+  "13.75_75.25": {
+   "slope_p90": 9.55,
+   "steep_share": 0.0012,
+   "relief": 184.6
+  },
+  "13.75_75.50": {
+   "slope_p90": 11.42,
+   "steep_share": 0.004,
+   "relief": 305.7
+  },
+  "13.75_75.75": {
+   "slope_p90": 9.31,
+   "steep_share": 0.0031,
+   "relief": 301.1
+  },
+  "13.75_76.00": {
+   "slope_p90": 6.42,
+   "steep_share": 0.0021,
+   "relief": 227.2
+  },
+  "13.75_76.25": {
+   "slope_p90": 2.22,
+   "steep_share": 0.0027,
+   "relief": 161.5
+  },
+  "13.75_76.50": {
+   "slope_p90": 10.13,
+   "steep_share": 0.0099,
+   "relief": 282.9
+  },
+  "13.75_76.75": {
+   "slope_p90": 2.82,
+   "steep_share": 0.0,
+   "relief": 122.1
+  },
+  "13.75_77.00": {
+   "slope_p90": 2.38,
+   "steep_share": 0.0012,
+   "relief": 161.5
+  },
+  "13.75_77.25": {
+   "slope_p90": 7.21,
+   "steep_share": 0.0121,
+   "relief": 325.8
+  },
+  "13.75_77.50": {
+   "slope_p90": 1.47,
+   "steep_share": 0.0004,
+   "relief": 103.2
+  },
+  "13.75_77.75": {
+   "slope_p90": 5.55,
+   "steep_share": 0.0069,
+   "relief": 306.0
+  },
+  "13.75_78.00": {
+   "slope_p90": 10.18,
+   "steep_share": 0.0104,
+   "relief": 379.2
+  },
+  "13.75_78.25": {
+   "slope_p90": 6.05,
+   "steep_share": 0.0072,
+   "relief": 313.4
+  },
+  "14.00_74.50": {
+   "slope_p90": 15.01,
+   "steep_share": 0.0084,
+   "relief": 429.2
+  },
+  "14.00_74.75": {
+   "slope_p90": 18.89,
+   "steep_share": 0.0426,
+   "relief": 827.1
+  },
+  "14.00_75.00": {
+   "slope_p90": 8.76,
+   "steep_share": 0.002,
+   "relief": 159.7
+  },
+  "14.00_75.25": {
+   "slope_p90": 8.72,
+   "steep_share": 0.0001,
+   "relief": 283.3
+  },
+  "14.00_75.50": {
+   "slope_p90": 7.18,
+   "steep_share": 0.002,
+   "relief": 290.4
+  },
+  "14.00_75.75": {
+   "slope_p90": 9.0,
+   "steep_share": 0.0021,
+   "relief": 239.5
+  },
+  "14.00_76.00": {
+   "slope_p90": 7.56,
+   "steep_share": 0.0019,
+   "relief": 304.6
+  },
+  "14.00_76.25": {
+   "slope_p90": 9.09,
+   "steep_share": 0.0072,
+   "relief": 272.9
+  },
+  "14.00_76.50": {
+   "slope_p90": 9.27,
+   "steep_share": 0.0068,
+   "relief": 353.2
+  },
+  "14.00_76.75": {
+   "slope_p90": 1.74,
+   "steep_share": 0.0,
+   "relief": 77.5
+  },
+  "14.00_77.00": {
+   "slope_p90": 1.88,
+   "steep_share": 0.0014,
+   "relief": 153.4
+  },
+  "14.00_77.25": {
+   "slope_p90": 6.27,
+   "steep_share": 0.0105,
+   "relief": 252.0
+  },
+  "14.00_77.50": {
+   "slope_p90": 2.42,
+   "steep_share": 0.0041,
+   "relief": 192.4
+  },
+  "14.00_77.75": {
+   "slope_p90": 8.81,
+   "steep_share": 0.0029,
+   "relief": 288.6
+  },
+  "14.00_78.00": {
+   "slope_p90": 12.87,
+   "steep_share": 0.0118,
+   "relief": 360.2
+  },
+  "14.25_74.50": {
+   "slope_p90": 19.78,
+   "steep_share": 0.038,
+   "relief": 530.7
+  },
+  "14.25_74.75": {
+   "slope_p90": 19.15,
+   "steep_share": 0.0447,
+   "relief": 684.4
+  },
+  "14.25_75.00": {
+   "slope_p90": 5.91,
+   "steep_share": 0.0,
+   "relief": 136.0
+  },
+  "14.25_75.25": {
+   "slope_p90": 6.64,
+   "steep_share": 0.0002,
+   "relief": 166.2
+  },
+  "14.25_75.50": {
+   "slope_p90": 9.49,
+   "steep_share": 0.0071,
+   "relief": 294.1
+  },
+  "14.25_75.75": {
+   "slope_p90": 7.78,
+   "steep_share": 0.0012,
+   "relief": 197.2
+  },
+  "14.25_76.00": {
+   "slope_p90": 2.36,
+   "steep_share": 0.0003,
+   "relief": 144.0
+  },
+  "14.25_76.25": {
+   "slope_p90": 4.33,
+   "steep_share": 0.0005,
+   "relief": 214.2
+  },
+  "14.25_76.50": {
+   "slope_p90": 5.06,
+   "steep_share": 0.0029,
+   "relief": 403.5
+  },
+  "14.25_76.75": {
+   "slope_p90": 1.58,
+   "steep_share": 0.0,
+   "relief": 97.6
+  },
+  "14.25_77.00": {
+   "slope_p90": 3.85,
+   "steep_share": 0.0112,
+   "relief": 320.9
+  },
+  "14.25_77.25": {
+   "slope_p90": 6.99,
+   "steep_share": 0.0143,
+   "relief": 328.7
+  },
+  "14.25_77.50": {
+   "slope_p90": 6.31,
+   "steep_share": 0.003,
+   "relief": 253.4
+  },
+  "14.50_74.25": {
+   "slope_p90": 14.0,
+   "steep_share": 0.003,
+   "relief": 204.5
+  },
+  "14.50_74.50": {
+   "slope_p90": 20.09,
+   "steep_share": 0.0341,
+   "relief": 611.3
+  },
+  "14.50_74.75": {
+   "slope_p90": 15.44,
+   "steep_share": 0.0337,
+   "relief": 572.7
+  },
+  "14.50_75.00": {
+   "slope_p90": 5.32,
+   "steep_share": 0.0002,
+   "relief": 122.7
+  },
+  "14.50_75.25": {
+   "slope_p90": 3.13,
+   "steep_share": 0.0,
+   "relief": 143.6
+  },
+  "14.50_75.50": {
+   "slope_p90": 2.3,
+   "steep_share": 0.001,
+   "relief": 151.1
+  },
+  "14.50_75.75": {
+   "slope_p90": 2.33,
+   "steep_share": 0.0001,
+   "relief": 82.5
+  },
+  "14.50_76.00": {
+   "slope_p90": 2.4,
+   "steep_share": 0.0001,
+   "relief": 146.3
+  },
+  "14.50_76.25": {
+   "slope_p90": 3.33,
+   "steep_share": 0.0006,
+   "relief": 149.3
+  },
+  "14.50_76.50": {
+   "slope_p90": 2.02,
+   "steep_share": 0.0001,
+   "relief": 127.5
+  },
+  "14.50_76.75": {
+   "slope_p90": 1.61,
+   "steep_share": 0.0,
+   "relief": 111.0
+  },
+  "14.50_77.00": {
+   "slope_p90": 2.14,
+   "steep_share": 0.0023,
+   "relief": 134.8
+  },
+  "14.75_74.00": {
+   "slope_p90": 21.46,
+   "steep_share": 0.0378,
+   "relief": 175.3
+  },
+  "14.75_74.25": {
+   "slope_p90": 21.87,
+   "steep_share": 0.0467,
+   "relief": 615.5
+  },
+  "14.75_74.50": {
+   "slope_p90": 21.15,
+   "steep_share": 0.0422,
+   "relief": 661.8
+  },
+  "14.75_74.75": {
+   "slope_p90": 15.13,
+   "steep_share": 0.0293,
+   "relief": 554.2
+  },
+  "14.75_75.00": {
+   "slope_p90": 5.9,
+   "steep_share": 0.0,
+   "relief": 154.6
+  },
+  "14.75_75.25": {
+   "slope_p90": 2.37,
+   "steep_share": 0.0,
+   "relief": 89.5
+  },
+  "14.75_75.50": {
+   "slope_p90": 2.36,
+   "steep_share": 0.0,
+   "relief": 125.3
+  },
+  "14.75_75.75": {
+   "slope_p90": 4.03,
+   "steep_share": 0.0014,
+   "relief": 175.0
+  },
+  "14.75_76.00": {
+   "slope_p90": 3.49,
+   "steep_share": 0.0005,
+   "relief": 138.9
+  },
+  "14.75_76.25": {
+   "slope_p90": 2.09,
+   "steep_share": 0.0001,
+   "relief": 137.1
+  },
+  "14.75_76.50": {
+   "slope_p90": 3.36,
+   "steep_share": 0.0002,
+   "relief": 152.1
+  },
+  "14.75_76.75": {
+   "slope_p90": 9.93,
+   "steep_share": 0.0107,
+   "relief": 270.2
+  },
+  "15.00_74.00": {
+   "slope_p90": 18.19,
+   "steep_share": 0.0227,
+   "relief": 489.5
+  },
+  "15.00_74.25": {
+   "slope_p90": 22.24,
+   "steep_share": 0.0651,
+   "relief": 789.9
+  },
+  "15.00_74.50": {
+   "slope_p90": 21.29,
+   "steep_share": 0.0569,
+   "relief": 654.7
+  },
+  "15.00_74.75": {
+   "slope_p90": 9.38,
+   "steep_share": 0.0163,
+   "relief": 347.9
+  },
+  "15.00_75.00": {
+   "slope_p90": 4.63,
+   "steep_share": 0.0,
+   "relief": 188.8
+  },
+  "15.00_75.25": {
+   "slope_p90": 2.63,
+   "steep_share": 0.0,
+   "relief": 159.7
+  },
+  "15.00_75.50": {
+   "slope_p90": 1.94,
+   "steep_share": 0.0,
+   "relief": 161.1
+  },
+  "15.00_75.75": {
+   "slope_p90": 2.88,
+   "steep_share": 0.0049,
+   "relief": 159.8
+  },
+  "15.00_76.00": {
+   "slope_p90": 2.43,
+   "steep_share": 0.0036,
+   "relief": 219.3
+  },
+  "15.00_76.25": {
+   "slope_p90": 1.67,
+   "steep_share": 0.0003,
+   "relief": 113.6
+  },
+  "15.00_76.50": {
+   "slope_p90": 15.49,
+   "steep_share": 0.0327,
+   "relief": 475.3
+  },
+  "15.00_76.75": {
+   "slope_p90": 13.99,
+   "steep_share": 0.017,
+   "relief": 434.2
+  },
+  "15.00_77.00": {
+   "slope_p90": 1.02,
+   "steep_share": 0.0004,
+   "relief": 198.0
+  },
+  "15.00_77.25": {
+   "slope_p90": 1.66,
+   "steep_share": 0.0003,
+   "relief": 112.2
+  },
+  "15.25_74.25": {
+   "slope_p90": 18.28,
+   "steep_share": 0.033,
+   "relief": 788.7
+  },
+  "15.25_74.50": {
+   "slope_p90": 14.28,
+   "steep_share": 0.0049,
+   "relief": 404.6
+  },
+  "15.25_74.75": {
+   "slope_p90": 4.81,
+   "steep_share": 0.0015,
+   "relief": 174.7
+  },
+  "15.25_75.00": {
+   "slope_p90": 5.07,
+   "steep_share": 0.0,
+   "relief": 189.1
+  },
+  "15.25_75.25": {
+   "slope_p90": 1.35,
+   "steep_share": 0.0,
+   "relief": 86.7
+  },
+  "15.25_75.50": {
+   "slope_p90": 1.82,
+   "steep_share": 0.0,
+   "relief": 163.3
+  },
+  "15.25_75.75": {
+   "slope_p90": 8.92,
+   "steep_share": 0.0097,
+   "relief": 304.3
+  },
+  "15.25_76.00": {
+   "slope_p90": 1.13,
+   "steep_share": 0.0,
+   "relief": 86.3
+  },
+  "15.25_76.25": {
+   "slope_p90": 1.9,
+   "steep_share": 0.0018,
+   "relief": 112.3
+  },
+  "15.25_76.50": {
+   "slope_p90": 15.98,
+   "steep_share": 0.0228,
+   "relief": 513.8
+  },
+  "15.25_76.75": {
+   "slope_p90": 3.88,
+   "steep_share": 0.002,
+   "relief": 235.4
+  },
+  "15.25_77.00": {
+   "slope_p90": 0.93,
+   "steep_share": 0.0002,
+   "relief": 80.2
+  },
+  "15.25_77.25": {
+   "slope_p90": 0.89,
+   "steep_share": 0.0004,
+   "relief": 70.3
+  },
+  "15.50_74.25": {
+   "slope_p90": 19.69,
+   "steep_share": 0.049,
+   "relief": 868.9
+  },
+  "15.50_74.50": {
+   "slope_p90": 8.99,
+   "steep_share": 0.0019,
+   "relief": 303.8
+  },
+  "15.50_74.75": {
+   "slope_p90": 6.78,
+   "steep_share": 0.0001,
+   "relief": 201.6
+  },
+  "15.50_75.00": {
+   "slope_p90": 3.52,
+   "steep_share": 0.0,
+   "relief": 132.7
+  },
+  "15.50_75.25": {
+   "slope_p90": 0.83,
+   "steep_share": 0.0,
+   "relief": 86.6
+  },
+  "15.50_75.50": {
+   "slope_p90": 1.01,
+   "steep_share": 0.0,
+   "relief": 131.7
+  },
+  "15.50_75.75": {
+   "slope_p90": 0.98,
+   "steep_share": 0.0,
+   "relief": 110.8
+  },
+  "15.50_76.00": {
+   "slope_p90": 1.0,
+   "steep_share": 0.0,
+   "relief": 92.5
+  },
+  "15.50_76.25": {
+   "slope_p90": 3.59,
+   "steep_share": 0.0008,
+   "relief": 146.3
+  },
+  "15.50_76.50": {
+   "slope_p90": 5.84,
+   "steep_share": 0.0037,
+   "relief": 228.4
+  },
+  "15.50_76.75": {
+   "slope_p90": 1.28,
+   "steep_share": 0.0005,
+   "relief": 78.2
+  },
+  "15.50_77.00": {
+   "slope_p90": 1.27,
+   "steep_share": 0.0021,
+   "relief": 153.5
+  },
+  "15.75_74.25": {
+   "slope_p90": 23.1,
+   "steep_share": 0.0822,
+   "relief": 820.9
+  },
+  "15.75_74.50": {
+   "slope_p90": 6.4,
+   "steep_share": 0.0001,
+   "relief": 239.2
+  },
+  "15.75_74.75": {
+   "slope_p90": 3.45,
+   "steep_share": 0.0,
+   "relief": 207.9
+  },
+  "15.75_75.00": {
+   "slope_p90": 2.34,
+   "steep_share": 0.0007,
+   "relief": 197.1
+  },
+  "15.75_75.25": {
+   "slope_p90": 2.49,
+   "steep_share": 0.0009,
+   "relief": 200.4
+  },
+  "15.75_75.50": {
+   "slope_p90": 0.94,
+   "steep_share": 0.0,
+   "relief": 61.3
+  },
+  "15.75_75.75": {
+   "slope_p90": 1.2,
+   "steep_share": 0.0001,
+   "relief": 128.8
+  },
+  "15.75_76.00": {
+   "slope_p90": 2.03,
+   "steep_share": 0.0019,
+   "relief": 187.1
+  },
+  "15.75_76.25": {
+   "slope_p90": 1.98,
+   "steep_share": 0.0,
+   "relief": 151.8
+  },
+  "15.75_76.50": {
+   "slope_p90": 2.84,
+   "steep_share": 0.0,
+   "relief": 150.3
+  },
+  "15.75_76.75": {
+   "slope_p90": 1.02,
+   "steep_share": 0.0004,
+   "relief": 73.6
+  },
+  "15.75_77.00": {
+   "slope_p90": 1.07,
+   "steep_share": 0.0,
+   "relief": 51.6
+  },
+  "16.00_74.50": {
+   "slope_p90": 8.0,
+   "steep_share": 0.0004,
+   "relief": 249.5
+  },
+  "16.00_74.75": {
+   "slope_p90": 7.49,
+   "steep_share": 0.0002,
+   "relief": 298.7
+  },
+  "16.00_75.00": {
+   "slope_p90": 3.54,
+   "steep_share": 0.0001,
+   "relief": 226.7
+  },
+  "16.00_75.25": {
+   "slope_p90": 5.48,
+   "steep_share": 0.0006,
+   "relief": 187.0
+  },
+  "16.00_75.50": {
+   "slope_p90": 3.16,
+   "steep_share": 0.0002,
+   "relief": 114.9
+  },
+  "16.00_75.75": {
+   "slope_p90": 6.71,
+   "steep_share": 0.0003,
+   "relief": 168.3
+  },
+  "16.00_76.00": {
+   "slope_p90": 4.15,
+   "steep_share": 0.0004,
+   "relief": 197.9
+  },
+  "16.00_76.25": {
+   "slope_p90": 1.54,
+   "steep_share": 0.0,
+   "relief": 145.6
+  },
+  "16.00_76.50": {
+   "slope_p90": 2.11,
+   "steep_share": 0.0,
+   "relief": 139.6
+  },
+  "16.00_76.75": {
+   "slope_p90": 1.18,
+   "steep_share": 0.0001,
+   "relief": 159.9
+  },
+  "16.00_77.00": {
+   "slope_p90": 0.99,
+   "steep_share": 0.0005,
+   "relief": 95.4
+  },
+  "16.00_77.25": {
+   "slope_p90": 0.9,
+   "steep_share": 0.0,
+   "relief": 60.0
+  },
+  "16.00_77.50": {
+   "slope_p90": 1.39,
+   "steep_share": 0.0,
+   "relief": 108.9
+  },
+  "16.25_74.25": {
+   "slope_p90": 11.3,
+   "steep_share": 0.002,
+   "relief": 407.9
+  },
+  "16.25_74.50": {
+   "slope_p90": 4.63,
+   "steep_share": 0.0,
+   "relief": 225.2
+  },
+  "16.25_74.75": {
+   "slope_p90": 3.29,
+   "steep_share": 0.0026,
+   "relief": 190.7
+  },
+  "16.25_75.00": {
+   "slope_p90": 1.66,
+   "steep_share": 0.0,
+   "relief": 120.0
+  },
+  "16.25_75.25": {
+   "slope_p90": 1.96,
+   "steep_share": 0.0,
+   "relief": 117.3
+  },
+  "16.25_75.50": {
+   "slope_p90": 3.99,
+   "steep_share": 0.0,
+   "relief": 150.9
+  },
+  "16.25_75.75": {
+   "slope_p90": 4.23,
+   "steep_share": 0.0001,
+   "relief": 109.9
+  },
+  "16.25_76.00": {
+   "slope_p90": 1.46,
+   "steep_share": 0.0,
+   "relief": 90.4
+  },
+  "16.25_76.25": {
+   "slope_p90": 1.57,
+   "steep_share": 0.0,
+   "relief": 120.3
+  },
+  "16.25_76.50": {
+   "slope_p90": 3.55,
+   "steep_share": 0.0,
+   "relief": 163.3
+  },
+  "16.25_76.75": {
+   "slope_p90": 5.28,
+   "steep_share": 0.0001,
+   "relief": 197.4
+  },
+  "16.25_77.00": {
+   "slope_p90": 3.24,
+   "steep_share": 0.0002,
+   "relief": 144.5
+  },
+  "16.25_77.25": {
+   "slope_p90": 0.99,
+   "steep_share": 0.0004,
+   "relief": 80.6
+  },
+  "16.25_77.50": {
+   "slope_p90": 1.94,
+   "steep_share": 0.0,
+   "relief": 125.0
+  },
+  "16.50_74.25": {
+   "slope_p90": 4.25,
+   "steep_share": 0.0002,
+   "relief": 167.1
+  },
+  "16.50_74.50": {
+   "slope_p90": 2.67,
+   "steep_share": 0.0,
+   "relief": 227.9
+  },
+  "16.50_74.75": {
+   "slope_p90": 2.45,
+   "steep_share": 0.0,
+   "relief": 171.7
+  },
+  "16.50_75.00": {
+   "slope_p90": 1.7,
+   "steep_share": 0.0,
+   "relief": 99.6
+  },
+  "16.50_75.25": {
+   "slope_p90": 2.89,
+   "steep_share": 0.0,
+   "relief": 125.7
+  },
+  "16.50_75.50": {
+   "slope_p90": 1.92,
+   "steep_share": 0.0,
+   "relief": 99.6
+  },
+  "16.50_75.75": {
+   "slope_p90": 1.88,
+   "steep_share": 0.0,
+   "relief": 135.7
+  },
+  "16.50_76.00": {
+   "slope_p90": 1.61,
+   "steep_share": 0.0,
+   "relief": 124.8
+  },
+  "16.50_76.25": {
+   "slope_p90": 1.32,
+   "steep_share": 0.0,
+   "relief": 108.0
+  },
+  "16.50_76.50": {
+   "slope_p90": 2.99,
+   "steep_share": 0.0,
+   "relief": 184.9
+  },
+  "16.50_76.75": {
+   "slope_p90": 3.42,
+   "steep_share": 0.0003,
+   "relief": 146.0
+  },
+  "16.50_77.00": {
+   "slope_p90": 1.28,
+   "steep_share": 0.0002,
+   "relief": 98.7
+  },
+  "16.50_77.25": {
+   "slope_p90": 1.09,
+   "steep_share": 0.0,
+   "relief": 62.1
+  },
+  "16.50_77.50": {
+   "slope_p90": 1.17,
+   "steep_share": 0.0,
+   "relief": 85.5
+  },
+  "16.75_74.50": {
+   "slope_p90": 2.19,
+   "steep_share": 0.0001,
+   "relief": 147.6
+  },
+  "16.75_74.75": {
+   "slope_p90": 1.91,
+   "steep_share": 0.0,
+   "relief": 128.8
+  },
+  "16.75_75.00": {
+   "slope_p90": 1.89,
+   "steep_share": 0.0,
+   "relief": 109.9
+  },
+  "16.75_75.25": {
+   "slope_p90": 2.81,
+   "steep_share": 0.0,
+   "relief": 160.7
+  },
+  "16.75_75.50": {
+   "slope_p90": 1.66,
+   "steep_share": 0.0,
+   "relief": 134.7
+  },
+  "16.75_75.75": {
+   "slope_p90": 1.64,
+   "steep_share": 0.0,
+   "relief": 106.1
+  },
+  "16.75_76.00": {
+   "slope_p90": 1.87,
+   "steep_share": 0.0,
+   "relief": 151.1
+  },
+  "16.75_76.25": {
+   "slope_p90": 1.32,
+   "steep_share": 0.0,
+   "relief": 92.7
+  },
+  "16.75_76.50": {
+   "slope_p90": 1.78,
+   "steep_share": 0.0,
+   "relief": 118.7
+  },
+  "16.75_76.75": {
+   "slope_p90": 2.34,
+   "steep_share": 0.0005,
+   "relief": 156.3
+  },
+  "16.75_77.00": {
+   "slope_p90": 1.54,
+   "steep_share": 0.0003,
+   "relief": 84.0
+  },
+  "16.75_77.25": {
+   "slope_p90": 4.83,
+   "steep_share": 0.0008,
+   "relief": 271.9
+  },
+  "16.75_77.50": {
+   "slope_p90": 4.79,
+   "steep_share": 0.0005,
+   "relief": 252.3
+  },
+  "17.00_75.00": {
+   "slope_p90": 2.2,
+   "steep_share": 0.0,
+   "relief": 178.3
+  },
+  "17.00_75.25": {
+   "slope_p90": 2.94,
+   "steep_share": 0.0,
+   "relief": 141.8
+  },
+  "17.00_75.50": {
+   "slope_p90": 2.28,
+   "steep_share": 0.0,
+   "relief": 162.2
+  },
+  "17.00_75.75": {
+   "slope_p90": 2.33,
+   "steep_share": 0.0,
+   "relief": 134.5
+  },
+  "17.00_76.00": {
+   "slope_p90": 1.35,
+   "steep_share": 0.0,
+   "relief": 97.3
+  },
+  "17.00_76.25": {
+   "slope_p90": 1.42,
+   "steep_share": 0.0,
+   "relief": 113.3
+  },
+  "17.00_76.50": {
+   "slope_p90": 2.21,
+   "steep_share": 0.0,
+   "relief": 109.0
+  },
+  "17.00_76.75": {
+   "slope_p90": 2.05,
+   "steep_share": 0.0,
+   "relief": 127.9
+  },
+  "17.00_77.00": {
+   "slope_p90": 2.26,
+   "steep_share": 0.0,
+   "relief": 203.9
+  },
+  "17.00_77.25": {
+   "slope_p90": 3.8,
+   "steep_share": 0.0001,
+   "relief": 196.8
+  },
+  "17.00_77.50": {
+   "slope_p90": 2.62,
+   "steep_share": 0.0,
+   "relief": 208.1
+  },
+  "17.25_75.50": {
+   "slope_p90": 1.72,
+   "steep_share": 0.0,
+   "relief": 149.6
+  },
+  "17.25_75.75": {
+   "slope_p90": 1.84,
+   "steep_share": 0.0,
+   "relief": 155.4
+  },
+  "17.25_76.00": {
+   "slope_p90": 1.45,
+   "steep_share": 0.0,
+   "relief": 88.8
+  },
+  "17.25_76.25": {
+   "slope_p90": 1.29,
+   "steep_share": 0.0,
+   "relief": 76.6
+  },
+  "17.25_76.50": {
+   "slope_p90": 2.18,
+   "steep_share": 0.0,
+   "relief": 101.9
+  },
+  "17.25_76.75": {
+   "slope_p90": 1.98,
+   "steep_share": 0.0,
+   "relief": 119.0
+  },
+  "17.25_77.00": {
+   "slope_p90": 1.75,
+   "steep_share": 0.0,
+   "relief": 125.4
+  },
+  "17.25_77.25": {
+   "slope_p90": 1.08,
+   "steep_share": 0.0,
+   "relief": 89.8
+  },
+  "17.25_77.50": {
+   "slope_p90": 2.18,
+   "steep_share": 0.0,
+   "relief": 143.4
+  },
+  "17.50_75.75": {
+   "slope_p90": 1.41,
+   "steep_share": 0.0,
+   "relief": 62.0
+  },
+  "17.50_76.00": {
+   "slope_p90": 1.36,
+   "steep_share": 0.0,
+   "relief": 88.5
+  },
+  "17.50_76.25": {
+   "slope_p90": 2.58,
+   "steep_share": 0.0,
+   "relief": 105.3
+  },
+  "17.50_76.50": {
+   "slope_p90": 3.79,
+   "steep_share": 0.0,
+   "relief": 140.5
+  },
+  "17.50_76.75": {
+   "slope_p90": 3.28,
+   "steep_share": 0.0,
+   "relief": 114.3
+  },
+  "17.50_77.00": {
+   "slope_p90": 4.85,
+   "steep_share": 0.0,
+   "relief": 191.3
+  },
+  "17.50_77.25": {
+   "slope_p90": 7.54,
+   "steep_share": 0.0,
+   "relief": 189.8
+  },
+  "17.50_77.50": {
+   "slope_p90": 5.94,
+   "steep_share": 0.0,
+   "relief": 213.5
+  },
+  "17.50_77.75": {
+   "slope_p90": 3.24,
+   "steep_share": 0.0,
+   "relief": 156.1
+  },
+  "17.75_76.50": {
+   "slope_p90": 1.56,
+   "steep_share": 0.0,
+   "relief": 101.0
+  },
+  "17.75_76.75": {
+   "slope_p90": 4.93,
+   "steep_share": 0.0,
+   "relief": 185.1
+  },
+  "17.75_77.00": {
+   "slope_p90": 4.93,
+   "steep_share": 0.0,
+   "relief": 166.1
+  },
+  "17.75_77.25": {
+   "slope_p90": 2.15,
+   "steep_share": 0.0,
+   "relief": 78.6
+  },
+  "17.75_77.50": {
+   "slope_p90": 2.09,
+   "steep_share": 0.0,
+   "relief": 77.1
+  },
+  "18.00_76.75": {
+   "slope_p90": 2.04,
+   "steep_share": 0.0,
+   "relief": 97.9
+  },
+  "18.00_77.00": {
+   "slope_p90": 1.83,
+   "steep_share": 0.0,
+   "relief": 108.8
+  },
+  "18.00_77.25": {
+   "slope_p90": 1.84,
+   "steep_share": 0.0,
+   "relief": 115.5
+  },
+  "18.00_77.50": {
+   "slope_p90": 2.53,
+   "steep_share": 0.0,
+   "relief": 148.8
+  },
+  "18.00_77.75": {
+   "slope_p90": 2.96,
+   "steep_share": 0.0,
+   "relief": 132.4
+  },
+  "18.25_77.00": {
+   "slope_p90": 2.11,
+   "steep_share": 0.0,
+   "relief": 95.4
+  },
+  "18.25_77.25": {
+   "slope_p90": 3.87,
+   "steep_share": 0.0,
+   "relief": 132.0
+  },
+  "18.25_77.50": {
+   "slope_p90": 4.08,
+   "steep_share": 0.0,
+   "relief": 215.9
+  },
+  "18.50_77.25": {
+   "slope_p90": 5.37,
+   "steep_share": 0.0,
+   "relief": 224.9
+  },
+  "18.50_77.50": {
+   "slope_p90": 3.8,
+   "steep_share": 0.0,
+   "relief": 142.4
+  }
+ }
+}

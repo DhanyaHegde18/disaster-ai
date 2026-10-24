@@ -1,0 +1,39 @@
+date,lat,lon,cell_id,taluk_id,accuracy,trigger,source,title
+2007-08-09,12.8733,74.8481,13.00_74.75,dakshina-kannada:mangaluru,10km,rain,NASA catalog (nasa_glc_export.csv),Mangalore
+2008-02-08,12.9752,77.6092,13.00_77.75,bengaluru-urban:bengaluru-south,25km,rain,NASA catalog (nasa_glc_export.csv),Kodaikanal
+2008-08-12,13.986,75.452,14.00_75.50,shivamogga:shivamogga,10km,downpour,NASA catalog (nasa_glc_export.csv),"Ayanur near Neriya, Karnataka"
+2008-08-12,14.229,74.8122,14.25_74.75,uttara-kannada:siddapur,5km,rain,NASA catalog (nasa_glc_export.csv),"Jog Falls, Karnataka"
+2009-10-02,14.7395,74.2566,14.75_74.25,uttara-kannada:ankola,25km,downpour,NASA catalog (nasa_glc_export.csv),National Highway 17 between Karwar and Ankola (
+2009-10-02,14.7812,74.499,14.75_74.50,uttara-kannada:yellapur,10km,downpour,NASA catalog (nasa_glc_export.csv),"Madibag near Kadwad village, Uttara Kannada district, North Karnataka"
+2009-10-02,14.9935,74.0478,15.00_74.25,uttara-kannada:karwar,5km,rain,NASA catalog (nasa_glc_export.csv),Konkan railway route in southern village Canacona in Goa
+2010-06-25,12.89163,74.88549,13.00_75.00,dakshina-kannada:mangaluru,5km,downpour,NASA catalog (nasa_glc_export.csv),"tracks near Kulshekar, between Padil and Thokur, Mangalore to Mumbai"
+2010-06-27,12.89307,74.88567,13.00_75.00,dakshina-kannada:mangaluru,5km,downpour,NASA catalog (nasa_glc_export.csv),"again on tracks near Kulshekar, Mangalore"
+2010-07-21,12.8277,75.0772,12.75_75.00,dakshina-kannada:bantwal,10km,downpour,NASA catalog (nasa_glc_export.csv),"Peruvai-Kadengodlu rd(?) between Vittal and Manila(Mani?), Bantwal tuluk, Karnataka"
+2010-07-29,12.896,74.8735,13.00_75.00,dakshina-kannada:mangaluru,10km,downpour,NASA catalog (nasa_glc_export.csv),"Shakthinagar, Mangalore"
+2010-07-31,12.8715,74.8862,13.00_75.00,dakshina-kannada:mangaluru,5km,downpour,NASA catalog (nasa_glc_export.csv),"Padil, NH - 48"
+2010-11-08,14.7822,74.2279,14.75_74.25,uttara-kannada:karwar,10km,downpour,NASA catalog (nasa_glc_export.csv),rails between Amdalli(?) and near Thodor(Todur) stations bordering Ankola and Karwar talukas in Uttar Kanara district of
+2010-11-11,12.8806,75.0327,13.00_75.00,dakshina-kannada:bantwal,5km,downpour,NASA catalog (nasa_glc_export.csv),"Bantwal Cross (BC) road flyover, NH48, between Mangalore and Beltangady(Belthangady) and Puttur, Bantwal, Karnataka"
+2011-06-27,12.9141,74.856,13.00_75.00,dakshina-kannada:mangaluru,5km,downpour,NASA catalog (nasa_glc_export.csv),"Karnataka coast, Mangalore"
+2013-07-03,15.4123,74.2664,15.50_74.25,uttara-kannada:joida,25km,downpour,NASA catalog (nasa_glc_export.csv),"Anmod Ghat Road, Goa-Karnataka Border"
+2013-10-06,15.6365,74.1158,15.75_74.25,belagavi:khanapur,5km,downpour,NASA catalog (nasa_glc_export.csv),"Ponsuli, Goa"
+2015-04-22,12.8659,74.8852,12.75_75.00,dakshina-kannada:mangaluru,1km,downpour,NASA catalog (nasa_glc_export.csv),under the third and fourth Padil-Bajal under-bridge railway tracks
+2015-07-14,12.8747,74.9566,12.75_75.00,dakshina-kannada:bantwal,1km,continuous_rain,NASA catalog (nasa_glc_export.csv),Farangipete
+2015-07-19,14.8937,74.5828,15.00_74.50,uttara-kannada:yellapur,5km,continuous_rain,NASA catalog (nasa_glc_export.csv),Talakebail in Vajralli gram panchayat in Yellapur
+2016-06-18,15.0275,74.1623,15.00_74.25,uttara-kannada:karwar,25km,downpour,NASA catalog (nasa_glc_export.csv),"main road between Gulem and Loliem and Cotigao, at Baddem, Goa, India"
+2016-06-24,12.8157,74.8586,12.75_74.75,dakshina-kannada:mangaluru,exact,downpour,NASA catalog (nasa_glc_export.csv),"Maya Bar, Thokkottu, India"
+2016-07-04,12.8041,74.8678,12.75_74.75,dakshina-kannada:mangaluru,5km,unknown,NASA catalog (nasa_glc_export.csv),"Kallarakodi, Ullal, India"
+2016-10-11,14.8009,74.118,14.75_74.00,uttara-kannada:karwar,10km,downpour,NASA catalog (nasa_glc_export.csv),NH 66 at Mudaga
+2017-05-15,15.41602,75.6167,15.50_75.75,gadag:gadag,10km,rain,NASA catalog (nasa_glc_export.csv),Landslide in Gadag
+2017-06-11,14.42828,74.41607,14.50_74.50,uttara-kannada:kumta,5km,rain,NASA catalog (nasa_glc_export.csv),"Landslide in Kumta, India, kills three"
+2017-06-12,12.89674,74.8597,13.00_74.75,dakshina-kannada:mangaluru,5km,rain,NASA catalog (nasa_glc_export.csv),Landslide on tracks near Mangaluru
+2017-06-12,13.87804,74.62463,14.00_74.50,udupi:kundapura,10km,rain,NASA catalog (nasa_glc_export.csv),Landslide blocks NH66 in Uttar Kannada
+2017-06-12,13.90075,74.66019,14.00_74.75,udupi:kundapura,5km,rain,NASA catalog (nasa_glc_export.csv),Landslide on Southern Railway
+2017-06-27,12.82403,75.21164,12.75_75.25,dakshina-kannada:bantwal,10km,rain,NASA catalog (nasa_glc_export.csv),Landslide on National Highway 75
+2017-06-29,15.68638,74.16234,15.75_74.25,belagavi:khanapur,1km,continuous_rain,NASA catalog (nasa_glc_export.csv),Landslide obstructs road
+2017-07-03,14.52203,74.41035,14.50_74.50,uttara-kannada:kumta,1km,rain,NASA catalog (nasa_glc_export.csv),Landslide blocks NH-66
+2018-06-29,13.505,75.09,13.50_75.00,shivamogga:tirthahalli,5km,rain,events.csv,Agumbe landslide
+2018-07-13,13.505,75.09,13.50_75.00,shivamogga:tirthahalli,5km,rain,events.csv,Agumbe landslide
+2018-08-12,12.425,75.74,12.50_75.75,kodagu:madikeri,5km,rain,events.csv,Madikeri landslide
+2018-08-14,12.945,75.785,13.00_75.75,hassan:sakleshpur,5km,rain,events.csv,Sakleshpur landslide
+2018-08-16,12.425,75.74,12.50_75.75,kodagu:madikeri,5km,rain,events.csv,Madikeri landslide
+2026-08-02,12.945,75.785,13.00_75.75,hassan:sakleshpur,5km,rain,events.csv,Sakleshpur landslide
