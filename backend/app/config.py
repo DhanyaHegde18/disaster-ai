@@ -72,6 +72,11 @@ ESCALATE_AFTER_MIN = float(os.getenv("ESCALATE_AFTER_MIN", "15"))  # re-alert if
 ESCALATE_MAX_TIMES = int(os.getenv("ESCALATE_MAX_TIMES", "8"))     # stop after this many alerts per item
 ESCALATION_CHECK_S = 60                                              # how often the server checks
 
+# How far the landslide model may raise a square ON ITS OWN (when the rain rule says LOW).
+# MEDIUM (default): it can put a square on watch; HIGH (an alert draft) needs the rain rule to be at least MEDIUM too.
+# HIGH: the model alone can trigger an alert draft. Its false-alarm rate is high (see ml/reports/landslide_model.md).
+LANDSLIDE_MODEL_ALONE_MAX = os.getenv("LANDSLIDE_MODEL_ALONE_MAX", "MEDIUM").strip().upper()
+
 EMERGENCY_NUMBER = "112"    # India's single emergency number (ERSS)
 ALERT_LEVELS = ("HIGH",)    # levels that get an alert drafted automatically
 

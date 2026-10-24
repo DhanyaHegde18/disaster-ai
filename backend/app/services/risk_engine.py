@@ -73,24 +73,32 @@ def scaled_split(cell: dict, daily: list[tuple[date, float]], today: date) -> tu
     return [s[d] for d in days if d <= today], [s[d] for d in days if d > today][:3]
 
 
-def add_landslide(result: dict, ls: dict | None, budgets: dict) -> dict:
-    """Merge the landslide model's view into a square's result: the level is the higher of the two."""
+def add_landslide(result: dict, ls: dict | None, budgets: dict, alone_max: str = "MEDIUM") -> dict:
+    """Merge the landslide model's view into a square's result. The model can only RAISE the level, and on its
+    own (rain rule LOW) only up to `alone_max`; with the rule at MEDIUM or above it may go all the way to HIGH."""
     if not ls:
         return result
     result["landslide_prob"], result["landslide_level"] = ls["prob"], ls["level"]
-    if ls["level"] != "LOW":
-        share = budgets.get(ls["level"].lower(), 0)
-        result["reasons"] = [r for r in result["reasons"] if r != "Rainfall below warning thresholds"]
-        result["reasons"].append(f"Landslide model: {ls['level']} (among the riskiest {share:.1%} of past monsoon days, "
-                                 f"from slope, soaked soil and coming rain)")
-        if LEVELS.index(ls["level"]) > LEVELS.index(result["level"]):
-            result["level"] = ls["level"]
+    if ls["level"] == "LOW":
+        return result
+    share = budgets.get(ls["level"].lower(), 0)
+    result["reasons"] = [r for r in result["reasons"] if r != "Rainfall below warning thresholds"]
+    reason = (f"Landslide model: {ls['level']} (among the riskiest {share:.1%} of past monsoon days, "
+              f"from slope, soaked soil and coming rain)")
+    allowed = ls["level"]
+    if result["level"] == "LOW" and LEVELS.index(allowed) > LEVELS.index(alone_max):
+        allowed = alone_max
+        reason += f"; counted as {allowed} until the rain rule agrees"
+    result["reasons"].append(reason)
+    if LEVELS.index(allowed) > LEVELS.index(result["level"]):
+        result["level"] = allowed
     return result
 
 
 def assess_all(daily_by_cell: dict, today: date, grid: dict, landslide_by_cell: dict | None = None,
-               budgets: dict | None = None) -> list[dict]:
-    results = [add_landslide(assess_cell(cid, c, daily_by_cell[cid], today), (landslide_by_cell or {}).get(cid), budgets or {})
+               budgets: dict | None = None, alone_max: str = "MEDIUM") -> list[dict]:
+    results = [add_landslide(assess_cell(cid, c, daily_by_cell[cid], today), (landslide_by_cell or {}).get(cid),
+                             budgets or {}, alone_max)
                for cid, c in grid["cells"].items() if cid in daily_by_cell]
     # Most urgent first: HIGH, then MEDIUM, then LOW; wetter forecast first within a level.
     results.sort(key=lambda r: (-LEVELS.index(r["level"]), -r["forecast_3d_mm"]))

@@ -27,7 +27,8 @@ def score_now() -> dict:
         rows = {cid: landslide.rain_features(*scaled_split(grid["cells"][cid], d, now.date()))
                 for cid, d in daily.items() if cid in grid["cells"]}
         ls = landslide.predict_cells(rows)
-    cells = assess_all(daily, now.date(), grid, ls, loaded[1]["budgets"] if loaded else None)
+    alone = config.LANDSLIDE_MODEL_ALONE_MAX if config.LANDSLIDE_MODEL_ALONE_MAX in ("MEDIUM", "HIGH") else "MEDIUM"
+    cells = assess_all(daily, now.date(), grid, ls, loaded[1]["budgets"] if loaded else None, alone)
     a = areas.get()
     villages = {lv: 0 for lv in ("HIGH", "MEDIUM", "LOW")}
     for c in cells:

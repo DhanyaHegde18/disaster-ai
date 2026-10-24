@@ -89,7 +89,8 @@ def health():
                            else f"from {grid.get('source', 'IMD')}, calibrated {grid.get('calibrated_on')}"),
             "coverage": f"{len(a.villages)} villages, {len(a.taluks)} taluks, {len(a.districts)} districts, "
                         f"{len(grid['cells'])} rain-grid squares",
-            "landslide_model": (lambda m: f"{m[1]['model']}, trained {m[1]['created']} on {m[1]['years'][0]}-{m[1]['years'][-1]}"
+            "landslide_model": (lambda m: f"{m[1]['model']}, trained {m[1]['created']} on {m[1]['years'][0]}-{m[1]['years'][-1]}; "
+                                          f"on its own raises a square up to {config.LANDSLIDE_MODEL_ALONE_MAX}"
                                 if m else "not trained yet (rain rule only)")(landslide.model()),
             "alert_drafting": f"gemini ({config.GEMINI_MODEL})" if config.GEMINI_API_KEY else "template only (no GEMINI_API_KEY)",
             "automatic_scoring": f"every {config.SCORING_INTERVAL_MIN:g} min" if config.SCHEDULER_ENABLED else "off",

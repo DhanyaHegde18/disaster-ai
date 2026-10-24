@@ -64,7 +64,29 @@ def test_no_model_means_rain_rule_only(world):
         assert c.get("/health").json()["landslide_model"] == "not trained yet (rain rule only)"
 
 
-def test_model_raises_steep_soaked_square(trained):
+def test_model_alone_only_raises_to_medium_by_default(trained):
+    for cell in (STEEP, FLAT):
+        trained.rain(cell, past=60, future=90, soaked=400)       # rain rule: LOW (below 100 mm)
+    with app_client() as c:
+        sign_in(c, taluk_id=None)
+        cells = {x["cell_id"]: x for x in c.get("/risk").json()["cells"]}
+        assert cells[STEEP]["landslide_level"] == "HIGH" and cells[STEEP]["level"] == "MEDIUM"
+        assert any("until the rain rule agrees" in s for s in cells[STEEP]["reasons"])
+        assert cells[FLAT]["level"] == "LOW"
+        assert c.post("/alerts/generate").json()["created"] == 0               # watch, no alert draft
+
+
+def test_model_and_rule_together_make_high(trained):
+    trained.rain(STEEP, past=110, future=90, soaked=400)        # rain rule: MEDIUM (past 3 days >= 100 mm)
+    with app_client() as c:
+        sign_in(c, taluk_id=None)
+        cell = next(x for x in c.get("/risk").json()["cells"] if x["cell_id"] == STEEP)
+    assert cell["level"] == "HIGH" and not any("until the rain rule agrees" in s for s in cell["reasons"])
+
+
+def test_model_raises_steep_soaked_square(trained, monkeypatch):
+    from backend.app import config
+    monkeypatch.setattr(config, "LANDSLIDE_MODEL_ALONE_MAX", "HIGH")       # trust the model on its own
     # same moderate rain on both squares: below the rain rule's thresholds (MEDIUM 100 mm)
     for cell in (STEEP, FLAT):
         trained.rain(cell, past=60, future=90, soaked=400)
