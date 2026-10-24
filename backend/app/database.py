@@ -9,7 +9,7 @@ Only pending alerts can be edited. Every change is timestamped.
 import json
 import sqlite3
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from . import config
@@ -109,6 +109,17 @@ def open_alert_today(village_id: str) -> dict | None:
             (village_id, today),
         ).fetchone()
         return _row(r)
+
+
+def list_public_alerts(village_id: str, include_simulated: bool = False, days: int = 7) -> list[dict]:
+    """Alerts villagers may see: APPROVED only, for one village, approved in the last `days` days.
+    Simulated (test) alerts are left out unless include_simulated is set (demo mode)."""
+    since = (datetime.now(ZoneInfo(config.TIMEZONE)) - timedelta(days=days)).isoformat(timespec="seconds")
+    sql = ("SELECT * FROM alerts WHERE village_id = ? AND status = 'approved' AND reviewed_at >= ?"
+           + ("" if include_simulated else " AND simulated = 0")
+           + " ORDER BY reviewed_at DESC")
+    with connect() as c:
+        return [_row(r) for r in c.execute(sql, (village_id, since)).fetchall()]
 
 
 def update_text(alert_id: int, message_kn: str | None, message_en: str | None) -> dict:

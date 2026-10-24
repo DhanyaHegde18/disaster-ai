@@ -5,6 +5,7 @@ Run from the project root:
     uvicorn backend.app.main:app --reload
 Then open:
     http://localhost:8000/                    Gram Panchayat dashboard
+    http://localhost:8000/villager/           villagers' warning page (approved alerts only)
     http://localhost:8000/docs                interactive API docs (try every endpoint here)
     http://localhost:8000/risk                current risk for all villages
     http://localhost:8000/alerts              drafted alerts and their review status
@@ -20,7 +21,7 @@ from fastapi.staticfiles import StaticFiles
 
 from . import config, database
 from .jobs import scheduler
-from .routers import alerts, risk
+from .routers import alerts, public, risk
 
 
 @asynccontextmanager
@@ -43,11 +44,16 @@ app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS,
                    allow_methods=["*"], allow_headers=["*"])
 app.include_router(risk.router)
 app.include_router(alerts.router)
+app.include_router(public.router)
 
-# Gram Panchayat dashboard (plain HTML/JS in frontend/dashboard), served by this same server.
+# Pages served by this same server (plain HTML/JS, no build step):
+#   /dashboard/  Gram Panchayat control centre    /villager/  villagers' warning page
 DASHBOARD_DIR = config.PROJECT_DIR / "frontend" / "dashboard"
+VILLAGER_DIR = config.PROJECT_DIR / "frontend" / "villager"
 if DASHBOARD_DIR.exists():
     app.mount("/dashboard", StaticFiles(directory=DASHBOARD_DIR, html=True), name="dashboard")
+if VILLAGER_DIR.exists():
+    app.mount("/villager", StaticFiles(directory=VILLAGER_DIR, html=True), name="villager")
 
 
 @app.get("/", include_in_schema=False)

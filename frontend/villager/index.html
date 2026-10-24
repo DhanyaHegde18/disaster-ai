@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="kn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1d4f6e">
+  <title>ಊರಿನ ಎಚ್ಚರಿಕೆ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;600;700&family=IBM+Plex+Sans:wght@400;600&display=swap">
+  <link rel="stylesheet" href="villager.css">
+</head>
+<body>
+  <header class="bar">
+    <div>
+      <h1 data-t="app"></h1>
+      <p data-t="tagline"></p>
+    </div>
+    <button class="lang" id="btn-lang" type="button" aria-label="Change language">English</button>
+  </header>
+
+  <div class="demo" id="demo-banner" hidden data-t="demo"></div>
+
+  <main>
+    <section id="picker" hidden>
+      <h2 data-t="choose"></h2>
+      <div class="village-buttons" id="village-buttons"></div>
+    </section>
+
+    <section id="home" hidden>
+      <div class="place">
+        <span id="place-name"></span>
+        <button class="link" id="btn-change" type="button" data-t="change"></button>
+      </div>
+
+      <div id="status"></div>
+
+      <div class="actions">
+        <button class="big secondary" id="btn-sound" type="button" aria-pressed="false" data-t="soundOff"></button>
+        <a class="big call" id="call" href="tel:112"><span data-t="call"></span></a>
+      </div>
+
+      <section class="recent" id="recent-wrap" hidden>
+        <h2 data-t="recent"></h2>
+        <div id="recent"></div>
+      </section>
+
+      <section class="tips">
+        <h2 data-t="tipsTitle"></h2>
+        <ul id="tips"></ul>
+      </section>
+
+      <p class="foot"><span data-t="onlyApproved"></span><br><span id="checked"></span></p>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script src="villager.js"></script>
+</body>
+</html>
