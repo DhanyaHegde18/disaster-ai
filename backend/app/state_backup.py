@@ -1,6 +1,6 @@
 """
 Keep the database (staff, alerts, family reports, relief centres) safe on a server whose disk is wiped on restart,
-like a free Hugging Face Space.
+like a free Render web service.
 
   restore()      at start-up: copy alerts.db back from the private dataset repository (if there is one)
   backup()       copy alerts.db to that repository, only if it changed since the last copy

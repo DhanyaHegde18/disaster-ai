@@ -1,0 +1,38 @@
+# Render Blueprint: free 24/7 server for Disaster AI (see docs/DEPLOY.md).
+# Render reads this file when you choose New -> Blueprint and pick this GitHub repository.
+services:
+  - type: web
+    name: disaster-ai
+    runtime: python
+    plan: free
+    region: singapore              # closest Render region to Karnataka
+    buildCommand: pip install -r requirements-server.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips "*"
+    healthCheckPath: /health
+    autoDeploy: true               # every git push to main deploys the new version
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: TZ
+        value: Asia/Kolkata
+      - key: SMS_PROVIDER
+        value: ntfy
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite
+      # Render asks for these when the Blueprint is created (they are never stored in the repository):
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: NTFY_TOPIC_GP
+        sync: false
+      - key: NTFY_TOPIC_NGO
+        sync: false
+      - key: OFFICIALS
+        sync: false
+      - key: HF_TOKEN
+        sync: false
+      - key: STATE_REPO
+        sync: false
+      - key: PUBLIC_URL
+        sync: false

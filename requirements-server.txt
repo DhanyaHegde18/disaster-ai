@@ -1,4 +1,4 @@
-# Only what the server needs (the data scripts and training need requirements.txt).
+# Only what the server needs (the data scripts and training need requirements.txt). Used by render.yaml.
 # Pin scikit-learn/numpy/pandas/joblib to the versions the landslide model was trained with: see docs/DEPLOY.md.
 fastapi>=0.110
 uvicorn[standard]>=0.29

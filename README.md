@@ -195,8 +195,9 @@ sudo tailscale funnel --bg --https=443 127.0.0.1:8000   # fixed https address fo
 
 Open `/dashboard/` for staff and `/villager/` for villagers. `/health` shows what is configured.
 
-**Run it 24/7 for free:** [docs/DEPLOY.md](docs/DEPLOY.md) deploys it to a Hugging Face Space (no card needed), with
-the database backed up to a private dataset, sign-in codes by ntfy, and a GitHub Actions job that keeps it awake.
+**Run it 24/7 for free:** [docs/DEPLOY.md](docs/DEPLOY.md) deploys it on Render's free plan (`render.yaml`, no card
+needed), kept awake by UptimeRobot, with the database copied to a private Hugging Face dataset and staff sign-in
+codes sent by ntfy.
 
 ## Project layout
 
@@ -227,8 +228,8 @@ backend/tests/       150 tests (fake Karnataka, fake rain and rivers, no network
 - **Census 2011 boundaries.** Taluks created later (e.g. Kadaba, Moodbidri) appear under their old taluk.
 - **Kannada names are not official.** 71% come from OpenStreetMap; the 29% spelled by AI often differ from local spelling by a letter.
 - **Demo sign-in** shows the code on screen; switch `SMS_PROVIDER` to Twilio or Fast2SMS before sharing widely.
-- **Free hosting has limits.** On a free Hugging Face Space a restart can lose up to 5 minutes of reports, and the
-  Space sleeps if the keep-alive job stops (docs/DEPLOY.md).
+- **Free hosting has limits.** On Render's free plan a restart can lose up to 5 minutes of reports, and the server
+  sleeps if nothing visits it for 15 minutes (docs/DEPLOY.md).
 
 ## Next
 

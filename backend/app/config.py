@@ -109,9 +109,9 @@ def grid_config() -> dict:
     return cfg
 
 
-# ---------- running on a server (deploy/huggingface/) ----------
-# Hugging Face Spaces forget their disk when they restart, so the database is copied to a PRIVATE Hugging Face
-# dataset repository every few minutes and copied back at start-up. Off unless both are set.
+# ---------- running on a server (render.yaml, docs/DEPLOY.md) ----------
+# Free servers (Render) forget their disk when they restart or sleep, so the database is copied to a PRIVATE Hugging
+# Face dataset repository every few minutes and copied back at start-up. Off unless both are set.
 STATE_REPO = os.getenv("STATE_REPO", "").strip()          # e.g. DhanyaHegde18/disaster-ai-state
 HF_TOKEN = os.getenv("HF_TOKEN", "").strip()              # a Hugging Face token with write access
 STATE_BACKUP_MIN = float(os.getenv("STATE_BACKUP_MIN", "5"))
