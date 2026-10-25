@@ -1,0 +1,17 @@
+# Only what the server needs (the data scripts and training need requirements.txt).
+# Pin scikit-learn/numpy/pandas/joblib to the versions the landslide model was trained with: see docs/DEPLOY.md.
+fastapi>=0.110
+uvicorn[standard]>=0.29
+requests>=2.31
+python-dotenv>=1.0
+pydantic>=2
+scikit-learn>=1.4
+pandas>=2.0
+numpy
+joblib
+huggingface_hub>=0.24
+joblib==1.6.0
+numpy==2.5.4
+pandas==3.0.6
+scikit-learn==1.9.1
+scipy==1.18.1

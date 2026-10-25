@@ -123,6 +123,31 @@ def remove_official(phone: str) -> bool:
     return bool(removed)
 
 
+def seed_officials(text: str) -> tuple[list[dict], list[str]]:
+    """Add/update staff from the OFFICIALS setting (for servers without a shell):
+    one per line or ';' -> phone, name, role, district, taluk. Returns (added, problems)."""
+    added, problems = [], []
+    for raw in re.split(r"[;\n]", text or ""):
+        parts = [x.strip() for x in raw.split(",")]
+        if not parts or not parts[0]:
+            continue
+        phone, name = parts[0], (parts[1] if len(parts) > 1 and parts[1] else "Staff")
+        role = (parts[2] if len(parts) > 2 and parts[2] else "gp").lower()
+        district = parts[3] if len(parts) > 3 and parts[3] else None
+        taluk = parts[4] if len(parts) > 4 and parts[4] else None
+        try:
+            taluk_id = None
+            if taluk:
+                found = areas.get().find_taluk(taluk, district)
+                if len(found) != 1:
+                    raise AuthError(f"taluk '{taluk}' " + ("not found" if not found else "is ambiguous; add the district"))
+                taluk_id = found[0]["taluk_id"]
+            added.append(add_official(phone, name, role, taluk_id=taluk_id, district=district))
+        except AuthError as err:
+            problems.append(f"line '{name}': {err}")
+    return added, problems
+
+
 def list_officials() -> list[dict]:
     with database.connect() as c:
         rows = [dict(r) for r in c.execute("SELECT phone, name, role, district, taluk_id, created_at "
@@ -156,13 +181,23 @@ def request_code(raw_phone: str, purpose: str = STAFF) -> dict:
         if provider == "twilio":
             sms.twilio_start(phone)                 # Twilio makes and remembers the code
             code_hash = "twilio"
-        elif provider in ("fast2sms", "demo"):
+        elif provider in ("fast2sms", "demo", "ntfy"):
             code = f"{secrets.randbelow(10**6):06d}"
             code_hash = _hash(f"{phone}|{purpose}|{code}")
             if provider == "fast2sms":
                 sms.fast2sms_send(phone, code)
+            elif provider == "ntfy" and purpose == STAFF:
+                from . import notify                # staff code to the alarm topic their phone follows
+                topic = notify.topic_for_user(get_official(phone))
+                if not topic:
+                    raise AuthError("Sign-in codes go by ntfy, but no ntfy topic is set on the server "
+                                    "(NTFY_TOPIC_GP / NTFY_TOPIC_NGO).", 500)
+                if not notify.send_code(topic, code, mask(phone)):
+                    raise sms.SMSError("ntfy did not accept the message")
+            elif provider == "ntfy":
+                provider = "screen"                 # villagers have no ntfy topic: shown on screen
         else:
-            raise AuthError(f"Unknown SMS_PROVIDER '{provider}'. Use demo, twilio or fast2sms.", 500)
+            raise AuthError(f"Unknown SMS_PROVIDER '{provider}'. Use demo, twilio, fast2sms or ntfy.", 500)
     except sms.SMSError as err:
         raise AuthError(f"Could not send the code: {err}", 502)
 
@@ -172,7 +207,7 @@ def request_code(raw_phone: str, purpose: str = STAFF) -> dict:
                   (phone, purpose, code_hash, now.isoformat(timespec="seconds"),
                    (now + timedelta(minutes=config.OTP_TTL_MIN)).isoformat(timespec="seconds")))
     result = {"phone": mask(phone), "expires_in_min": config.OTP_TTL_MIN, "sent_by": provider}
-    if provider == "demo":
+    if provider in ("demo", "screen"):
         result["demo_code"] = code              # no SMS: the screen shows the code
     return result
 

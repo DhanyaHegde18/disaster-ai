@@ -1,0 +1,20 @@
+# Free Hugging Face Spaces go to sleep when nobody visits them for a while; a sleeping Space doesn't check the rain.
+# This visits it every 6 hours. Set the repository variable SPACE_URL (Settings -> Secrets and variables ->
+# Actions -> Variables), e.g. https://yourname-disaster-ai.hf.space
+name: keep the server awake
+on:
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    if: ${{ vars.SPACE_URL != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: visit /health (a sleeping Space can take a minute to wake up)
+        run: |
+          for i in 1 2 3; do
+            curl -fsS --max-time 120 "${{ vars.SPACE_URL }}/health" && exit 0
+            sleep 60
+          done
+          exit 1

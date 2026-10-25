@@ -51,6 +51,8 @@ SCHEDULER_FIRST_RUN_DELAY_S = 30   # wait a little after startup before the firs
 #   demo      code shown on screen (no SMS; for development and demos)
 #   twilio    Twilio Verify (free trial: up to 5 verified numbers, 30 days)
 #   fast2sms  Fast2SMS OTP route (any Indian number, paid per SMS)
+#   ntfy      free: staff codes go to the official's own ntfy alarm topic (the one their phone already follows);
+#             villagers' codes are shown on screen, as in demo mode (villagers have no ntfy topic)
 SMS_PROVIDER = os.getenv("SMS_PROVIDER", "demo").strip().lower()
 OTP_DEMO_MODE = SMS_PROVIDER == "demo"
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID", "")
@@ -105,3 +107,14 @@ def grid_config() -> dict:
     cfg = json.loads(path.read_text())
     cfg["demo"] = path == GRID_CONFIG_DEMO or cfg.get("demo", False)
     return cfg
+
+
+# ---------- running on a server (deploy/huggingface/) ----------
+# Hugging Face Spaces forget their disk when they restart, so the database is copied to a PRIVATE Hugging Face
+# dataset repository every few minutes and copied back at start-up. Off unless both are set.
+STATE_REPO = os.getenv("STATE_REPO", "").strip()          # e.g. DhanyaHegde18/disaster-ai-state
+HF_TOKEN = os.getenv("HF_TOKEN", "").strip()              # a Hugging Face token with write access
+STATE_BACKUP_MIN = float(os.getenv("STATE_BACKUP_MIN", "5"))
+# Dashboard staff without a shell on the server: one per line or ';'
+#   phone, name, role, district, taluk        e.g.  98xxxxxxxx, Ujire GP, gp, Dakshina Kannada, Belthangady
+OFFICIALS = os.getenv("OFFICIALS", "")

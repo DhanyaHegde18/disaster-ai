@@ -82,11 +82,24 @@ def _load(model_mtime: float, meta_mtime: float):
     return joblib.load(MODEL_FILE), json.loads(META_FILE.read_text())
 
 
+load_error: str | None = None
+
+
 def model():
-    """(model, meta) or None when no model has been trained yet."""
+    """(model, meta) or None when no model has been trained yet, or when it can't be loaded here (e.g. a server
+    with a different scikit-learn version): then warnings fall back to the rain rule and /health says why."""
+    global load_error
     if not (MODEL_FILE.exists() and META_FILE.exists()):
         return None
-    return _load(MODEL_FILE.stat().st_mtime, META_FILE.stat().st_mtime)
+    try:
+        loaded = _load(MODEL_FILE.stat().st_mtime, META_FILE.stat().st_mtime)
+        load_error = None
+        return loaded
+    except Exception as err:
+        if load_error is None:
+            print(f"[landslide] model could not be loaded, using the rain rule only: {type(err).__name__}: {err}", flush=True)
+        load_error = f"{type(err).__name__}: {str(err)[:160]}"
+        return None
 
 
 def level_for(prob: float, thresholds: dict) -> str:

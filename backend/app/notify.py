@@ -104,6 +104,18 @@ def topic_for_user(user: dict) -> str | None:
     return base
 
 
+def send_code(topic: str, code: str, who: str) -> bool:
+    """A dashboard sign-in code, to one staff member's own topic. True if ntfy accepted it."""
+    try:
+        r = requests.post(f"{config.NTFY_SERVER}/{topic}", timeout=10,
+                          data=f"Dashboard sign-in code for {who}: {code} (valid {config.OTP_TTL_MIN} min). "
+                               f"Don't share it.".encode("utf-8"),
+                          headers={"Title": "Sign-in code", "Priority": "4", "Tags": "key"})
+        return r.status_code < 300
+    except requests.RequestException:
+        return False
+
+
 def push(roles: tuple[str, ...], title: str, message: str, priority: int = HIGH,
          tags: str = "warning", path: str = "/", taluk_id: str | None = None) -> int:
     """Send to every configured topic for `roles` (and the place). Returns how many accepted it."""

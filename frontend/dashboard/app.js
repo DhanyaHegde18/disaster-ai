@@ -93,7 +93,9 @@ $("form-phone").addEventListener("submit", async (e) => {
   const btn = $("btn-send"); btn.disabled = true;
   try {
     const r = await api("/auth/request-code", { method: "POST", body: JSON.stringify({ phone: $("phone").value }) });
-    $("code-sent").textContent = `Code sent to ${r.phone}. It works for ${r.expires_in_min} minutes.`;
+    $("code-sent").textContent = r.sent_by === "ntfy"
+      ? `Code sent to the ntfy alarm app on your phone (your area's topic). It works for ${r.expires_in_min} minutes.`
+      : `Code sent to ${r.phone}. It works for ${r.expires_in_min} minutes.`;
     $("demo-code").hidden = !r.demo_code;
     if (r.demo_code) $("demo-code").innerHTML = `Demo mode (no SMS yet): your code is <b>${esc(r.demo_code)}</b>`;
     $("form-phone").hidden = true;

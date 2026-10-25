@@ -19,7 +19,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import areas, config, database
+from . import areas, config, database, state_backup
+from . import auth as auth_core
 from .auth import require_gp, require_official
 from .jobs import escalation, scheduler
 from . import notify
@@ -30,17 +31,24 @@ from .services import shelters as shelter_data
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    state_backup.restore()         # on a server that forgets its disk: bring the database back first
     database.init_db()  # create the tables on first run
     areas.get()                    # load the ~28,000 villages once
+    if config.OFFICIALS:           # staff listed in the server's settings (no shell on the server)
+        added, problems = auth_core.seed_officials(config.OFFICIALS)
+        print(f"[staff] {len(added)} from OFFICIALS" + (f"; problems: {problems}" if problems else ""), flush=True)
     shelter_data.sync_from_csv()   # relief centres + OpenStreetMap candidates (only if the files changed)
     tasks = []
     if config.SCHEDULER_ENABLED:
         tasks.append(asyncio.create_task(scheduler.scheduler_loop()))
     if notify.topics_for(("gp", "ngo")):          # phone reminders only if ntfy topics are set
         tasks.append(asyncio.create_task(escalation.escalation_loop()))
+    if state_backup.enabled():
+        tasks.append(asyncio.create_task(state_backup.backup_loop()))
     yield
     for t in tasks:
         t.cancel()      # stop background jobs cleanly when the server stops
+    await asyncio.gather(*tasks, return_exceptions=True)      # (the backup loop saves once more)
 
 
 app = FastAPI(
@@ -91,12 +99,16 @@ def health():
                         f"{len(grid['cells'])} rain-grid squares",
             "landslide_model": (lambda m: f"{m[1]['model']}, trained {m[1]['created']} on {m[1]['years'][0]}-{m[1]['years'][-1]}; "
                                           f"on its own raises a square up to {config.LANDSLIDE_MODEL_ALONE_MAX}"
-                                if m else "not trained yet (rain rule only)")(landslide.model()),
+                                if m else f"could not be loaded here ({landslide.load_error}); rain rule only"
+                                if landslide.load_error else "not trained yet (rain rule only)")(landslide.model()),
             "rivers": (lambda rc: f"{len(rivers.live_points(rc))} river points, flood levels from GloFAS {rc['years'][0]}-{rc['years'][-1]} "
                                   f"(built {rc['created']})" if rc else "not set up (run ml/scripts/build_rivers.py)")(rivers.river_config()),
             "alert_drafting": f"gemini ({config.GEMINI_MODEL})" if config.GEMINI_API_KEY else "template only (no GEMINI_API_KEY)",
             "automatic_scoring": f"every {config.SCORING_INTERVAL_MIN:g} min" if config.SCHEDULER_ENABLED else "off",
-            "sign_in": "demo codes on screen" if config.OTP_DEMO_MODE else f"SMS codes via {config.SMS_PROVIDER}",
+            "sign_in": ("demo codes on screen" if config.OTP_DEMO_MODE else
+                        "staff codes by ntfy to their area's alarm topic; villager codes on screen"
+                        if config.SMS_PROVIDER == "ntfy" else f"SMS codes via {config.SMS_PROVIDER}"),
+            "database_backup": state_backup.summary(),
             "public_address": (f"{config.PUBLIC_URL} (from .env)" if config.PUBLIC_URL
                                else f"{notify.learned_public_url()} (learned from the dashboard)" if notify.learned_public_url()
                                else "not learned yet: sign in to the dashboard through your public address"),
