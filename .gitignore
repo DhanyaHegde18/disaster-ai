@@ -14,3 +14,6 @@ backend/data/latest_risk.json
 backend/data/alerts.db
 .pytest_cache/
 *.db-journal
+kannada.log
+kannada.log
+rivers.log
