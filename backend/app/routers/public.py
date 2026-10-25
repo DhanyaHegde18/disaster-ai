@@ -31,7 +31,8 @@ def village_or_404(village_id: str) -> dict:
 
 def village_view(v: dict) -> dict:
     a = areas.get()
-    return {**areas.public(v), "district_kn": a.district_kn.get(v["district"])}
+    t = a.taluk(v["taluk_id"]) or {}
+    return {**areas.public(v), "district_kn": a.district_kn.get(v["district"]), "taluk_kn": t.get("name_kn")}
 
 
 @router.get("/districts")
@@ -50,7 +51,8 @@ def villages(taluk_id: str | None = None, district: str | None = None,
     if not taluk_id and not q.strip():
         raise HTTPException(status_code=422, detail="Give a taluk_id or a name to search for.")
     found = a.search(q, taluk_id=taluk_id, district=district, limit=limit)
-    return [{k: v[k] for k in ("village_id", "name", "name_kn", "taluk", "taluk_id", "district")} for v in found]
+    return [{**{k: v[k] for k in ("village_id", "name", "name_kn", "taluk", "taluk_id", "district")},
+             "taluk_kn": (a.taluk(v["taluk_id"]) or {}).get("name_kn")} for v in found]
 
 
 @router.get("/village/{village_id}")

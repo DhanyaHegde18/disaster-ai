@@ -1,0 +1,905 @@
+{
+ "created": "2026-10-25",
+ "source": "GloFAS v4 river discharge via Open-Meteo flood API",
+ "years": [
+  2005,
+  2006,
+  2007,
+  2008,
+  2009,
+  2010,
+  2011,
+  2012,
+  2013,
+  2014,
+  2015,
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022
+ ],
+ "points": {
+  "krishna-kudachi": {
+   "river": "Krishna",
+   "river_kn": "ಕೃಷ್ಣಾ",
+   "place": "Kudachi",
+   "lat": 16.62,
+   "lon": 74.86,
+   "radius_km": 10.0,
+   "moved_km": 0.0,
+   "medium": 5040.6,
+   "high": 6551.7,
+   "record": 11427.8,
+   "top_years": [
+    2019,
+    2020,
+    2008
+   ],
+   "years": 18,
+   "villages": 17,
+   "taluk_ids": [
+    "belagavi:athani",
+    "belagavi:raibag"
+   ],
+   "cells": [
+    "16.50_74.75",
+    "16.50_75.00",
+    "16.75_74.75",
+    "16.75_75.00"
+   ],
+   "places": [
+    "Kudachi Tmc",
+    "Ugar K H",
+    "Ainapur"
+   ],
+   "small": false
+  },
+  "krishna-almatti": {
+   "river": "Krishna",
+   "river_kn": "ಕೃಷ್ಣಾ",
+   "place": "Almatti",
+   "lat": 16.33,
+   "lon": 75.88,
+   "radius_km": 10.0,
+   "moved_km": 0.0,
+   "medium": 6003.9,
+   "high": 8056.5,
+   "record": 13212.0,
+   "top_years": [
+    2019,
+    2020,
+    2008
+   ],
+   "years": 18,
+   "villages": 43,
+   "taluk_ids": [
+    "bagalkote:bagalkot",
+    "bagalkote:bilgi",
+    "vijayapura:basavana-bagevadi",
+    "vijayapura:muddebihal"
+   ],
+   "cells": [
+    "16.25_75.75",
+    "16.25_76.00",
+    "16.50_75.75",
+    "16.50_76.00"
+   ],
+   "places": [
+    "Nidagundi",
+    "Araladinni",
+    "Almatti Sitimani Nac"
+   ],
+   "small": false
+  },
+  "krishna-narayanpur": {
+   "river": "Krishna",
+   "river_kn": "ಕೃಷ್ಣಾ",
+   "place": "Narayanpur",
+   "lat": 16.21,
+   "lon": 76.3,
+   "radius_km": 10.0,
+   "moved_km": 5.3,
+   "medium": 6769.2,
+   "high": 9397.6,
+   "record": 14059.5,
+   "top_years": [
+    2019,
+    2020,
+    2013
+   ],
+   "years": 18,
+   "villages": 42,
+   "taluk_ids": [
+    "bagalkote:hungund",
+    "raichur:lingsugur",
+    "vijayapura:muddebihal",
+    "yadgir:shorapur"
+   ],
+   "cells": [
+    "16.25_76.25",
+    "16.25_76.50"
+   ],
+   "places": [
+    "Naltawad",
+    "Narayanpur",
+    "Narayanapur Nac"
+   ],
+   "small": false
+  },
+  "krishna-deosugur": {
+   "river": "Krishna",
+   "river_kn": "ಕೃಷ್ಣಾ",
+   "place": "Deosugur",
+   "lat": 16.37,
+   "lon": 77.35,
+   "radius_km": 10.0,
+   "moved_km": 0.0,
+   "medium": 11417.4,
+   "high": 14770.4,
+   "record": 23877.1,
+   "top_years": [
+    2019,
+    2009,
+    2020
+   ],
+   "years": 18,
+   "villages": 21,
+   "taluk_ids": [
+    "raichur:raichur"
+   ],
+   "cells": [
+    "16.25_77.25",
+    "16.25_77.50",
+    "16.50_77.25",
+    "16.50_77.50"
+   ],
+   "places": [
+    "Shaktinagar Nmct",
+    "Deosugur",
+    "Chicksugur"
+   ],
+   "small": false
+  },
+  "bhima-afzalpur": {
+   "river": "Bhima",
+   "river_kn": "ಭೀಮಾ",
+   "place": "Afzalpur",
+   "lat": 17.15,
+   "lon": 76.31,
+   "radius_km": 10.0,
+   "moved_km": 7.7,
+   "medium": 4355.5,
+   "high": 6197.4,
+   "record": 10091.5,
+   "top_years": [
+    2019,
+    2020,
+    2006
+   ],
+   "years": 18,
+   "villages": 27,
+   "taluk_ids": [
+    "kalaburagi:afzalpur",
+    "vijayapura:sindgi"
+   ],
+   "cells": [
+    "17.00_76.25",
+    "17.00_76.50",
+    "17.25_76.25",
+    "17.25_76.50"
+   ],
+   "places": [
+    "Afzalpur",
+    "Devangao",
+    "Bommanhalli"
+   ],
+   "small": false
+  },
+  "bhima-jewargi": {
+   "river": "Bhima",
+   "river_kn": "ಭೀಮಾ",
+   "place": "Jewargi",
+   "lat": 17.02,
+   "lon": 76.77,
+   "radius_km": 10.0,
+   "moved_km": 0.0,
+   "medium": 4399.6,
+   "high": 6770.7,
+   "record": 10302.9,
+   "top_years": [
+    2019,
+    2020,
+    2006
+   ],
+   "years": 18,
+   "villages": 24,
+   "taluk_ids": [
+    "kalaburagi:jevargi",
+    "kalaburagi:kalaburagi"
+   ],
+   "cells": [
+    "17.00_76.75"
+   ],
+   "places": [
+    "Jevargi B",
+    "Andola",
+    "Ferozabad"
+   ],
+   "small": false
+  },
+  "bhima-yadgir": {
+   "river": "Bhima",
+   "river_kn": "ಭೀಮಾ",
+   "place": "Yadgir",
+   "lat": 16.7,
+   "lon": 77.08,
+   "radius_km": 10.0,
+   "moved_km": 7.7,
+   "medium": 4491.2,
+   "high": 7417.8,
+   "record": 10616.0,
+   "top_years": [
+    2019,
+    2020,
+    2009
+   ],
+   "years": 18,
+   "villages": 24,
+   "taluk_ids": [
+    "yadgir:shahpur",
+    "yadgir:yadgir"
+   ],
+   "cells": [
+    "16.75_77.00",
+    "16.75_77.25"
+   ],
+   "places": [
+    "Yadgir Tmc",
+    "Naikal",
+    "Kurkunda"
+   ],
+   "small": false
+  },
+  "ghataprabha-gokak": {
+   "river": "Ghataprabha",
+   "river_kn": "ಘಟಪ್ರಭಾ",
+   "place": "Gokak",
+   "lat": 16.17,
+   "lon": 74.82,
+   "radius_km": 10.0,
+   "moved_km": 0.0,
+   "medium": 1209.8,
+   "high": 1645.7,
+   "record": 1976.0,
+   "top_years": [
+    2019,
+    2020,
+    2008
+   ],
+   "years": 18,
+   "villages": 23,
+   "taluk_ids": [
+    "belagavi:gokak"
+   ],
+   "cells": [
+    "16.00_74.75",
+    "16.00_75.00",
+    "16.25_74.75",
+    "16.25_75.00"
+   ],
+   "places": [
+    "Gokak Tmc",
+    "Gokak Falls Nac",
+    "Shindikurbet"
+   ],
+   "small": false
+  },
+  "ghataprabha-bagalkot": {
+   "river": "Ghataprabha",
+   "river_kn": "ಘಟಪ್ರಭಾ",
+   "place": "Bagalkot",
+   "lat": 16.18,
+   "lon": 75.7,
+   "radius_km": 10.0,
+   "moved_km": 0.0,
+   "medium": 1412.7,
+   "high": 1721.7,
+   "record": 2112.5,
+   "top_years": [
+    2019,
+    2020,
+    2022
+   ],
+   "years": 18,
+   "villages": 29,
+   "taluk_ids": [
+    "bagalkote:badami",
+    "bagalkote:bagalkot",
+    "bagalkote:bilgi"
+   ],
+   "cells": [
+    "16.00_75.75",
+    "16.25_75.50",
+    "16.25_75.75"
+   ],
+   "places": [
+    "Bagalkot Cmc",
+    "Gaddankeri",
+    "Muranal"
+   ],
+   "small": false
+  },
+  "malaprabha-ramdurg": {
+   "river": "Malaprabha",
+   "river_kn": "ಮಲಪ್ರಭಾ",
+   "place": "Ramdurg",
+   "lat": 15.95,
+   "lon": 75.3,
+   "radius_km": 10.0,
+   "moved_km": 0.0,
+   "medium": 400.3,
+   "high": 716.3,
+   "record": 1041.3,
+   "top_years": [
+    2020,
+    2013,
+    2019
+   ],
+   "years": 18,
+   "villages": 32,
+   "taluk_ids": [
+    "belagavi:ramdurg"
+   ],
+   "cells": [
+    "15.75_75.25",
+    "16.00_75.25",
+    "16.00_75.50"
+   ],
+   "places": [
+    "Ramdurg Tmc",
+    "Chilamur",
+    "Halagatti"
+   ],
+   "small": false
+  },
+  "tungabhadra-harihar": {
+   "river": "Tungabhadra",
+   "river_kn": "ತುಂಗಭದ್ರಾ",
+   "place": "Harihar",
+   "lat": 14.52,
+   "lon": 75.75,
+   "radius_km": 10.0,
+   "moved_km": 5.4,
+   "medium": 2117.5,
+   "high": 2889.6,
+   "record": 4538.4,
+   "top_years": [
+    2021,
+    2009,
+    2020
+   ],
+   "years": 18,
+   "villages": 47,
+   "taluk_ids": [
+    "davanagere:davanagere",
+    "davanagere:harihar",
+    "haveri:ranebennur"
+   ],
+   "cells": [
+    "14.50_75.75"
+   ],
+   "places": [
+    "Harihar Tmc",
+    "Bhanuvalli",
+    "Belludi"
+   ],
+   "small": false
+  },
+  "tungabhadra-hampi": {
+   "river": "Tungabhadra",
+   "river_kn": "ತುಂಗಭದ್ರಾ",
+   "place": "Hampi",
+   "lat": 15.34,
+   "lon": 76.41,
+   "radius_km": 10.0,
+   "moved_km": 5.4,
+   "medium": 2877.7,
+   "high": 4076.0,
+   "record": 9203.5,
+   "top_years": [
+    2021,
+    2009,
+    2020
+   ],
+   "years": 18,
+   "villages": 51,
+   "taluk_ids": [
+    "koppal:gangavathi",
+    "koppal:koppal",
+    "vijayanagara:hosapete"
+   ],
+   "cells": [
+    "15.25_76.25",
+    "15.25_76.50",
+    "15.50_76.25",
+    "15.50_76.50"
+   ],
+   "places": [
+    "Hospet Cmc",
+    "Amaravati Tmc",
+    "Malapanagudi"
+   ],
+   "small": false
+  },
+  "tungabhadra-siruguppa": {
+   "river": "Tungabhadra",
+   "river_kn": "ತುಂಗಭದ್ರಾ",
+   "place": "Siruguppa",
+   "lat": 15.62,
+   "lon": 76.8,
+   "radius_km": 10.0,
+   "moved_km": 10.7,
+   "medium": 2993.3,
+   "high": 4162.7,
+   "record": 10255.5,
+   "top_years": [
+    2009,
+    2021,
+    2020
+   ],
+   "years": 18,
+   "villages": 23,
+   "taluk_ids": [
+    "ballari:siruguppa",
+    "koppal:gangavathi",
+    "raichur:sindhanur"
+   ],
+   "cells": [
+    "15.50_76.75",
+    "15.50_77.00",
+    "15.75_76.75"
+   ],
+   "places": [
+    "Roudkunda",
+    "Salgunda",
+    "Dasanur"
+   ],
+   "small": false
+  },
+  "tunga-shivamogga": {
+   "river": "Tunga",
+   "river_kn": "ತುಂಗಾ",
+   "place": "Shivamogga",
+   "lat": 14.03,
+   "lon": 75.62,
+   "radius_km": 8.0,
+   "moved_km": 12.4,
+   "medium": 1678.8,
+   "high": 2080.6,
+   "record": 2534.1,
+   "top_years": [
+    2021,
+    2011,
+    2020
+   ],
+   "years": 18,
+   "villages": 37,
+   "taluk_ids": [
+    "davanagere:honnali",
+    "shivamogga:bhadravathi",
+    "shivamogga:shivamogga"
+   ],
+   "cells": [
+    "14.00_75.50",
+    "14.00_75.75"
+   ],
+   "places": [
+    "Holalur",
+    "Holehonnur",
+    "Haramaghatta"
+   ],
+   "small": false
+  },
+  "bhadra-bhadravati": {
+   "river": "Bhadra",
+   "river_kn": "ಭದ್ರಾ",
+   "place": "Bhadravati",
+   "lat": 13.84,
+   "lon": 75.7,
+   "radius_km": 8.0,
+   "moved_km": 0.0,
+   "medium": 739.6,
+   "high": 881.8,
+   "record": 1204.0,
+   "top_years": [
+    2011,
+    2021,
+    2020
+   ],
+   "years": 18,
+   "villages": 61,
+   "taluk_ids": [
+    "shivamogga:bhadravathi",
+    "shivamogga:shivamogga"
+   ],
+   "cells": [
+    "13.75_75.75",
+    "14.00_75.75"
+   ],
+   "places": [
+    "Bhadravati New Town Nac",
+    "Bhadravati Tmc",
+    "Donabaghatta"
+   ],
+   "small": false
+  },
+  "kali-dandeli": {
+   "river": "Kali",
+   "river_kn": "ಕಾಳಿ",
+   "place": "Dandeli",
+   "lat": 15.2,
+   "lon": 74.62,
+   "radius_km": 8.0,
+   "moved_km": 5.6,
+   "medium": 652.1,
+   "high": 778.9,
+   "record": 921.6,
+   "top_years": [
+    2019,
+    2008,
+    2013
+   ],
+   "years": 18,
+   "villages": 19,
+   "taluk_ids": [
+    "uttara-kannada:haliyal",
+    "uttara-kannada:joida"
+   ],
+   "cells": [
+    "15.25_74.50",
+    "15.25_74.75"
+   ],
+   "places": [
+    "Dandeli Cmc",
+    "Ambikanagara Nmct",
+    "Badakanshirda"
+   ],
+   "small": false
+  },
+  "sharavathi-honnavar": {
+   "river": "Sharavathi",
+   "river_kn": "ಶರಾವತಿ",
+   "place": "Honnavar",
+   "lat": 14.28,
+   "lon": 74.42,
+   "radius_km": 8.0,
+   "moved_km": 5.4,
+   "medium": 610.7,
+   "high": 841.6,
+   "record": 974.0,
+   "top_years": [
+    2007,
+    2011,
+    2022
+   ],
+   "years": 18,
+   "villages": 20,
+   "taluk_ids": [
+    "uttara-kannada:honavar",
+    "uttara-kannada:kumta"
+   ],
+   "cells": [
+    "14.25_74.50"
+   ],
+   "places": [
+    "Honavar Tmc",
+    "Haldipur",
+    "Kasarkod"
+   ],
+   "small": false
+  },
+  "aghanashini-kumta": {
+   "river": "Aghanashini",
+   "river_kn": "ಅಘನಾಶಿನಿ",
+   "place": "Kumta",
+   "lat": 14.48,
+   "lon": 74.45,
+   "radius_km": 8.0,
+   "moved_km": 0.0,
+   "medium": 735.4,
+   "high": 823.9,
+   "record": 917.3,
+   "top_years": [
+    2020,
+    2021,
+    2019
+   ],
+   "years": 18,
+   "villages": 40,
+   "taluk_ids": [
+    "uttara-kannada:kumta"
+   ],
+   "cells": [
+    "14.50_74.50"
+   ],
+   "places": [
+    "Kumta Tmc",
+    "Hegde",
+    "Mirjan"
+   ],
+   "small": false
+  },
+  "netravati-bantwal": {
+   "river": "Netravati",
+   "river_kn": "ನೇತ್ರಾವತಿ",
+   "place": "Bantwal",
+   "lat": 12.89,
+   "lon": 75.03,
+   "radius_km": 8.0,
+   "moved_km": 0.0,
+   "medium": 1145.9,
+   "high": 1426.2,
+   "record": 1491.8,
+   "top_years": [
+    2009,
+    2019,
+    2020
+   ],
+   "years": 18,
+   "villages": 27,
+   "taluk_ids": [
+    "dakshina-kannada:bantwal",
+    "dakshina-kannada:mangaluru"
+   ],
+   "cells": [
+    "12.75_75.00",
+    "13.00_75.00"
+   ],
+   "places": [
+    "Bantval Tmc",
+    "Pudu Nmct",
+    "Munnur"
+   ],
+   "small": false
+  },
+  "netravati-uppinangady": {
+   "river": "Netravati",
+   "river_kn": "ನೇತ್ರಾವತಿ",
+   "place": "Uppinangady",
+   "lat": 12.84,
+   "lon": 75.2,
+   "radius_km": 8.0,
+   "moved_km": 5.4,
+   "medium": 1053.5,
+   "high": 1307.2,
+   "record": 1382.6,
+   "top_years": [
+    2009,
+    2019,
+    2020
+   ],
+   "years": 18,
+   "villages": 23,
+   "taluk_ids": [
+    "dakshina-kannada:bantwal",
+    "dakshina-kannada:belthangady",
+    "dakshina-kannada:puttur"
+   ],
+   "cells": [
+    "12.75_75.25",
+    "13.00_75.25"
+   ],
+   "places": [
+    "Uppinangady",
+    "Ilanthila",
+    "Kedila"
+   ],
+   "small": false
+  },
+  "kumaradhara-subrahmanya": {
+   "river": "Kumaradhara",
+   "river_kn": "ಕುಮಾರಧಾರಾ",
+   "place": "Subrahmanya",
+   "lat": 12.71,
+   "lon": 75.51,
+   "radius_km": 8.0,
+   "moved_km": 12.2,
+   "medium": 173.2,
+   "high": 208.2,
+   "record": 231.8,
+   "top_years": [
+    2018,
+    2009,
+    2020
+   ],
+   "years": 18,
+   "villages": 13,
+   "taluk_ids": [
+    "dakshina-kannada:puttur",
+    "dakshina-kannada:sullia"
+   ],
+   "cells": [
+    "12.75_75.50"
+   ],
+   "places": [
+    "Kutrupadi",
+    "Aithoor",
+    "Yedamangala"
+   ],
+   "small": true
+  },
+  "cauvery-kushalnagar": {
+   "river": "Cauvery",
+   "river_kn": "ಕಾವೇರಿ",
+   "place": "Kushalnagar",
+   "lat": 12.46,
+   "lon": 75.91,
+   "radius_km": 8.0,
+   "moved_km": 5.4,
+   "medium": 430.0,
+   "high": 603.0,
+   "record": 678.2,
+   "top_years": [
+    2018,
+    2007,
+    2022
+   ],
+   "years": 18,
+   "villages": 24,
+   "taluk_ids": [
+    "kodagu:somwarpet",
+    "mysuru:periyapatna"
+   ],
+   "cells": [
+    "12.50_75.75",
+    "12.50_76.00"
+   ],
+   "places": [
+    "Kushalnagar Mp",
+    "Kudumangalore",
+    "Mullusoge"
+   ],
+   "small": false
+  },
+  "cauvery-srirangapatna": {
+   "river": "Cauvery",
+   "river_kn": "ಕಾವೇರಿ",
+   "place": "Srirangapatna",
+   "lat": 12.42,
+   "lon": 76.69,
+   "radius_km": 8.0,
+   "moved_km": 0.0,
+   "medium": 807.2,
+   "high": 1349.9,
+   "record": 1814.5,
+   "top_years": [
+    2011,
+    2020,
+    2009
+   ],
+   "years": 18,
+   "villages": 56,
+   "taluk_ids": [
+    "mandya:pandavapura",
+    "mandya:srirangapatna",
+    "mysuru:mysuru"
+   ],
+   "cells": [
+    "12.25_76.75",
+    "12.50_76.50",
+    "12.50_76.75"
+   ],
+   "places": [
+    "Shrirangapattana Tmc",
+    "Belagola",
+    "Kennalu"
+   ],
+   "small": false
+  },
+  "cauvery-shivanasamudra": {
+   "river": "Cauvery",
+   "river_kn": "ಕಾವೇರಿ",
+   "place": "Shivanasamudra",
+   "lat": 12.27,
+   "lon": 77.12,
+   "radius_km": 8.0,
+   "moved_km": 5.4,
+   "medium": 1488.2,
+   "high": 2211.8,
+   "record": 2804.4,
+   "top_years": [
+    2011,
+    2020,
+    2018
+   ],
+   "years": 18,
+   "villages": 33,
+   "taluk_ids": [
+    "chamarajanagar:kollegala",
+    "mandya:malavalli",
+    "mysuru:t-narasipura"
+   ],
+   "cells": [
+    "12.25_77.00",
+    "12.25_77.25"
+   ],
+   "places": [
+    "Belakavadi Rural",
+    "Belakavadi Mp",
+    "Holesalu"
+   ],
+   "small": false
+  },
+  "kabini-nanjangud": {
+   "river": "Kabini",
+   "river_kn": "ಕಬಿನಿ",
+   "place": "Nanjangud",
+   "lat": 12.12,
+   "lon": 76.68,
+   "radius_km": 8.0,
+   "moved_km": 0.0,
+   "medium": 925.0,
+   "high": 1039.9,
+   "record": 1376.2,
+   "top_years": [
+    2018,
+    2021,
+    2011
+   ],
+   "years": 18,
+   "villages": 35,
+   "taluk_ids": [
+    "mysuru:mysuru",
+    "mysuru:nanjangud"
+   ],
+   "cells": [
+    "12.00_76.50",
+    "12.00_76.75",
+    "12.25_76.75"
+   ],
+   "places": [
+    "Nanjangud Tmc",
+    "Kalale",
+    "Tandavapura"
+   ],
+   "small": false
+  },
+  "hemavathi-holenarasipur": {
+   "river": "Hemavathi",
+   "river_kn": "ಹೇಮಾವತಿ",
+   "place": "Holenarasipur",
+   "lat": 12.79,
+   "lon": 76.19,
+   "radius_km": 8.0,
+   "moved_km": 5.4,
+   "medium": 481.3,
+   "high": 673.7,
+   "record": 823.1,
+   "top_years": [
+    2011,
+    2009,
+    2020
+   ],
+   "years": 18,
+   "villages": 88,
+   "taluk_ids": [
+    "hassan:arkalgud",
+    "hassan:hassan",
+    "hassan:holenarasipura"
+   ],
+   "cells": [
+    "12.75_76.00",
+    "12.75_76.25"
+   ],
+   "places": [
+    "Hole Narsipur Tmc",
+    "Doddabyagathavalli",
+    "Bagivalu"
+   ],
+   "small": false
+  }
+ }
+}

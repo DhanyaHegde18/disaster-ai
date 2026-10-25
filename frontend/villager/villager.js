@@ -9,7 +9,7 @@ const T = {
     app: "ಊರಿನ ಎಚ್ಚರಿಕೆ",
     tagline: "ಪ್ರವಾಹ ಮತ್ತು ಭೂಕುಸಿತ ಮುನ್ನೆಚ್ಚರಿಕೆ",
     choose: "ನಿಮ್ಮ ಊರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
-    searchLabel: "ಊರಿನ ಹೆಸರು ಬರೆಯಿರಿ (ಇಂಗ್ಲಿಷ್ ಅಕ್ಷರಗಳಲ್ಲಿ)",
+    searchLabel: "ಊರಿನ ಹೆಸರು ಬರೆಯಿರಿ (ಕನ್ನಡ ಅಥವಾ ಇಂಗ್ಲಿಷ್)",
     orBrowse: "ಅಥವಾ ಜಿಲ್ಲೆ ಮತ್ತು ತಾಲ್ಲೂಕು ಆಯ್ಕೆಮಾಡಿ:",
     district: "ಜಿಲ್ಲೆ", taluk: "ತಾಲ್ಲೂಕು",
     pickDistrict: "ಜಿಲ್ಲೆ ಆಯ್ಕೆಮಾಡಿ", pickTaluk: "ತಾಲ್ಲೂಕು ಆಯ್ಕೆಮಾಡಿ",
@@ -103,7 +103,7 @@ const T = {
     app: "Village Alert",
     tagline: "Flood and landslide warnings",
     choose: "Choose your village",
-    searchLabel: "Type your village's name",
+    searchLabel: "Type your village's name (English or Kannada)",
     orBrowse: "Or choose your district and taluk:",
     district: "District", taluk: "Taluk",
     pickDistrict: "Choose district", pickTaluk: "Choose taluk",
@@ -239,12 +239,13 @@ $("btn-lang").addEventListener("click", () => {
 
 // ---------- village choice: search the whole state, or district -> taluk -> village ----------
 const districtName = (d) => S.lang === "kn" ? (d.name_kn || d.name) : d.name;
+const talukName = (x) => S.lang === "kn" ? (x.taluk_kn || x.name_kn || x.taluk || x.name) : (x.taluk || x.name);
 
 function villageButtons(list, withPlace) {
   return list.map((v) => `
     <button type="button" data-id="${esc(v.village_id)}">
       <b>${esc(S.lang === "kn" ? (v.name_kn || v.name) : v.name)}</b>
-      <span>${withPlace ? `${esc(v.taluk)} · ${esc(districtName(S.districts.find((d) => d.name === v.district) || { name: v.district }))}` : ""}</span>
+      <span>${withPlace ? `${esc(talukName({ taluk: v.taluk, taluk_kn: v.taluk_kn }))} · ${esc(districtName(S.districts.find((d) => d.name === v.district) || { name: v.district }))}` : ""}</span>
     </button>`).join("");
 }
 
@@ -268,7 +269,7 @@ function renderTaluks() {
   const ts = $("pick-taluk"), current = ts.value;
   ts.disabled = !d;
   ts.innerHTML = `<option value="">${esc(t("pickTaluk"))}</option>` +
-    (d ? d.taluks.map((x) => `<option value="${esc(x.taluk_id)}">${esc(x.name)}</option>`).join("") : "");
+    (d ? d.taluks.map((x) => `<option value="${esc(x.taluk_id)}">${esc(talukName({ name: x.name, name_kn: x.name_kn }))}</option>`).join("") : "");
   if (d && d.taluks.some((x) => x.taluk_id === current)) ts.value = current;
 }
 
@@ -281,7 +282,7 @@ function renderSearchHits() {
 
 function renderTalukVillages() {
   const q = $("v-filter").value.trim().toLowerCase();
-  const list = S.talukVillages.filter((v) => !q || v.name.toLowerCase().includes(q));
+  const list = S.talukVillages.filter((v) => !q || v.name.toLowerCase().includes(q) || (v.name_kn || "").includes(q));
   $("v-filter").hidden = !S.talukVillages.length;
   $("village-buttons").innerHTML = villageButtons(list, false);
   bindVillageButtons($("village-buttons"));
@@ -492,7 +493,7 @@ function renderStatus() {
   const d = S.data;
   const v = d.village;
   $("place-name").textContent = S.lang === "kn" ? (v.name_kn || v.name) : v.name;
-  $("place-sub").textContent = `${v.taluk} ${t("talukWord")}, ${S.lang === "kn" ? (v.district_kn || v.district) : v.district}`;
+  $("place-sub").textContent = `${talukName(v)} ${t("talukWord")}, ${S.lang === "kn" ? (v.district_kn || v.district) : v.district}`;
   $("call").href = `tel:${d.emergency_number || "112"}`;
 
   if (d.active.length) {

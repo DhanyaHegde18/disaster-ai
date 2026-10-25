@@ -15,12 +15,19 @@ GRID_CONFIG = APP_DIR / "grid_config.json"          # written by ml/scripts/buil
 GRID_CONFIG_DEMO = APP_DIR / "grid_config.demo.json"  # placeholder thresholds, used until you run build_grid.py
 VILLAGES_CSV = PROJECT_DIR / "ml" / "data" / "karnataka_villages.csv"   # ml/scripts/build_villages.py
 AREAS_JSON = PROJECT_DIR / "ml" / "data" / "karnataka_areas.json"
+# Kannada names (ml/scripts/fetch_kannada_names.py); hand corrections in the fixes file win over both
+VILLAGE_NAMES_KN_CSV = PROJECT_DIR / "ml" / "data" / "village_names_kn.csv"
+TALUK_NAMES_KN_CSV = PROJECT_DIR / "ml" / "data" / "taluk_names_kn.csv"
+NAME_KN_FIXES_CSV = PROJECT_DIR / "ml" / "data" / "name_kn_fixes.csv"
 SHELTER_CANDIDATES_CSV = PROJECT_DIR / "ml" / "data" / "shelter_candidates.csv"  # ml/scripts/fetch_osm_buildings.py
 LATEST_RISK_FILE = BACKEND_DIR / "data" / "latest_risk.json"
 ALERTS_DB = BACKEND_DIR / "data" / "alerts.db"
 SHELTERS_CSV = PROJECT_DIR / "ml" / "data" / "shelters.csv"   # relief centres; edit this file to add real ones
 
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
+FLOOD_URL = "https://flood-api.open-meteo.com/v1/flood"        # GloFAS river discharge (ml/scripts/build_rivers.py)
+RIVER_CONFIG = APP_DIR / "river_config.json"                    # river flood levels; rivers are skipped until it exists
+RIVER_DAYS_AHEAD = 5                                            # a river warning looks this many days ahead
 TIMEZONE = "Asia/Kolkata"
 CACHE_MINUTES = 60          # /risk reuses results younger than this instead of calling the API again
 REQUEST_TIMEOUT_S = 30

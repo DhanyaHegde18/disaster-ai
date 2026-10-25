@@ -24,7 +24,7 @@ from .auth import require_gp, require_official
 from .jobs import escalation, scheduler
 from . import notify
 from .routers import alerts, auth, public, relief, risk, shelters, villagers
-from .services import landslide
+from .services import landslide, rivers
 from .services import shelters as shelter_data
 
 
@@ -92,6 +92,8 @@ def health():
             "landslide_model": (lambda m: f"{m[1]['model']}, trained {m[1]['created']} on {m[1]['years'][0]}-{m[1]['years'][-1]}; "
                                           f"on its own raises a square up to {config.LANDSLIDE_MODEL_ALONE_MAX}"
                                 if m else "not trained yet (rain rule only)")(landslide.model()),
+            "rivers": (lambda rc: f"{len(rivers.live_points(rc))} river points, flood levels from GloFAS {rc['years'][0]}-{rc['years'][-1]} "
+                                  f"(built {rc['created']})" if rc else "not set up (run ml/scripts/build_rivers.py)")(rivers.river_config()),
             "alert_drafting": f"gemini ({config.GEMINI_MODEL})" if config.GEMINI_API_KEY else "template only (no GEMINI_API_KEY)",
             "automatic_scoring": f"every {config.SCORING_INTERVAL_MIN:g} min" if config.SCHEDULER_ENABLED else "off",
             "sign_in": "demo codes on screen" if config.OTP_DEMO_MODE else f"SMS codes via {config.SMS_PROVIDER}",

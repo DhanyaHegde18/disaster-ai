@@ -83,6 +83,10 @@ def world(tmp_path, monkeypatch):
     w = World(tmp_path)
     monkeypatch.setattr(config, "VILLAGES_CSV", vcsv)
     monkeypatch.setattr(config, "AREAS_JSON", areas_json)
+    monkeypatch.setattr(config, "VILLAGE_NAMES_KN_CSV", tmp_path / "village_names_kn.csv")
+    monkeypatch.setattr(config, "TALUK_NAMES_KN_CSV", tmp_path / "taluk_names_kn.csv")
+    monkeypatch.setattr(config, "NAME_KN_FIXES_CSV", tmp_path / "name_kn_fixes.csv")
+    monkeypatch.setattr(config, "RIVER_CONFIG", tmp_path / "river_config.json")   # no rivers unless a test adds them
     monkeypatch.setattr(config, "ALERTS_DB", tmp_path / "alerts.db")
     monkeypatch.setattr(config, "LATEST_RISK_FILE", tmp_path / "latest_risk.json")
     monkeypatch.setattr(config, "SHELTERS_CSV", tmp_path / "shelters.csv")

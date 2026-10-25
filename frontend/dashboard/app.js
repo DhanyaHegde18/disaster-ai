@@ -9,7 +9,7 @@ const state = { risk: null, alerts: [], tab: "pending", scheduler: null, health:
 const NEED_LABEL = { rescue: "Rescue needed", food: "Food", water: "Drinking water", medicine: "Medicine", elderly_help: "Elderly / disabled help" };
 const SHELTER_STATUS = { open: "Open", full: "Full", closed: "Not open", candidate: "Possible" };
 const LEVEL_ORDER = { LOW: 0, MEDIUM: 1, HIGH: 2 };
-let map, cellLayer, villageLayer, shelterLayer, candLayer, addMarker = null;
+let map, cellLayer, villageLayer, riverLayer, shelterLayer, candLayer, addMarker = null;
 
 // ---------- helpers ----------
 const $ = (id) => document.getElementById(id);
@@ -311,6 +311,11 @@ function renderStatus() {
   const r = state.risk, s = state.scheduler;
   const parts = [];
   if (r) parts.push(`Rain checked ${fmtTime(r.generated_at)}`);
+  if (r && r.rivers && r.rivers.length) {
+    const rising = r.rivers.filter((p) => p.level !== "LOW").length;
+    parts.push(rising ? `${rising} river point${rising > 1 ? "s" : ""} rising` : "rivers normal");
+  }
+  if (r && r.rivers_error) parts.push("rivers not checked (flood service unavailable)");
   if (s && s.enabled) parts.push(`next automatic check ${fmtTime(s.next_run_at)}`);
   if (state.health) parts.push(`alerts drafted by ${state.health.alert_drafting}`);
   $("statusline").textContent = parts.join(" · ") || "No data yet";
@@ -363,7 +368,7 @@ function renderArea() {
       return `<li class="village" data-lat="${c0.lat || ""}" data-lon="${c0.lon || ""}" tabindex="0">
         <span class="pill ${t.level}">${t.level}</span>
         <div>
-          <div class="names"><b>${esc(t.name)}</b><span class="kn">${esc(t.district)}</span></div>
+          <div class="names"><b>${esc(t.name)}</b>${t.name_kn ? ` <span class="kn" lang="kn">${esc(t.name_kn)}</span>` : ""}<span class="kn">${esc(t.district)}</span></div>
           <div class="meta">${t.villages_at_risk} of ${t.villages_total} villages at risk · last 3 days ${t.past_3d_mm} mm · next 3 days ${t.forecast_3d_mm} mm</div>
         </div>
         ${bars(t.daily_mm || [])}
@@ -387,11 +392,18 @@ function renderArea() {
   if (current) sel.value = current;
 }
 
+// Kannada name next to the census name; AI-suggested spellings are marked until someone checks them
+function knName(v) {
+  if (!v.name_kn) return "";
+  const ai = (v.name_kn_source || "").startsWith("ai");      // "ai", or "ai-local" (spelled with local examples)
+  return ` <span class="kn" lang="kn"${ai ? ' title="Kannada spelling suggested by AI and checked only automatically. Wrong? Add the right one to ml/data/name_kn_fixes.csv"' : ""}>${esc(v.name_kn)}${ai ? " <small>(AI)</small>" : ""}</span>`;
+}
+
 function renderVillageList() {
   const q = $("village-filter").value.trim().toLowerCase();
-  const vs = (state.risk.villages || []).filter((v) => !q || v.name.toLowerCase().includes(q));
+  const vs = (state.risk.villages || []).filter((v) => !q || v.name.toLowerCase().includes(q) || (v.name_kn || "").includes(q));
   $("village-list").innerHTML = vs.slice(0, 400).map((v) =>
-    `<li><span class="pill ${v.level}">${v.level}</span> <button class="link-btn" type="button" data-lat="${v.lat}" data-lon="${v.lon}">${esc(v.name)}</button>
+    `<li><span class="pill ${v.level}">${v.level}</span> <button class="link-btn" type="button" data-lat="${v.lat}" data-lon="${v.lon}">${esc(v.name)}</button>${knName(v)}
       <span class="meta">${v.population.toLocaleString("en-IN")} people</span></li>`).join("") || `<li class="empty">No village matches.</li>`;
   $("village-list").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
     if (map) map.flyTo([+b.dataset.lat, +b.dataset.lon], 13, { duration: 0.6 });
@@ -411,6 +423,7 @@ function renderMap() {
     // rain square or a village dot (Leaflet stops a click on a layer with a popup from reaching the map).
     cellLayer = L.featureGroup().addTo(map).on("click", onMapClick);
     villageLayer = L.featureGroup().addTo(map).on("click", onMapClick);
+    riverLayer = L.featureGroup().addTo(map);
     map.on("click", onMapClick);
   }
   if (!r) return;
@@ -429,6 +442,19 @@ function renderMap() {
   (r.villages || []).forEach((v) => {
     L.circleMarker([v.lat, v.lon], { radius: 3, color: colors[v.level], fillColor: colors[v.level], fillOpacity: 0.9, weight: 1 })
       .bindTooltip(`${v.name} · ${v.level}`).addTo(villageLayer);
+  });
+  // River points (GloFAS forecast vs that point's own flood levels): a wave pin coloured by level
+  riverLayer.clearLayers();
+  const fmt = (x) => Math.round(x).toLocaleString("en-IN");
+  (r.rivers || []).forEach((p) => {
+    L.marker([p.lat, p.lon], {
+      icon: L.divIcon({ className: `river-pin ${p.level}`, html: "≈", iconSize: [22, 22] }),
+      title: `${p.river} at ${p.place}: ${p.level}`, zIndexOffset: 500,
+    }).bindPopup(`<b>${esc(p.river)} river at ${esc(p.place)}</b> · <b style="color:${colors[p.level]}">${p.level}</b><br>` +
+                 `Highest in the next days: ${fmt(p.peak_m3s)} m³/s on ${esc(p.peak_day)}<br>` +
+                 `Flood levels here: ${fmt(p.medium_m3s)} m³/s (about every 2nd year), ${fmt(p.high_m3s)} m³/s (about every 5th year)<br>` +
+                 `<span class="meta">Warns ${p.villages} villages within ${p.radius_km} km · GloFAS model, check with CWC / dam releases</span>`)
+      .addTo(riverLayer);
   });
   if (r.cells.length && !renderMap._fitted) {
     map.fitBounds(L.latLngBounds(r.cells.map((c) => [[c.lat - 0.125, c.lon - 0.125], [c.lat + 0.125, c.lon + 0.125]]).flat()), { padding: [10, 10] });
@@ -833,6 +859,7 @@ function renderSystem() {
     ["Next run", s.enabled ? fmtTime(s.next_run_at) : "–"],
     ["Thresholds", h.thresholds || "–"],
     ["Landslide model", h.landslide_model || "–"],
+    ["Rivers", h.rivers || "–"],
     ["Coverage", h.coverage || "–"],
   ];
   $("sysinfo").innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("") +

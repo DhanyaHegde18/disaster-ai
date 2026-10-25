@@ -7,7 +7,7 @@
      Android Chrome) even if the page was closed. */
 "use strict";
 // Change the version when the page files change, so phones drop the old copy.
-const SHELL_CACHE = "village-shell-v1";
+const SHELL_CACHE = "village-shell-v2";
 const DATA_CACHE = "village-data-v1";
 const SHELL = ["/villager/", "/villager/index.html", "/villager/villager.css", "/villager/villager.js",
                "/villager/manifest.json", "/villager/icon-192.png", "/villager/icon-512.png"];

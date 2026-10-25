@@ -38,13 +38,18 @@ def facts_for(risk: dict) -> dict:
     """The only information the model is allowed to use. `risk` is a taluk risk (services/risk_view.py)."""
     return {
         "taluk": risk["name"],
+        "taluk_kn": risk.get("name_kn") or risk["name"],
         "district_en": risk["district"],
         "district_kn": risk.get("district_kn") or risk["district"],
         "villages_most_affected": risk.get("places", []),
+        "villages_most_affected_kn": risk.get("places_kn") or risk.get("places", []),
         "level": risk["level"],
         "rain_last_3_days_mm": int(round(risk["past_3d_mm"])),
         "rain_next_3_days_mm": int(round(risk["forecast_3d_mm"])),
-        "main_cause": "forecast" if risk["forecast_3d_mm"] >= risk["past_3d_mm"] else "recent rain",
+        "main_cause": ("river" if risk.get("cause") == "river" else
+                       "forecast" if risk["forecast_3d_mm"] >= risk["past_3d_mm"] else "recent rain"),
+        "rivers_rising": list(dict.fromkeys(r["river"] for r in risk.get("rivers", []))),
+        "rivers_rising_kn": list(dict.fromkeys(r["river_kn"] for r in risk.get("rivers", []))),
         "landslide_risk": risk.get("landslide_level", "LOW"),
         "emergency_number": config.EMERGENCY_NUMBER,
     }
@@ -59,10 +64,14 @@ FACTS (use only these; do not add anything else):
 
 RULES
 - Kannada: simple, spoken style that a villager in {f['district_en']} district understands. Kannada script only
-  (write the taluk and village names in Kannada script too).
+  (write the taluk and village names in Kannada script too, spelled as in taluk_kn and
+  villages_most_affected_kn where those are in Kannada script).
 - English: the same message in plain English.
 - Each message at most 3 short sentences.
-- Mention the taluk name, the most affected villages, and the rain amount for the main cause.
+- Mention the taluk name, the most affected villages, and the rain amount for the main cause
+  (if main_cause is "river", give no rain amount).
+- If rivers_rising is not empty, say that those rivers may rise to flood level and that families living on
+  their banks should be ready to move (Kannada river names as in rivers_rising_kn).
 - If landslide_risk is HIGH or MEDIUM, say clearly that hillsides may slide and people living below steep
   slopes should move early.
 - Tell people to stay away from rivers, streams and steep slopes, and to follow the
@@ -111,12 +120,13 @@ class Reply:
         self.status, self.text, self.data = status, text, data
 
 
-def _post(body: dict) -> Reply:
+def _post(body: dict, timeout: float | None = None) -> Reply:
     headers = {"x-goog-api-key": config.GEMINI_API_KEY, "Content-Type": "application/json"}
+    timeout = timeout or config.GEMINI_TIMEOUT_S
     try:
-        resp = requests.post(config.GEMINI_URL, headers=headers, json=body, timeout=config.GEMINI_TIMEOUT_S)
+        resp = requests.post(config.GEMINI_URL, headers=headers, json=body, timeout=timeout)
     except (requests.Timeout, requests.ConnectionError) as err:
-        return Reply(0, f"no answer within {config.GEMINI_TIMEOUT_S}s ({type(err).__name__})")
+        return Reply(0, f"no answer within {timeout}s ({type(err).__name__})")
     try:
         data = resp.json()
     except ValueError:
@@ -124,23 +134,24 @@ def _post(body: dict) -> Reply:
     return Reply(resp.status_code, resp.text, data)
 
 
-def _call_model(model: str, prompt: str) -> Reply:
+def _call_model(model: str, prompt: str, schema: dict | None = None, timeout: float | None = None) -> Reply:
     """One model. Retries briefly when it answers 'busy'; gives up on it at once if it
-    doesn't answer at all (an overloaded model rarely recovers within seconds)."""
+    doesn't answer at all (an overloaded model rarely recovers within seconds).
+    `schema`/`timeout` let other jobs (ml/scripts/fetch_kannada_names.py) reuse this call."""
     body = {
         "model": model,
         "input": prompt,
-        "response_format": {"type": "text", "mime_type": "application/json", "schema": SCHEMA},
+        "response_format": {"type": "text", "mime_type": "application/json", "schema": schema or SCHEMA},
         # A 3-sentence warning needs no long reasoning; low thinking answers much faster.
         "generation_config": {"thinking_level": "low"},
     }
     reply = Reply(0, "not called")
     for attempt in range(config.GEMINI_BUSY_RETRIES + 1):
-        reply = _post(body)
+        reply = _post(body, timeout)
         if reply.status == 400 and len(body) > 2:
             # The model rejected an optional setting: retry with only the model and prompt.
             body = {"model": model, "input": prompt}
-            reply = _post(body)
+            reply = _post(body, timeout)
         if reply.status not in BUSY:
             break  # success, a real error, or a timeout (0): stop retrying this model
         if attempt < config.GEMINI_BUSY_RETRIES:
@@ -196,7 +207,9 @@ def check_draft(draft: dict, f: dict) -> list[str]:
 # ---------- template ----------
 
 def template_draft(f: dict) -> dict:
-    if f["main_cause"] == "forecast":
+    if f["main_cause"] == "river":
+        rain_en = rain_kn = ""
+    elif f["main_cause"] == "forecast":
         rain_en = f"{f['rain_next_3_days_mm']} mm of rain is expected in the next 3 days."
         rain_kn = f"ಮುಂದಿನ 3 ದಿನಗಳಲ್ಲಿ {f['rain_next_3_days_mm']} ಮಿ.ಮೀ. ಮಳೆ ಬೀಳುವ ಮುನ್ಸೂಚನೆ ಇದೆ."
     else:
@@ -205,15 +218,23 @@ def template_draft(f: dict) -> dict:
     # Wording reviewed by a native speaker: everyday words (ಗುಡ್ಡ) and the government's own
     # term for flood relief camps (ಕಾಳಜಿ ಕೇಂದ್ರ), which villagers hear from officials.
     places = ", ".join(f["villages_most_affected"])
+    places_kn = ", ".join(f.get("villages_most_affected_kn") or f["villages_most_affected"])
     near_en = f" ({places} and nearby villages)" if places else ""
-    near_kn = f" ({places} ಮತ್ತು ಸುತ್ತಮುತ್ತಲಿನ ಊರುಗಳು)" if places else ""
+    near_kn = f" ({places_kn} ಮತ್ತು ಸುತ್ತಮುತ್ತಲಿನ ಊರುಗಳು)" if places_kn else ""
+    rivers_en, rivers_kn = f.get("rivers_rising") or [], f.get("rivers_rising_kn") or []
+    if rivers_en:
+        names = " and ".join(rivers_en)
+        rain_en = (f"The {names} {'river' if len(rivers_en) == 1 else 'rivers'} may rise to flood level; families "
+                   f"living on the banks should be ready to move. " + rain_en).strip()
+        rain_kn = (f"{' ಮತ್ತು '.join(rivers_kn)} {'ನದಿಯ' if len(rivers_kn) == 1 else 'ನದಿಗಳ'} ನೀರು ಪ್ರವಾಹದ "
+                   f"ಮಟ್ಟಕ್ಕೆ ಏರುವ ಸಾಧ್ಯತೆ ಇದೆ; ದಡದಲ್ಲಿ ವಾಸಿಸುವ ಕುಟುಂಬಗಳು ಸ್ಥಳಾಂತರಕ್ಕೆ ಸಿದ್ಧವಾಗಿರಬೇಕು. " + rain_kn).strip()
     en = (f"Warning for {f['taluk']} taluk{near_en}: high risk of floods and landslides. {rain_en} "
           f"Stay away from rivers, streams and hillsides. If the Gram Panchayat asks, go to the "
           f"nearest relief centre. For emergency help, call {f['emergency_number']}.")
-    kn = (f"ಎಚ್ಚರಿಕೆ: {f['district_kn']} ಜಿಲ್ಲೆಯ {f['taluk']} ತಾಲ್ಲೂಕಿನಲ್ಲಿ{near_kn} ಪ್ರವಾಹ ಮತ್ತು ಭೂಕುಸಿತದ ಅಪಾಯ "
+    kn = (f"ಎಚ್ಚರಿಕೆ: {f['district_kn']} ಜಿಲ್ಲೆಯ {f.get('taluk_kn') or f['taluk']} ತಾಲ್ಲೂಕಿನಲ್ಲಿ{near_kn} ಪ್ರವಾಹ ಮತ್ತು ಭೂಕುಸಿತದ ಅಪಾಯ "
           f"ಹೆಚ್ಚಾಗಿದೆ. {rain_kn} ನದಿ, ಹಳ್ಳ ಮತ್ತು ಗುಡ್ಡಗಳ ಬಳಿ ಹೋಗಬೇಡಿ. ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ಸೂಚಿಸಿದರೆ ಹತ್ತಿರದ "
           f"ಕಾಳಜಿ ಕೇಂದ್ರಕ್ಕೆ ತೆರಳಿ. ತುರ್ತು ಸಹಾಯಕ್ಕೆ {f['emergency_number']} ಕರೆ ಮಾಡಿ.")
-    return {"kn": kn, "en": en}
+    return {"kn": re.sub(r"  +", " ", kn), "en": re.sub(r"  +", " ", en)}
 
 
 # ---------- main entry ----------

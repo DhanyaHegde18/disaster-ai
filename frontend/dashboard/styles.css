@@ -305,3 +305,14 @@ body:not(.role-gp) .gp-only, body:not(.role-ngo) .ngo-only { display: none !impo
 .cand-list input { width: 150px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
 .pill.sh-candidate { background: var(--surface-2); color: var(--muted); border: 1px dashed var(--line); }
 .sq.candidate { background: var(--surface); box-shadow: 0 0 0 1px var(--muted); border-style: dashed; }
+
+/* river points on the map */
+.river-pin { display: grid; place-items: center; border-radius: 50%; font: 700 15px/1 system-ui, sans-serif;
+  color: #fff; background: #2f6fb0; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
+.river-pin.MEDIUM { background: var(--medium); }
+.river-pin.HIGH { background: var(--high); animation: river-pulse 1.6s ease-in-out infinite; }
+@keyframes river-pulse { 50% { box-shadow: 0 0 0 6px rgba(192,38,45,.25); } }
+@media (prefers-reduced-motion: reduce) { .river-pin.HIGH { animation: none; } }
+.legend .riverkey { display: inline-grid; place-items: center; width: 14px; height: 14px; margin: 0 3px 0 8px;
+  border-radius: 50%; background: #2f6fb0; color: #fff; font-style: normal; font-size: 10px; font-weight: 700;
+  vertical-align: -2px; }

@@ -29,13 +29,19 @@ def taluk_risk(snapshot: dict, taluk_id: str, cells: dict | None = None) -> dict
     at_risk = [v for v in villages if v["cell_id"] in at_risk_cells]
     places = sorted((v for v in villages if v["cell_id"] in worst_cells), key=lambda v: -v["population"])
     return {
-        "taluk_id": taluk_id, "name": t["name"], "district": t["district"], "district_kn": t.get("district_kn"),
+        "taluk_id": taluk_id, "name": t["name"], "name_kn": t.get("name_kn"),
+        "district": t["district"], "district_kn": t.get("district_kn"),
         "level": worst["level"], "past_3d_mm": worst["past_3d_mm"], "forecast_3d_mm": worst["forecast_3d_mm"],
         "reasons": worst["reasons"], "daily_mm": worst["daily_mm"], "worst_cell": worst["cell_id"],
         "cells_at_risk": sorted(at_risk_cells),
         "villages_total": len(villages), "villages_at_risk": len(at_risk),
         "places": [v["name"] for v in places[:PLACES_IN_ALERT]],
+        "places_kn": [v.get("name_kn") or v["name"] for v in places[:PLACES_IN_ALERT]],
         "landslide_level": max((c.get("landslide_level", "LOW") for c in mine), key=LEVELS.index),
+        "cause": worst.get("level_cause", "rain"),
+        "rivers": [{k: r[k] for k in ("point_id", "river", "river_kn", "place", "level", "peak_m3s", "peak_day")}
+                   for r in snapshot.get("rivers") or []
+                   if r["level"] != "LOW" and set(r["cells"]) & a.cells_by_taluk.get(taluk_id, set())],
     }
 
 
@@ -76,10 +82,13 @@ def scoped_view(snapshot: dict, taluk_ids: set[str] | None, area_label: str) -> 
         "summary": villages_by_level,                  # villages per level, in this area
         "squares": {lv: sum(c["level"] == lv for c in shown_cells) for lv in LEVELS[::-1]},
         "taluks": taluks, "cells": shown_cells,
+        "rivers": [r for r in snapshot.get("rivers") or [] if taluk_ids is None or set(r["cells"]) & cell_ids],
+        "rivers_error": snapshot.get("rivers_error"),
     }
     if taluk_ids is not None and len(tids) == 1:      # one taluk: list its villages too
         level_of = {cid: cells[cid]["level"] for cid in cell_ids if cid in cells}
-        vs = [{"village_id": v["village_id"], "name": v["name"], "cell_id": v["cell_id"], "lat": v["lat"],
+        vs = [{"village_id": v["village_id"], "name": v["name"], "name_kn": v.get("name_kn"),
+               "name_kn_source": v.get("name_kn_source"), "cell_id": v["cell_id"], "lat": v["lat"],
                "lon": v["lon"], "population": v["population"], "level": level_of.get(v["cell_id"], "LOW")}
               for v in a.by_taluk.get(tids[0], [])]
         vs.sort(key=lambda v: (-LEVELS.index(v["level"]), v["name"]))

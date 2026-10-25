@@ -72,6 +72,8 @@ flowchart LR
    and other rivers, GloFAS's 5-day discharge forecast is compared with that point's own flood levels from
    2005–2022: MEDIUM = a level reached about every 2nd year, HIGH = about every 5th year. A rising river raises
    the squares around it on its own, because river floods in North Karnataka often come with little local rain.
+   Each point is first moved onto the nearest cell of the main river within about 11 km (a town's 5 km GloFAS cell can be a small
+   stream beside the river); points that still look like streams are left out.
 4. **Alerts per taluk.** A HIGH taluk gets one draft that names its biggest affected villages. Gemini writes it
    in Kannada and English from a fixed set of facts; every number is checked against those facts, Kannada script
    is required, and any failure falls back to a reviewed template. Nothing reaches villagers until a Gram
@@ -165,7 +167,7 @@ fallback records why it was used.
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env            # add GEMINI_API_KEY, ntfy topics (all optional)
-python -m pytest -q             # 133 tests
+python -m pytest -q             # 139 tests
 ```
 
 Data, in this order (each step is safe to re-run):
@@ -210,7 +212,7 @@ frontend/dashboard/  GP / NGO dashboard (Leaflet map, alerts, relief, centres)
 frontend/villager/   villager page (Kannada first, offline service worker, route map)
 ml/scripts/          data: villages, IMD grid, bias, terrain, landslides, rivers, OSM buildings, Kannada names
 ml/training/         train_landslide.py (+ the earlier 8-village experiments)
-backend/tests/       133 tests (fake Karnataka, fake rain and rivers, no network)
+backend/tests/       139 tests (fake Karnataka, fake rain and rivers, no network)
 ```
 
 ## Limits
