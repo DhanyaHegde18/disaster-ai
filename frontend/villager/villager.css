@@ -163,3 +163,10 @@ button, a { font: inherit; }
 .outbox .urgent { margin-top: 6px; color: var(--danger); }
 .big.sms { border-color: var(--danger); color: var(--danger); }
 .sms-hint { margin: -8px 0 18px; }
+
+/* opened from a warning notification: one big tap for siren + reading aloud */
+.big.hear { width: 100%; margin: 0 0 12px; background: #b3261e; color: #fff; font-size: 1.15rem;
+  animation: hear-pulse 1.4s ease-in-out infinite; }
+@keyframes hear-pulse { 50% { box-shadow: 0 0 0 8px rgba(192, 38, 45, .25); } }
+@media (prefers-reduced-motion: reduce) { .big.hear { animation: none; } }
+.push-note, .ntfy-note { margin-top: 6px; }

@@ -191,7 +191,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .signin a, .fine a { color: var(--accent); }
 
 /* role-specific parts: body gets class role-gp or role-ngo after sign-in */
-body:not(.role-gp) .gp-only, body:not(.role-ngo) .ngo-only { display: none !important; }
+body:not(.role-gp) .gp-only, body:not(.role-ngo) .ngo-only, body:not(.role-admin) .admin-only { display: none !important; }
 .count-rescue { border-top-color: var(--high); } .count-rescue .num { color: var(--high); }
 .who-role { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; padding: 1px 6px; border-radius: 5px;
             background: var(--surface-2); color: var(--muted); margin-left: 4px; vertical-align: 1px; }
@@ -316,3 +316,14 @@ body:not(.role-gp) .gp-only, body:not(.role-ngo) .ngo-only { display: none !impo
 .legend .riverkey { display: inline-grid; place-items: center; width: 14px; height: 14px; margin: 0 3px 0 8px;
   border-radius: 50%; background: #2f6fb0; color: #fff; font-style: normal; font-size: 10px; font-weight: 700;
   vertical-align: -2px; }
+
+/* admin: staff list */
+.staff { margin-top: 16px; }
+.staff-table { min-width: 760px; }
+.staff-table th:nth-child(n+2) { text-align: left !important; }
+.staff-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.staff-actions select, .staff-actions input, .add-staff input, .add-staff select {
+  border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: var(--surface); color: inherit; min-width: 0; }
+.staff-actions input { width: 130px; }
+.add-staff { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 14px 14px; }
+.add-staff input, .add-staff select { flex: 1 1 140px; }

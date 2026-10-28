@@ -7,7 +7,7 @@
      Android Chrome) even if the page was closed. */
 "use strict";
 // Change the version when the page files change, so phones drop the old copy.
-const SHELL_CACHE = "village-shell-v2";
+const SHELL_CACHE = "village-shell-v3";
 const DATA_CACHE = "village-data-v1";
 const SHELL = ["/villager/", "/villager/index.html", "/villager/villager.css", "/villager/villager.js",
                "/villager/manifest.json", "/villager/icon-192.png", "/villager/icon-512.png"];
@@ -93,3 +93,25 @@ async function sendSaved() {
 
 self.addEventListener("sync", (e) => { if (e.tag === "send-report") e.waitUntil(sendSaved()); });
 self.addEventListener("message", (e) => { if (e.data === "send-report") e.waitUntil(sendSaved()); });
+
+// ---------- warnings when the page is closed (Web Push from the server when a Gram Panchayat approves) ----------
+self.addEventListener("push", (e) => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch { d = { body: e.data ? e.data.text() : "" }; }
+  e.waitUntil(self.registration.showNotification(d.title || "⚠️ Village Alert", {
+    body: d.body || "", tag: d.tag || "village-alert", renotify: true, requireInteraction: true,
+    vibrate: [800, 300, 800, 300, 800, 300, 1500], icon: "/villager/icon-192.png", badge: "/villager/icon-192.png",
+    data: { url: d.url || "/villager/" },
+  }));
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || "/villager/";
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
+    for (const c of list) {
+      if (c.url.includes("/villager/") && "navigate" in c) return c.navigate(url).then((w) => (w || c).focus());
+    }
+    return self.clients.openWindow(url);
+  }));
+});

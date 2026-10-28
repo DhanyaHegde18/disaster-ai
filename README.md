@@ -18,7 +18,7 @@ Landslides*, 3rd prize at Innovate-A-Thon 2026, SDM Institute of Technology, Uji
 
 | Who | What they do |
 |---|---|
-| **Villager** (no sign-in to read) | Pick the village by name, typed in Kannada or English (spelling-tolerant: "Ujire" and "ಉಜಿರೆ" both find the census name "Ujre") → approved warnings in Kannada with siren and read-aloud → nearest open relief centre with a walking-route map → report the family's status (at a centre, with relatives, at home, missing) and ask for rescue. Works offline: reports wait on the phone and are sent when signal returns; an SMS button sends an SOS with GPS position without any data. Installs as an app. |
+| **Villager** (no sign-in to read) | Pick the village by name, typed in Kannada or English (spelling-tolerant: "Ujire" and "ಉಜಿರೆ" both find the census name "Ujre") → approved warnings in Kannada with siren and read-aloud → nearest open relief centre with a walking-route map → report the family's status (at a centre, with relatives, at home, missing) and ask for rescue. Turning on alarms makes approved warnings ring the phone even when the page is closed (Web Push). Works offline: reports wait on the phone and are sent when signal returns; an SMS button sends an SOS with GPS position without any data. Installs as an app. |
 | **Gram Panchayat official** (phone + OTP, one taluk) | Risk per rain-grid square and per village in their taluk, AI-drafted alerts to edit and approve, each family's report with phone number, "mark rescue handled", relief centres: designate a school or hall from OpenStreetMap, open it, update the head count. Phone alarms (ntfy) with reminders every 15 minutes until a rescue is handled or an alert reviewed. |
 | **NGO** (phone + OTP, one district) | The same picture read-only, approved alerts, evacuation counts without personal phone numbers, relief centre occupancy. |
 
@@ -167,7 +167,7 @@ fallback records why it was used.
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env            # add GEMINI_API_KEY, ntfy topics (all optional)
-python -m pytest -q             # 150 tests
+python -m pytest -q             # 169 tests
 ```
 
 Data, in this order (each step is safe to re-run):
@@ -216,7 +216,7 @@ frontend/dashboard/  GP / NGO dashboard (Leaflet map, alerts, relief, centres)
 frontend/villager/   villager page (Kannada first, offline service worker, route map)
 ml/scripts/          data: villages, IMD grid, bias, terrain, landslides, rivers, OSM buildings, Kannada names
 ml/training/         train_landslide.py (+ the earlier 8-village experiments)
-backend/tests/       150 tests (fake Karnataka, fake rain and rivers, no network)
+backend/tests/       169 tests (fake Karnataka, fake rain and rivers, no network)
 ```
 
 ## Limits

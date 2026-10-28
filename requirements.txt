@@ -17,3 +17,4 @@ httpx>=0.27
 python-dotenv>=1.0
 rasterio          # elevation tiles for the landslide model (ml/scripts/fetch_cell_terrain.py)
 huggingface_hub   # database backup when deployed (docs/DEPLOY.md)
+pywebpush         # alarms on villagers' phones (backend/app/push.py)

@@ -41,6 +41,11 @@ const T = {
     offline: "ಸಂಪರ್ಕ ಇಲ್ಲ. ಕೊನೆಯದಾಗಿ ಪಡೆದ ಮಾಹಿತಿ ತೋರಿಸಲಾಗುತ್ತಿದೆ.",
     noKnVoice: "ಈ ಫೋನಿನಲ್ಲಿ ಕನ್ನಡ ಧ್ವನಿ ಇಲ್ಲ. ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಓದಲಾಗುತ್ತಿದೆ.",
     notifTitle: "ಊರಿನ ಎಚ್ಚರಿಕೆ",
+    pushOn: "ಪುಟ ಮುಚ್ಚಿದ್ದರೂ ಎಚ್ಚರಿಕೆ ಈ ಫೋನ್‌ಗೆ ಬರುತ್ತದೆ.",
+    pushNo: "ಈ ಫೋನಿನ ಬ್ರೌಸರ್ ಪುಟ ಮುಚ್ಚಿದಾಗ ಎಚ್ಚರಿಕೆ ಕಳುಹಿಸಲಾರದು. ಪುಟವನ್ನು ತೆರೆದಿಡಿ, ಅಥವಾ ಕೆಳಗಿನ ntfy ಆ್ಯಪ್ ಬಳಸಿ.",
+    pushDenied: "ಅಧಿಸೂಚನೆಗೆ ಅನುಮತಿ ನೀಡಿಲ್ಲ. ಬ್ರೌಸರ್ ಸೆಟ್ಟಿಂಗ್‌ನಲ್ಲಿ ಈ ಸೈಟ್‌ಗೆ ಅಧಿಸೂಚನೆ ಆನ್ ಮಾಡಿ.",
+    ntfyHint: (topic) => `ಇನ್ನೂ ಜೋರಾದ ಎಚ್ಚರಿಕೆಗೆ: ಉಚಿತ ntfy ಆ್ಯಪ್ ಹಾಕಿ, ಈ ಹೆಸರನ್ನು ಫಾಲೋ ಮಾಡಿ: ${topic}`,
+    hearAlarm: "▶ ಎಚ್ಚರಿಕೆ ಕೇಳಲು ಇಲ್ಲಿ ಒತ್ತಿ",
     langBtn: "English",
     reportTitle: "ನಿಮ್ಮ ಕುಟುಂಬದ ಸ್ಥಿತಿ ತಿಳಿಸಿ",
     reportWhy: "ನೀವು ಎಲ್ಲಿದ್ದೀರಿ ಎಂದು ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ಮತ್ತು ಸಹಾಯ ಸಂಸ್ಥೆಗಳಿಗೆ ತಿಳಿಯುತ್ತದೆ. ಸಹಾಯ ಬೇಕಾದರೆ ಗ್ರಾಮ ಪಂಚಾಯಿತಿ ನಿಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸುತ್ತದೆ.",
@@ -135,6 +140,11 @@ const T = {
     offline: "No connection. Showing the last information received.",
     noKnVoice: "No Kannada voice on this phone. Reading in English.",
     notifTitle: "Village Alert",
+    pushOn: "Warnings now reach this phone even when the page is closed.",
+    pushNo: "This phone's browser can't receive warnings while the page is closed. Keep the page open, or use the ntfy app below.",
+    pushDenied: "Notifications are blocked. Allow notifications for this site in the browser settings.",
+    ntfyHint: (topic) => `For a louder alarm: install the free ntfy app and follow: ${topic}`,
+    hearAlarm: "▶ Tap here to hear the warning",
     langBtn: "ಕನ್ನಡ",
     reportTitle: "Tell us your family's status",
     reportWhy: "Your Gram Panchayat and relief organisations will know where you are. If you need help, the Gram Panchayat will contact you.",
@@ -318,6 +328,8 @@ function chooseVillage(id) {
   showHome();
   refresh();
   initReport();
+  showNtfyTopic();
+  if (load("v-push") === "on") enablePush();          // move this phone's warnings to the new village
 }
 
 function showHome() {
@@ -569,7 +581,74 @@ $("btn-sound").addEventListener("click", async () => {
   if ("Notification" in window && Notification.permission === "default") {
     try { await Notification.requestPermission(); } catch { }
   }
+  await enablePush();
 });
+
+// ---------- warnings when the page is closed (Web Push) ----------
+function b64ToBytes(b64) {
+  const pad = "=".repeat((4 - (b64.length % 4)) % 4);
+  const raw = atob((b64 + pad).replace(/-/g, "+").replace(/_/g, "/"));
+  return Uint8Array.from(raw, (c) => c.charCodeAt(0));
+}
+
+function pushNote(text) {
+  const p = $("push-note");
+  p.textContent = text || "";
+  p.hidden = !text;
+}
+
+async function enablePush() {
+  if (!S.village) return;
+  if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
+    pushNote(t("pushNo")); return;
+  }
+  if (Notification.permission !== "granted") { pushNote(t("pushDenied")); return; }
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) {
+      const { public_key } = await (await fetch("/public/push/key")).json();
+      sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(public_key) });
+    }
+    const res = await fetch("/public/push/subscribe", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subscription: sub.toJSON(), village_id: S.village, lang: S.lang, demo: DEMO }),
+    });
+    if (!res.ok) throw new Error(String(res.status));
+    store("v-push", "on");
+    pushNote(t("pushOn"));
+  } catch {
+    pushNote(t("pushNo"));
+  }
+}
+
+async function showNtfyTopic() {
+  const p = $("ntfy-note");
+  p.hidden = true;
+  if (!S.village) return;
+  try {
+    const { topic } = await (await fetch(`/public/push/topic/${encodeURIComponent(S.village)}`)).json();
+    if (topic) { p.textContent = t("ntfyHint")(topic); p.hidden = false; }
+  } catch { /* offline: leave it hidden */ }
+}
+
+// Opened from a warning notification: one tap plays the siren and reads the warning aloud
+// (browsers only allow sound after a tap).
+function offerAlarm() {
+  if (!new URLSearchParams(location.search).get("alarm")) return;
+  const b = $("btn-hear");
+  b.textContent = t("hearAlarm");
+  b.hidden = false;
+  b.onclick = async () => {
+    S.audio = S.audio || new (window.AudioContext || window.webkitAudioContext)();
+    await S.audio.resume();
+    playSiren();
+    if (navigator.vibrate) navigator.vibrate([800, 300, 800, 300, 800]);
+    const a = S.data && S.data.active[0];
+    if (a) setTimeout(() => speak(a), 3500);
+    b.hidden = true;
+  };
+}
 
 // ---------- read aloud ----------
 function speak(a) {
@@ -835,13 +914,17 @@ $("r-logout").addEventListener("click", async () => {
 // ---------- start ----------
 async function start() {
   S.lang = load("v-lang") === "en" ? "en" : "kn";
+  const fromLink = new URLSearchParams(location.search).get("v");   // opened from a warning notification
+  if (fromLink) store("v-village", fromLink);
   S.village = load("v-village") || null;
   $("demo-banner").hidden = !DEMO;
   try { S.districts = await (await fetch("/public/districts")).json(); } catch { S.districts = []; }
   applyLang();
   showHome();
   refresh();
-  if (S.village) initReport();
+  if (S.village) { initReport(); showNtfyTopic(); }
+  offerAlarm();
+  if (S.village && load("v-push") === "on" && "Notification" in window && Notification.permission === "granted") enablePush();
   setInterval(refresh, POLL_MS);
   setOffline(!navigator.onLine);
   renderOutbox();

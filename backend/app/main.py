@@ -12,19 +12,21 @@ Then open:
     http://localhost:8000/system/scheduler    when automatic scoring last ran and runs next
 """
 import asyncio
+import json
+import secrets
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import areas, config, database, state_backup
+from . import areas, config, database, push, state_backup
 from . import auth as auth_core
 from .auth import require_gp, require_official
 from .jobs import escalation, scheduler
 from . import notify
-from .routers import alerts, auth, public, relief, risk, shelters, villagers
+from .routers import admin, alerts, auth, public, relief, risk, shelters, villagers
 from .services import landslide, rivers
 from .services import shelters as shelter_data
 
@@ -65,6 +67,7 @@ app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_cred
 # /relief/summary, /shelters.  Gram Panchayat only: drafting/reviewing alerts, /relief/reports,
 # opening/closing relief centres (PATCH /shelters), running checks.  Open: /public/shelters (nearest centres).
 app.include_router(auth.router)
+app.include_router(admin.router)
 app.include_router(risk.router)
 app.include_router(alerts.router)
 app.include_router(public.router)
@@ -112,6 +115,9 @@ def health():
                              "viewer": "ON: any number can sign in as a read-only guest (code on screen)",
                              "gp": f"ON: any number can sign in as a Gram Panchayat guest of {config.OPEN_SIGNIN_TALUK} "
                                    f"and approve real alerts"}.get(config.OPEN_SIGNIN, "off"),
+            "villager_alarms": (f"{push.count()} phones get warnings as notifications (Web Push)"
+                                + (f"; loud alarms on ntfy topics '{config.NTFY_TOPIC_PUBLIC}-<taluk>'"
+                                   if config.NTFY_TOPIC_PUBLIC else "")),
             "database_backup": state_backup.summary(),
             "public_address": (f"{config.PUBLIC_URL} (from .env)" if config.PUBLIC_URL
                                else f"{notify.learned_public_url()} (learned from the dashboard)" if notify.learned_public_url()
@@ -119,6 +125,26 @@ def health():
             "phone_alerts": (f"ntfy, a topic per taluk (GP) and district (NGO), reminders every "
                              f"{config.ESCALATE_AFTER_MIN:g} min") if notify.topics_for(("gp", "ngo"))
                             else "off (set NTFY_TOPIC_GP / NTFY_TOPIC_NGO)"}
+
+
+@app.post("/system/snapshot", tags=["system"])
+def receive_snapshot(snapshot: dict, x_snapshot_token: str = Header("")):
+    """A risk map computed elsewhere (GitHub Actions or a laptop: python -m backend.app.jobs.push_snapshot), for when
+    the forecast API refuses this server. Saved as the latest map; HIGH taluks get alert drafts as usual."""
+    if not config.SNAPSHOT_TOKEN or not secrets.compare_digest(x_snapshot_token, config.SNAPSHOT_TOKEN):
+        raise HTTPException(status_code=403, detail="Wrong or missing X-Snapshot-Token.")
+    if not isinstance(snapshot.get("cells"), list) or not snapshot.get("generated_at"):
+        raise HTTPException(status_code=422, detail="Not a risk map (needs generated_at and cells).")
+    grid = config.grid_config()["cells"]
+    if not snapshot["cells"] or any(c.get("cell_id") not in grid for c in snapshot["cells"]):
+        raise HTTPException(status_code=422, detail="The map's squares don't match this server's grid.")
+    snapshot["received_from"] = "push"
+    config.LATEST_RISK_FILE.parent.mkdir(parents=True, exist_ok=True)
+    config.LATEST_RISK_FILE.write_text(json.dumps(snapshot, ensure_ascii=False))
+    from .services.alerts import generate_for_snapshot
+    created = generate_for_snapshot(snapshot)
+    return {"saved": snapshot["generated_at"], "squares": len(snapshot["cells"]),
+            "summary": snapshot.get("summary"), "alerts_drafted": len(created)}
 
 
 @app.get("/system/scheduler", tags=["system"], dependencies=[Depends(require_official)])

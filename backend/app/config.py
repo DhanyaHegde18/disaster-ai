@@ -29,7 +29,8 @@ FLOOD_URL = "https://flood-api.open-meteo.com/v1/flood"        # GloFAS river di
 RIVER_CONFIG = APP_DIR / "river_config.json"                    # river flood levels; rivers are skipped until it exists
 RIVER_DAYS_AHEAD = 5                                            # a river warning looks this many days ahead
 TIMEZONE = "Asia/Kolkata"
-CACHE_MINUTES = 60          # /risk reuses results younger than this instead of calling the API again
+CACHE_MINUTES = float(os.getenv("CACHE_MINUTES", "60"))   # /risk reuses results younger than this
+LIVE_RETRY_MIN = 15         # after a failed forecast fetch, don't try again from a page load for this long
 REQUEST_TIMEOUT_S = 30
 RETRIES = 3
 
@@ -73,6 +74,11 @@ COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").lower() == "true"
 # and subscribes to their role's topic. Topic names act like passwords: make them long and random.
 NTFY_SERVER = os.getenv("NTFY_SERVER", "https://ntfy.sh").rstrip("/")
 NTFY_TOPIC_GP = os.getenv("NTFY_TOPIC_GP", "")
+# Optional: a PUBLIC topic base for villagers' loud alarms; each taluk gets '<this>-<taluk>' (see push.py)
+NTFY_TOPIC_PUBLIC = os.getenv("NTFY_TOPIC_PUBLIC", "").strip()
+# Web Push keys for villagers' phones; leave empty and they are made automatically and kept in the database
+VAPID_PUBLIC_KEY = os.getenv("VAPID_PUBLIC_KEY", "").strip()
+VAPID_PRIVATE_KEY = os.getenv("VAPID_PRIVATE_KEY", "").strip()
 NTFY_TOPIC_NGO = os.getenv("NTFY_TOPIC_NGO", "")
 # Link opened from a phone notification. Normally leave it unset: the app learns its public address
 # (tunnel, Tailscale, Wi-Fi IP) from the dashboard itself. Set it only to force a particular address.
@@ -126,3 +132,6 @@ OFFICIALS = os.getenv("OFFICIALS", "")
 #           villagers see and that ring the GP alarm topic: use only while presenting.
 OPEN_SIGNIN = os.getenv("OPEN_SIGNIN", "off").strip().lower()
 OPEN_SIGNIN_TALUK = os.getenv("OPEN_SIGNIN_TALUK", "dakshina-kannada:belthangady").strip()
+# Rain checks done elsewhere (a GitHub Actions job or a laptop) can send their risk map to the server with this
+# shared secret: useful when the forecast API refuses the server's shared address (HTTP 429). See docs/DEPLOY.md.
+SNAPSHOT_TOKEN = os.getenv("SNAPSHOT_TOKEN", "").strip()

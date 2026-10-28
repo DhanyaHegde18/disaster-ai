@@ -63,15 +63,18 @@ function showSignIn(message) {
 
 function showApp(me) {
   state.signedIn = true;
-  state.role = me.role;
+  state.admin = me.role === "admin";
+  state.role = state.admin ? "gp" : me.role;          // the admin can do everything a GP can, in every taluk
   state.me = me;
-  // body.role-gp / body.role-ngo shows or hides the parts marked gp-only / ngo-only.
-  document.body.classList.toggle("role-gp", me.role === "gp");
-  document.body.classList.toggle("role-ngo", me.role === "ngo");
-  $("app-title").textContent = me.role === "ngo" ? "Relief Coordination" : "Gram Panchayat Control Centre";
-  $("who-role").textContent = me.role === "ngo" ? "NGO" : "GP";
+  // body.role-gp / body.role-ngo / body.role-admin show or hide the parts marked gp-only / ngo-only / admin-only.
+  document.body.classList.toggle("role-gp", state.role === "gp");
+  document.body.classList.toggle("role-ngo", state.role === "ngo");
+  document.body.classList.toggle("role-admin", state.admin);
+  $("app-title").textContent = state.admin ? "Admin · Control Centre" : me.role === "ngo" ? "Relief Coordination" : "Gram Panchayat Control Centre";
+  $("who-role").textContent = state.admin ? "ADMIN" : me.role === "ngo" ? (me.name.startsWith("Guest") ? "GUEST" : "NGO") : "GP";
   $("who-area").textContent = me.area;
-  if (me.role !== "gp") state.tab = "approved";       // NGOs see approved alerts only
+  if (state.role !== "gp") state.tab = "approved";    // NGOs see approved alerts only
+  if (state.admin) loadStaff();
   $("who-name").textContent = me.name;
   $("signin").hidden = true;
   $("top-controls").hidden = false;
@@ -840,9 +843,12 @@ async function onAlertAction(e) {
         await api(`/alerts/${id}`, { method: "PUT", body: JSON.stringify({ message_kn: $(`kn-${id}`).value, message_en: $(`en-${id}`).value }) });
       }
       // The server records the signed-in official as the reviewer.
-      await api(`/alerts/${id}/${action}`, { method: "POST", body: JSON.stringify({ note }) });
+      const done = await api(`/alerts/${id}/${action}`, { method: "POST", body: JSON.stringify({ note }) });
       state.dirty.delete(id);
-      toast(action === "approve" ? "Approved. Villagers in this taluk can now see this alert." : "Rejected. It will not be sent.");
+      const phones = done && done.phones_alerted;
+      toast(action !== "approve" ? "Rejected. It will not be sent."
+        : typeof phones === "number" ? `Approved. Villagers in this taluk see it now, and ${phones} phone${phones === 1 ? "" : "s"} with alarms on ${phones === 1 ? "is" : "are"} ringing.`
+        : "Approved (test). Phones on the demo villager page are ringing.");
     }
     state.alerts = await api("/alerts");
     renderAlerts(); renderSummary();
@@ -906,3 +912,70 @@ $("btn-simulate").addEventListener("click", async (e) => {
   try { showApp(await api("/auth/me")); }
   catch { showSignIn(""); }
 })();
+
+// ---------- admin: who may use the dashboard ----------
+async function loadStaff() {
+  try {
+    const [data, districts] = await Promise.all([api("/admin/officials"), state.districts || api("/public/districts")]);
+    state.districts = districts;
+    renderStaff(data);
+  } catch (err) {
+    toast("Could not load staff: " + err.message, true);
+  }
+}
+
+function talukOptions(selected) {
+  return (state.districts || []).map((d) => `<optgroup label="${esc(d.name)}">` +
+    d.taluks.map((t) => `<option value="${esc(t.taluk_id)}"${t.taluk_id === selected ? " selected" : ""}>${esc(t.name)}</option>`).join("") +
+    "</optgroup>").join("");
+}
+
+function renderStaff(data) {
+  $("staff-note").textContent = `${data.villager_phones_with_alarms} villager phone${data.villager_phones_with_alarms === 1 ? "" : "s"} get warnings as alarms.`;
+  $("staff-list").innerHTML = data.officials.map((o) => {
+    const role = o.role === "admin" ? "Admin" : o.role === "gp" ? "Gram Panchayat" : o.guest ? "Guest (read-only)" : "NGO";
+    const change = o.role === "admin" ? `<span class="meta">set in the server settings</span>` : `
+      <select id="st-taluk-${esc(o.phone)}" aria-label="Taluk for ${esc(o.name)}"><option value="">Taluk…</option>${talukOptions(o.taluk_id)}</select>
+      <input id="st-name-${esc(o.phone)}" type="text" value="${o.guest ? "" : esc(o.name)}" placeholder="Real name" aria-label="Name">
+      <button class="btn primary" data-staff="gp" data-phone="${esc(o.phone)}">${o.role === "gp" ? "Save" : "Make GP"}</button>
+      <button class="btn danger" data-staff="remove" data-phone="${esc(o.phone)}">Remove</button>`;
+    return `<tr><td><b>${esc(o.name)}</b><br><span class="meta">${esc(o.phone)}</span></td><td>${role}</td>
+      <td>${esc(o.area)}</td><td><div class="staff-actions">${change}</div></td></tr>`;
+  }).join("") || `<tr><td colspan="4" class="empty">No staff yet.</td></tr>`;
+  $("add-staff-taluk").innerHTML = `<option value="">Taluk (for GP)…</option>${talukOptions("")}`;
+  $("staff-list").querySelectorAll("button[data-staff]").forEach((b) => b.addEventListener("click", () => staffAction(b.dataset.staff, b.dataset.phone)));
+}
+
+async function staffAction(action, phone) {
+  try {
+    if (action === "remove") {
+      await api(`/admin/officials/${encodeURIComponent(phone)}`, { method: "DELETE" });
+      toast("Access removed.");
+    } else {
+      const taluk = $(`st-taluk-${phone}`).value, name = $(`st-name-${phone}`).value.trim();
+      if (!taluk) throw new Error("Choose the taluk this Gram Panchayat official covers.");
+      if (name.length < 2) throw new Error("Type the person's real name.");
+      await api("/admin/officials", { method: "POST", body: JSON.stringify({ phone, name, role: "gp", taluk_id: taluk }) });
+      toast(`${name} is now a Gram Panchayat official. Their sign-in codes go to their taluk's ntfy topic.`);
+    }
+    loadStaff();
+  } catch (err) {
+    toast(err.message, true);
+  }
+}
+
+$("form-add-staff").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const role = $("add-staff-role").value, taluk = $("add-staff-taluk").value;
+  try {
+    if (role === "gp" && !taluk) throw new Error("Choose the taluk for a Gram Panchayat official.");
+    await api("/admin/officials", { method: "POST", body: JSON.stringify({
+      phone: $("add-staff-phone").value, name: $("add-staff-name").value.trim(), role,
+      taluk_id: role === "gp" ? taluk : null }) });
+    toast("Added.");
+    e.target.reset();
+    loadStaff();
+  } catch (err) {
+    toast(err.message, true);
+  }
+});

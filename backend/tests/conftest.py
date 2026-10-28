@@ -109,6 +109,8 @@ def world(tmp_path, monkeypatch):
     from backend.app.services import landslide                 # no landslide model unless a test trains one
     monkeypatch.setattr(landslide, "MODEL_FILE", tmp_path / "landslide_model.joblib")
     monkeypatch.setattr(landslide, "META_FILE", tmp_path / "landslide_model.json")
+    from backend.app.routers import risk as risk_router            # forget forecast failures of other tests
+    monkeypatch.setattr(risk_router, "_failed", {"at": None, "why": ""})
     from backend.app import database
     database.init_db()
     return w

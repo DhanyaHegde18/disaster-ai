@@ -75,6 +75,22 @@ The private dataset is created by the server itself; you don't need to make it.
 3. Backup: GitHub repository → **Settings → Secrets and variables → Actions → Variables → New variable**
    `SERVER_URL` = `https://<your-address>`. Then **Actions → keep the server awake → Run workflow** once.
 
+## If the server can't get rain data ("429")
+
+Render's free servers share one internet address with many other apps, and together they can use up Open-Meteo's
+free limit. The dashboard then says "No risk data yet ... 429". The fix is to check the rain from GitHub's computers
+every 3 hours and send the map to the server (`.github/workflows/score.yml`):
+
+1. Make a secret token: `python3 -c "import secrets; print(secrets.token_hex(16))"`.
+2. Render → **Environment**: add `SNAPSHOT_TOKEN` = that token.
+3. GitHub repository → **Settings → Secrets and variables → Actions → Secrets**: add `SERVER_URL`
+   (`https://...onrender.com`) and `SNAPSHOT_TOKEN` (the same token).
+4. **Actions → check the rain → Run workflow**. After about 3 minutes the dashboard shows the map.
+
+From the laptop, the same job works by hand:
+`SERVER_URL=https://...onrender.com SNAPSHOT_TOKEN=... python -m backend.app.jobs.push_snapshot`.
+The last map is also backed up, so a restart doesn't lose it.
+
 ## Letting anyone try the dashboard (demos)
 
 Add the variable `OPEN_SIGNIN` under **Environment**:
@@ -87,6 +103,24 @@ Add the variable `OPEN_SIGNIN` under **Environment**:
   it back to `viewer` or `off`.
 
 Registered staff (`OFFICIALS`) still get their codes by ntfy.
+
+## Admin and Panchayat access
+
+Make yourself the admin in `OFFICIALS`: `9036605879, Dhanya, admin`. The admin sees all of Karnataka, can do
+everything a Gram Panchayat can, and gets a **"Who can use the dashboard"** panel. Anyone may sign in as a
+read-only guest (with `OPEN_SIGNIN=viewer`). In that panel the admin picks a guest's taluk, types their real name and
+clicks **Make GP**. Removing someone signs them out everywhere. Admins themselves can only be set in `OFFICIALS`.
+
+## Alarms on villagers' phones
+
+When a Gram Panchayat approves a warning, every phone in that taluk that turned on alarms gets it as a
+notification with sound and long vibration, even with the villager page closed (Web Push, free, no app). Villagers
+tap **Turn on alarm sound** on the villager page and allow notifications. Tapping the notification opens the page,
+where one tap plays the siren and reads the warning aloud. Test alerts only ring phones that use `/villager/?demo=true`.
+
+For a **louder** alarm, set `NTFY_TOPIC_PUBLIC` (e.g. `ka-flood-warnings`). Approved warnings then also go, at the
+highest priority, to the public ntfy topic of each taluk, which the villager page shows to anyone who wants to
+install the free ntfy app.
 
 ## Updating
 

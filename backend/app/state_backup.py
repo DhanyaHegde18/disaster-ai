@@ -20,7 +20,8 @@ from pathlib import Path
 from . import config
 
 FILE = "alerts.db"
-state = {"last_backup": None, "last_error": None, "restored": None, "_hash": None}
+SNAPSHOT = "latest_risk.json"   # the last risk map too, so a restarted server has data before the next rain check
+state = {"last_backup": None, "last_error": None, "restored": None, "_hash": None, "_snap_hash": None}
 
 
 def enabled() -> bool:
@@ -59,6 +60,12 @@ def restore() -> str:
         config.ALERTS_DB.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(path, config.ALERTS_DB)
         state["_hash"] = hashlib.sha256(Path(path).read_bytes()).hexdigest()
+        if SNAPSHOT in api.list_repo_files(config.STATE_REPO, repo_type="dataset"):
+            snap = hf_hub_download(config.STATE_REPO, SNAPSHOT, repo_type="dataset", token=config.HF_TOKEN,
+                                   local_dir=tempfile.mkdtemp())
+            config.LATEST_RISK_FILE.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(snap, config.LATEST_RISK_FILE)
+            state["_snap_hash"] = hashlib.sha256(Path(snap).read_bytes()).hexdigest()
         state["restored"] = f"restored at {datetime.now().isoformat(timespec='seconds')}"
         print(f"[backup] database {state['restored']} from {config.STATE_REPO}", flush=True)
     except Exception as err:                       # a failed restore must not stop the server starting
@@ -79,14 +86,23 @@ def backup() -> bool:
         src.close()
         dst.close()
         digest = hashlib.sha256(tmp.read_bytes()).hexdigest()
-        if digest == state["_hash"]:
+        snap = config.LATEST_RISK_FILE
+        snap_digest = hashlib.sha256(snap.read_bytes()).hexdigest() if snap.exists() else None
+        if digest == state["_hash"] and snap_digest == state["_snap_hash"]:
             return False
         api = _api()
         if not _private_repo(api):
             return False
-        api.upload_file(path_or_fileobj=str(tmp), path_in_repo=FILE, repo_id=config.STATE_REPO, repo_type="dataset",
-                        commit_message=f"database {datetime.now().isoformat(timespec='minutes')}")
-        state["_hash"], state["last_backup"], state["last_error"] = digest, datetime.now().isoformat(timespec="seconds"), None
+        stamp = datetime.now().isoformat(timespec="minutes")
+        if digest != state["_hash"]:
+            api.upload_file(path_or_fileobj=str(tmp), path_in_repo=FILE, repo_id=config.STATE_REPO,
+                            repo_type="dataset", commit_message=f"database {stamp}")
+            state["_hash"] = digest
+        if snap_digest and snap_digest != state["_snap_hash"]:
+            api.upload_file(path_or_fileobj=str(snap), path_in_repo=SNAPSHOT, repo_id=config.STATE_REPO,
+                            repo_type="dataset", commit_message=f"risk map {stamp}")
+            state["_snap_hash"] = snap_digest
+        state["last_backup"], state["last_error"] = datetime.now().isoformat(timespec="seconds"), None
         return True
     except Exception as err:
         state["last_error"] = f"backup failed: {type(err).__name__}: {str(err)[:200]}"

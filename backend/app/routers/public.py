@@ -14,8 +14,9 @@ from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, HTTPException, Query
+from pydantic import BaseModel, Field
 
-from .. import areas, config, database
+from .. import areas, config, database, push
 
 router = APIRouter(prefix="/public", tags=["public (villagers)"])
 
@@ -84,3 +85,43 @@ def status(village_id: str, demo: bool = Query(False, description="Also show sim
         "recent": recent,
         "emergency_number": config.EMERGENCY_NUMBER,
     }
+
+
+# ---------- alarms on villagers' phones (Web Push) ----------
+
+class PushSubscription(BaseModel):
+    subscription: dict
+    village_id: str = Field(..., max_length=40)
+    lang: str = Field("kn", max_length=5)
+    demo: bool = False
+
+
+class PushEndpoint(BaseModel):
+    endpoint: str = Field(..., max_length=1000)
+
+
+@router.get("/push/key")
+def push_key():
+    """The public key the villager page needs to ask the browser for a push subscription."""
+    return {"public_key": push.keys()[0]}
+
+
+@router.post("/push/subscribe")
+def push_subscribe(body: PushSubscription):
+    """This phone wants warnings for its village's taluk, even when the page is closed."""
+    try:
+        return push.subscribe(body.subscription, body.village_id, body.lang, body.demo)
+    except ValueError as err:
+        raise HTTPException(status_code=422, detail=str(err))
+
+
+@router.post("/push/unsubscribe")
+def push_unsubscribe(body: PushEndpoint):
+    return {"removed": push.unsubscribe(body.endpoint)}
+
+
+@router.get("/push/topic/{village_id}")
+def push_topic(village_id: str):
+    """The public ntfy topic for loud alarms in this village's taluk (null if the server has none)."""
+    v = village_or_404(village_id)
+    return {"topic": push.public_topic(v["taluk_id"]), "server": config.NTFY_SERVER}

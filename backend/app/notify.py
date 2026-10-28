@@ -74,7 +74,7 @@ def _slug(s: str) -> str:
 
 
 def _base(role: str) -> str:
-    return {"gp": config.NTFY_TOPIC_GP, "ngo": config.NTFY_TOPIC_NGO}.get(role, "")
+    return {"gp": config.NTFY_TOPIC_GP, "admin": config.NTFY_TOPIC_GP, "ngo": config.NTFY_TOPIC_NGO}.get(role, "")
 
 
 def topics_for(roles: tuple[str, ...], taluk_id: str | None = None) -> list[str]:

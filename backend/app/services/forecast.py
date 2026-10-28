@@ -14,11 +14,25 @@ import requests
 from .. import config
 
 
+def _reason(resp) -> str:
+    try:
+        return str(resp.json().get("reason") or resp.text[:120])
+    except ValueError:
+        return resp.text[:120]
+
+
 def _get(params: dict) -> list:
     last_err = None
     for attempt in range(1, config.RETRIES + 1):
         try:
             resp = requests.get(config.FORECAST_URL, params=params, timeout=config.REQUEST_TIMEOUT_S)
+            if resp.status_code == 429:
+                reason = _reason(resp)
+                if "minut" not in reason.lower():        # hourly/daily limit: waiting a few seconds won't help
+                    raise RuntimeError(f"Open-Meteo limit reached for this server's internet address: {reason}")
+                if attempt < config.RETRIES:
+                    time.sleep(61)                        # the per-minute limit resets within a minute
+                    continue
             if resp.status_code in (429, 500, 502, 503, 504):
                 raise requests.HTTPError(f"{resp.status_code} server busy")
             resp.raise_for_status()

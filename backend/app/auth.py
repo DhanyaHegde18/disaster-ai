@@ -31,7 +31,7 @@ from . import areas, config, database, sms
 STAFF, VILLAGER = "staff", "villager"
 COOKIES = {STAFF: "gp_session", VILLAGER: "v_session"}
 COOKIE = COOKIES[STAFF]          # kept for older imports
-ROLES = ("gp", "ngo")
+ROLES = ("gp", "ngo", "admin")    # admin: whole state, everything a GP can do, and gives others access
 
 
 class AuthError(Exception):
@@ -74,6 +74,8 @@ def add_official(phone: str, name: str, role: str = "gp", taluk_id: str | None =
     phone, role = normalize_phone(phone), role.lower()
     if role not in ROLES:
         raise AuthError(f"Role must be one of: {', '.join(ROLES)}")
+    if role == "admin":
+        taluk_id = district = None                       # the admin covers all of Karnataka
     a = areas.get()
     if taluk_id:
         t = a.taluk(taluk_id)
@@ -318,11 +320,24 @@ def require_official(request: Request) -> dict:
     return user
 
 
+def acts_as_gp(user: dict) -> bool:
+    """Gram Panchayat officials, and the admin (who can do everything a GP can, in every taluk)."""
+    return user.get("role") in ("gp", "admin")
+
+
 def require_gp(request: Request) -> dict:
-    """A signed-in Gram Panchayat official (approving alerts, running checks)."""
+    """A signed-in Gram Panchayat official or the admin (approving alerts, running checks)."""
     user = require_official(request)
-    if user["role"] != "gp":
+    if not acts_as_gp(user):
         raise HTTPException(status_code=403, detail="Only Gram Panchayat officials can do this.")
+    return user
+
+
+def require_admin(request: Request) -> dict:
+    """The admin (set in the OFFICIALS setting with role 'admin'): gives Panchayat access to others."""
+    user = require_official(request)
+    if user["role"] != "admin":
+        raise HTTPException(status_code=403, detail="Only the admin can do this.")
     return user
 
 

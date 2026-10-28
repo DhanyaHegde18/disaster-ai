@@ -196,3 +196,107 @@ def test_registered_staff_still_get_ntfy_codes_with_open_signin(monkeypatch, ntf
     with app_client() as c:
         r = c.post("/auth/request-code", json={"phone": "9876543210"}).json()
         assert r["sent_by"] == "ntfy" and "demo_code" not in r and len(ntfy) == 1
+
+
+# ---------- risk map sent from elsewhere (forecast API refuses the server) ----------
+
+def make_snapshot(world, high_cell="13.00_75.25"):
+    from backend.app.jobs import score_grid
+    world.rain(high_cell, past=200)
+    snap = score_grid.score_now()
+    config.LATEST_RISK_FILE.unlink()                                  # as if computed on another computer
+    return snap
+
+
+def test_snapshot_push_needs_the_token(world, monkeypatch):
+    snap = make_snapshot(world)
+    with app_client() as c:
+        assert c.post("/system/snapshot", json=snap).status_code == 403        # no token set on the server
+        monkeypatch.setattr(config, "SNAPSHOT_TOKEN", "s3cret")
+        assert c.post("/system/snapshot", json=snap, headers={"X-Snapshot-Token": "nope"}).status_code == 403
+        assert c.post("/system/snapshot", json={"cells": []}, headers={"X-Snapshot-Token": "s3cret"}).status_code == 422
+        bad = {**snap, "cells": [{**snap["cells"][0], "cell_id": "99.00_99.00"}]}
+        assert c.post("/system/snapshot", json=bad, headers={"X-Snapshot-Token": "s3cret"}).status_code == 422
+
+
+def test_pushed_snapshot_is_used_and_drafts_alerts(world, monkeypatch):
+    monkeypatch.setattr(config, "SNAPSHOT_TOKEN", "s3cret")
+    snap = make_snapshot(world)
+    from backend.app.jobs import score_grid
+
+    def refuse(points, past_days=2):
+        raise RuntimeError("Open-Meteo limit reached for this server's internet address: Daily API request limit exceeded")
+    monkeypatch.setattr(score_grid, "fetch_daily_rain", refuse)
+    with app_client() as c:
+        r = c.post("/system/snapshot", json=snap, headers={"X-Snapshot-Token": "s3cret"}).json()
+        assert r["summary"]["HIGH"] >= 1 and r["alerts_drafted"] == 1
+        auth.add_official("9876543210", "Ujire GP", "gp", taluk_id=BELTHANGADY)
+        from backend.tests.conftest import sign_in
+        sign_in(c)
+        risk = c.get("/risk").json()
+        assert risk["summary"]["HIGH"] == 2 and not risk["stale"]
+
+
+def test_failed_fetch_is_not_retried_on_every_page_load(world, monkeypatch):
+    from backend.app.jobs import score_grid
+    from backend.app.routers import risk as risk_router
+    calls = []
+
+    def refuse(points, past_days=2):
+        calls.append(1)
+        raise RuntimeError("429 daily limit")
+    snap = make_snapshot(world)
+    config.LATEST_RISK_FILE.write_text(__import__("json").dumps({**snap, "generated_at": "2026-01-01T00:00:00+05:30"}))
+    monkeypatch.setattr(score_grid, "fetch_daily_rain", refuse)
+    first = risk_router._cached_or_fresh()
+    second = risk_router._cached_or_fresh()
+    assert first["stale"] and second["stale"] and len(calls) == 1 and "429" in second["stale_reason"]
+
+
+def test_open_meteo_429_minute_waits_daily_gives_up(monkeypatch):
+    from backend.app.services import forecast
+    slept, replies = [], []
+
+    class Resp:
+        def __init__(self, status, reason):
+            self.status_code, self._reason, self.text = status, reason, reason
+
+        def json(self):
+            return {"error": True, "reason": self._reason} if self.status_code == 429 else [
+                {"daily": {"time": ["2026-10-28"], "precipitation_sum": [1.0]}}]
+
+        def raise_for_status(self):
+            pass
+    monkeypatch.setattr(forecast.time, "sleep", lambda s: slept.append(s))
+    seq = [Resp(429, "Minutely API request limit exceeded. Please try again in one minute."), Resp(200, "")]
+    monkeypatch.setattr(forecast.requests, "get", lambda url, params, timeout: seq.pop(0))
+    assert forecast._get({}) and slept == [61]
+    monkeypatch.setattr(forecast.requests, "get", lambda url, params, timeout: Resp(429, "Daily API request limit exceeded."))
+    with pytest.raises(RuntimeError, match="Daily API request limit"):
+        forecast._get({})
+    assert slept == [61]                                              # no pointless waiting for a daily limit
+
+
+def test_push_job_sends_the_map(world, monkeypatch, capsys):
+    from backend.app.jobs import push_snapshot
+    sent = {}
+
+    def fake_post(url, json, timeout, headers):
+        sent.update(url=url, cells=len(json["cells"]), token=headers["X-Snapshot-Token"])
+        return types.SimpleNamespace(status_code=200, text='{"saved": "x"}')
+    monkeypatch.setattr(push_snapshot.requests, "post", fake_post)
+    monkeypatch.setenv("SERVER_URL", "https://example.onrender.com/")
+    monkeypatch.setenv("SNAPSHOT_TOKEN", "s3cret")
+    assert push_snapshot.main() == 0
+    assert sent == {"url": "https://example.onrender.com/system/snapshot", "cells": 4, "token": "s3cret"}
+
+
+def test_backup_includes_the_risk_map(hub, world):
+    make_snapshot(world)
+    from backend.app.jobs import score_grid
+    score_grid.score_now()
+    auth.add_official("9876543210", "Ujire GP", "gp", taluk_id=BELTHANGADY)
+    assert state_backup.backup() and set(hub.files) == {"alerts.db", "latest_risk.json"}
+    config.LATEST_RISK_FILE.unlink()
+    state_backup.restore()
+    assert config.LATEST_RISK_FILE.exists()

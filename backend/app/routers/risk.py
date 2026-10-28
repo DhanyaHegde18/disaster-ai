@@ -16,6 +16,9 @@ from ..services.risk_view import scoped_view, taluk_risk
 router = APIRouter(prefix="/risk", tags=["risk"], dependencies=[Depends(require_official)])
 
 
+_failed = {"at": None, "why": ""}
+
+
 def _cached_or_fresh(force: bool = False) -> dict:
     """Reuse the last snapshot if it's recent; otherwise score again.
     If the forecast API is down, fall back to the last snapshot and say so."""
@@ -25,9 +28,15 @@ def _cached_or_fresh(force: bool = False) -> dict:
         age = datetime.now(ZoneInfo(config.TIMEZONE)) - datetime.fromisoformat(snap["generated_at"])
         if age < timedelta(minutes=config.CACHE_MINUTES) and "cells" in snap:
             return snap
+    now = datetime.now(ZoneInfo(config.TIMEZONE))
+    recent_failure = _failed["at"] and now - _failed["at"] < timedelta(minutes=config.LIVE_RETRY_MIN)
     try:
+        if recent_failure and not force:              # don't make every page load wait for a refusing API
+            raise RuntimeError(_failed["why"])
         return score_now()
     except Exception as err:  # forecast API down, bad network, ...
+        if not recent_failure or force:
+            _failed.update(at=now, why=str(err))
         if f.exists():
             snap = json.loads(f.read_text())
             if "cells" in snap:                    # (an old per-village snapshot is no use)

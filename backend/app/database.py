@@ -99,6 +99,20 @@ CREATE TABLE IF NOT EXISTS shelters (
 );
 CREATE INDEX IF NOT EXISTS shelters_taluk ON shelters (taluk_id, designated);
 
+-- Villagers' phones that asked for warning notifications (Web Push). One row per browser subscription.
+CREATE TABLE IF NOT EXISTS push_subscriptions (
+    endpoint    TEXT PRIMARY KEY,                 -- the browser's push address (secret-ish, never shown)
+    p256dh      TEXT NOT NULL,
+    auth        TEXT NOT NULL,
+    village_id  TEXT NOT NULL,
+    taluk_id    TEXT NOT NULL,
+    lang        TEXT NOT NULL DEFAULT 'kn',
+    demo        INTEGER NOT NULL DEFAULT 0,       -- 1 = also receives SIMULATED test alerts (villager page ?demo=true)
+    created_at  TEXT NOT NULL,
+    last_ok_at  TEXT
+);
+CREATE INDEX IF NOT EXISTS push_taluk ON push_subscriptions (taluk_id);
+
 -- Small facts the app keeps for itself (e.g. which version of a data file was last loaded).
 CREATE TABLE IF NOT EXISTS app_meta (
     key    TEXT PRIMARY KEY,

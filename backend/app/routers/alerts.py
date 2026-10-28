@@ -14,10 +14,10 @@ drafts an alert as if the taluk were HIGH, marked "simulated" so it's never show
 """
 import copy
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from .. import auth, database
+from .. import auth, database, push
 from ..auth import require_gp, require_official
 from ..services.alerts import draft_for, generate_for_snapshot
 from ..services.risk_view import taluk_risk
@@ -40,7 +40,7 @@ class Review(BaseModel):
 
 def _get_or_404(alert_id: int, user: dict) -> dict:
     a = database.get_alert(alert_id)
-    if a is None or not auth.in_scope(user, a["taluk_id"]) or (user["role"] != "gp" and a["status"] != "approved"):
+    if a is None or not auth.in_scope(user, a["taluk_id"]) or (not auth.acts_as_gp(user) and a["status"] != "approved"):
         raise HTTPException(status_code=404, detail=f"No alert {alert_id}")
     return a
 
@@ -75,7 +75,7 @@ def draft_one(taluk_id: str, simulate_high: bool = Query(False, description="Pre
 @router.get("")
 def list_all(status: str | None = Query(None, pattern="^(pending|approved|rejected)$"),
              user: dict = Depends(require_official)):
-    if user["role"] != "gp":
+    if not auth.acts_as_gp(user):
         status = "approved"          # NGOs see only what the Gram Panchayat approved
     return database.list_alerts(status, taluk_ids=auth.scope_taluks(user))
 
@@ -95,12 +95,16 @@ def edit(alert_id: int, body: EditText, user: dict = Depends(require_gp)):
 
 
 @router.post("/{alert_id}/approve")
-def approve(alert_id: int, body: Review, official: dict = Depends(require_gp)):
+def approve(alert_id: int, body: Review, background: BackgroundTasks, official: dict = Depends(require_gp)):
+    """Publish the warning: villagers' pages show it, and every phone that turned on alarms in that taluk rings
+    (Web Push; plus the taluk's public ntfy topic if set). Test alerts ring only demo-page phones."""
     _get_or_404(alert_id, official)
     try:
-        return database.review(alert_id, "approved", official["name"], body.note)
+        a = database.review(alert_id, "approved", official["name"], body.note)
     except ValueError as err:
         raise HTTPException(status_code=409, detail=str(err))
+    background.add_task(push.alert_villagers, a)
+    return {**a, "phones_alerted": push.count([a["taluk_id"]]) if not a.get("simulated") else "demo phones only"}
 
 
 @router.post("/{alert_id}/reject")
