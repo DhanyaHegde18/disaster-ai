@@ -322,3 +322,24 @@ def test_refused_ntfy_says_why_and_token_is_sent(monkeypatch):
         monkeypatch.setattr(config, "OTP_RESEND_S", 0)
         c.post("/auth/request-code", json={"phone": "9876543210"})
         assert seen[-1]["Authorization"] == "Bearer tk_abc"
+
+
+def test_admin_pin_when_ntfy_refuses(monkeypatch):
+    monkeypatch.setattr(config, "SMS_PROVIDER", "ntfy")
+    monkeypatch.setattr(config, "OTP_DEMO_MODE", False)
+    monkeypatch.setattr(config, "NTFY_TOPIC_GP", "gp-secret")
+    monkeypatch.setattr(config, "ADMIN_PIN", "correct-horse-42")
+    monkeypatch.setattr(notify.requests, "post", lambda url, data, timeout, headers: types.SimpleNamespace(
+        status_code=429, text="quota", json=lambda: {"error": "daily message quota reached"}))
+    auth.add_official("9111111111", "State admin", "admin")
+    auth.add_official("9876543210", "Ujire GP", "gp", taluk_id=BELTHANGADY)
+    with app_client() as c:
+        r = c.post("/auth/request-code", json={"phone": "9111111111"}).json()
+        assert r["sent_by"] == "pin" and "admin PIN" in r["note"] and "quota" in r["note"] and "demo_code" not in r
+        assert c.post("/auth/verify", json={"phone": "9111111111", "code": "123456"}).status_code == 401
+        assert c.post("/auth/verify", json={"phone": "9111111111", "code": "correct-horse-42"}).status_code == 200
+        assert c.post("/auth/request-code", json={"phone": "9876543210"}).status_code == 502   # GPs: no PIN
+    monkeypatch.setattr(config, "ADMIN_PIN", "short")                                       # too short: off
+    monkeypatch.setattr(config, "OTP_RESEND_S", 0)
+    with app_client() as c:
+        assert c.post("/auth/request-code", json={"phone": "9111111111"}).status_code == 502

@@ -192,7 +192,7 @@ def request_code(raw_phone: str, purpose: str = STAFF) -> dict:
         if wait > 0:
             raise AuthError(f"Please wait {int(wait) + 1} seconds before asking for a new code.", 429)
 
-    provider, code = ("demo" if guest else config.SMS_PROVIDER), None      # guests: code on screen
+    provider, code, note = ("demo" if guest else config.SMS_PROVIDER), None, None    # guests: code on screen
     try:
         if provider == "twilio":
             sms.twilio_start(phone)                 # Twilio makes and remembers the code
@@ -209,7 +209,9 @@ def request_code(raw_phone: str, purpose: str = STAFF) -> dict:
                     raise AuthError("Sign-in codes go by ntfy, but no ntfy topic is set on the server "
                                     "(NTFY_TOPIC_GP / NTFY_TOPIC_NGO).", 500)
                 why = notify.send_code(topic, code, mask(phone))
-                if why:
+                if why and official and official.get("role") == "admin" and len(config.ADMIN_PIN) >= 10:
+                    code_hash, provider, note = "pin", "pin", why      # admin: type the PIN from the settings
+                elif why:
                     raise sms.SMSError(why)
             elif provider == "ntfy":
                 provider = "screen"                 # villagers have no ntfy topic: shown on screen
@@ -226,10 +228,14 @@ def request_code(raw_phone: str, purpose: str = STAFF) -> dict:
     result = {"phone": mask(phone), "expires_in_min": config.OTP_TTL_MIN, "sent_by": provider}
     if provider in ("demo", "screen"):
         result["demo_code"] = code              # no SMS: the screen shows the code
+    if provider == "pin":
+        result["note"] = f"The code could not be sent ({note}). Enter your admin PIN instead."
     return result
 
 
 def _code_matches(row, phone: str, purpose: str, code: str) -> bool:
+    if row["code_hash"] == "pin":
+        return len(config.ADMIN_PIN) >= 10 and secrets.compare_digest(code.encode(), config.ADMIN_PIN.encode())
     if row["code_hash"] == "twilio":
         try:
             return sms.twilio_check(phone, code)

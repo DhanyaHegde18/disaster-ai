@@ -65,6 +65,9 @@ SMS_TIMEOUT_S = 20
 OTP_TTL_MIN = 5            # a code works for 5 minutes
 OTP_MAX_ATTEMPTS = 5       # then a new code must be requested
 OTP_RESEND_S = 30          # minimum gap between code requests for one number
+# Backup sign-in for the ADMIN only, if the code can't be sent (e.g. ntfy refuses the server): a long secret PIN
+# (at least 10 characters) set in the server's settings. Ignored if shorter or empty.
+ADMIN_PIN = os.getenv("ADMIN_PIN", "").strip()
 SESSION_HOURS = 12         # staff stay signed in for one working day
 VILLAGER_SESSION_DAYS = 30  # villagers stay signed in a month, so a report saved offline can still be sent later
 # Session cookies are made https-only automatically when the page came over https; true forces it always.

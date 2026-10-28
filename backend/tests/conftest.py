@@ -100,6 +100,7 @@ def world(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "NTFY_TOPIC_GP", "")         # ...and never push to real phones
     monkeypatch.setattr(config, "NTFY_TOPIC_NGO", "")
     monkeypatch.setattr(config, "NTFY_TOKEN", "")
+    monkeypatch.setattr(config, "ADMIN_PIN", "")
     monkeypatch.setattr(config, "NTFY_TOPIC_PUBLIC", "")
     monkeypatch.setattr(config, "COOKIE_SECURE", False)
     monkeypatch.setattr(config, "STATE_REPO", "")             # never back up test databases to a real repository

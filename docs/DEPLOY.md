@@ -97,6 +97,10 @@ ntfy.sh limits anonymous messages per internet address, and Render's address is 
 ntfy.sh account (no card): https://ntfy.sh/signup, then **Account → Access tokens → Create access token**. Put the
 token (`tk_...`) in Render's **Environment** as `NTFY_TOKEN`. Your phone's ntfy app keeps following the same topics.
 
+**Backup for the admin:** set `ADMIN_PIN` to a long secret (10+ characters, e.g. from
+`python3 -c "import secrets; print(secrets.token_urlsafe(9))"`). If ntfy refuses a code, the admin's sign-in screen
+asks for this PIN instead. Gram Panchayat staff have no PIN: their codes always come by ntfy.
+
 ## Letting anyone try the dashboard (demos)
 
 Add the variable `OPEN_SIGNIN` under **Environment**:
