@@ -136,9 +136,11 @@ def alert_villagers(alert: dict) -> dict:
     topic = public_topic(alert["taluk_id"])
     if topic and not simulated:
         try:
+            from .notify import ntfy_headers
             r = requests.post(f"{config.NTFY_SERVER}/{topic}", data=alert["message_kn"].encode("utf-8"), timeout=10,
-                              headers={"Title": f"Warning: {alert.get('taluk_name') or ''} taluk", "Priority": "5",
-                                       "Tags": "rotating_light,warning", "Click": f"{config.PUBLIC_URL}/villager/"})
+                              headers=ntfy_headers({"Title": f"Warning: {alert.get('taluk_name') or ''} taluk",
+                                                    "Priority": "5", "Tags": "rotating_light,warning",
+                                                    "Click": f"{config.PUBLIC_URL}/villager/"}))
             ntfy = r.status_code < 300
         except requests.RequestException:
             pass

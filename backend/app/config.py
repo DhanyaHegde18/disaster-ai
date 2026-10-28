@@ -72,14 +72,17 @@ COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").lower() == "true"
 
 # Phone push alerts for staff (ntfy: free app for Android/iOS). Each person installs the ntfy app
 # and subscribes to their role's topic. Topic names act like passwords: make them long and random.
-NTFY_SERVER = os.getenv("NTFY_SERVER", "https://ntfy.sh").rstrip("/")
-NTFY_TOPIC_GP = os.getenv("NTFY_TOPIC_GP", "")
+NTFY_SERVER = os.getenv("NTFY_SERVER", "https://ntfy.sh").strip().rstrip("/")
+# Optional access token of a free ntfy.sh account (ntfy.sh -> Account -> Access tokens). Without it, ntfy.sh limits
+# messages per internet address, and a free host's address is shared with many apps, so messages can be refused.
+NTFY_TOKEN = os.getenv("NTFY_TOKEN", "").strip()
+NTFY_TOPIC_GP = os.getenv("NTFY_TOPIC_GP", "").strip()
 # Optional: a PUBLIC topic base for villagers' loud alarms; each taluk gets '<this>-<taluk>' (see push.py)
 NTFY_TOPIC_PUBLIC = os.getenv("NTFY_TOPIC_PUBLIC", "").strip()
 # Web Push keys for villagers' phones; leave empty and they are made automatically and kept in the database
 VAPID_PUBLIC_KEY = os.getenv("VAPID_PUBLIC_KEY", "").strip()
 VAPID_PRIVATE_KEY = os.getenv("VAPID_PRIVATE_KEY", "").strip()
-NTFY_TOPIC_NGO = os.getenv("NTFY_TOPIC_NGO", "")
+NTFY_TOPIC_NGO = os.getenv("NTFY_TOPIC_NGO", "").strip()
 # Link opened from a phone notification. Normally leave it unset: the app learns its public address
 # (tunnel, Tailscale, Wi-Fi IP) from the dashboard itself. Set it only to force a particular address.
 PUBLIC_URL = os.getenv("PUBLIC_URL", "").rstrip("/")

@@ -104,16 +104,37 @@ def topic_for_user(user: dict) -> str | None:
     return base
 
 
-def send_code(topic: str, code: str, who: str) -> bool:
-    """A dashboard sign-in code, to one staff member's own topic. True if ntfy accepted it."""
+def ntfy_headers(headers: dict) -> dict:
+    """Add the ntfy account token when there is one (its own limits instead of the shared address's)."""
+    return {**headers, "Authorization": f"Bearer {config.NTFY_TOKEN}"} if config.NTFY_TOKEN else headers
+
+
+def _why(r) -> str:
+    try:
+        msg = r.json().get("error") or r.text
+    except ValueError:
+        msg = r.text
+    hint = (" (limit for this server's shared internet address: set NTFY_TOKEN, see docs/DEPLOY.md)"
+            if r.status_code == 429 else " (check NTFY_TOKEN)" if r.status_code in (401, 403) else "")
+    return f"ntfy answered {r.status_code}: {str(msg).strip()[:120]}{hint}"
+
+
+def send_code(topic: str, code: str, who: str) -> str | None:
+    """A dashboard sign-in code, to one staff member's own topic. None if ntfy accepted it, else the reason."""
     try:
         r = requests.post(f"{config.NTFY_SERVER}/{topic}", timeout=10,
                           data=f"Dashboard sign-in code for {who}: {code} (valid {config.OTP_TTL_MIN} min). "
                                f"Don't share it.".encode("utf-8"),
-                          headers={"Title": "Sign-in code", "Priority": "4", "Tags": "key"})
-        return r.status_code < 300
-    except requests.RequestException:
-        return False
+                          headers=ntfy_headers({"Title": "Sign-in code", "Priority": "4", "Tags": "key"}))
+    except requests.RequestException as err:
+        why = f"could not reach ntfy ({type(err).__name__})"
+        print(f"[notify] sign-in code: {why}", flush=True)
+        return why
+    if r.status_code < 300:
+        return None
+    why = _why(r)
+    print(f"[notify] sign-in code refused: {why}", flush=True)
+    return why
 
 
 def push(roles: tuple[str, ...], title: str, message: str, priority: int = HIGH,
@@ -123,12 +144,12 @@ def push(roles: tuple[str, ...], title: str, message: str, priority: int = HIGH,
     for topic in topics_for(roles, taluk_id):
         try:
             r = requests.post(f"{config.NTFY_SERVER}/{topic}", data=message.encode("utf-8"), timeout=10,
-                              headers={"Title": title, "Priority": str(priority),
-                                       "Tags": tags, "Click": f"{public_url()}{path}"})
+                              headers=ntfy_headers({"Title": title, "Priority": str(priority),
+                                                    "Tags": tags, "Click": f"{public_url()}{path}"}))
             if r.status_code < 300:
                 ok += 1
             else:
-                print(f"[notify] ntfy refused ({r.status_code}): {r.text[:120]}", flush=True)
+                print(f"[notify] {_why(r)}", flush=True)
         except requests.RequestException as err:
             print(f"[notify] could not reach ntfy: {type(err).__name__}", flush=True)
     return ok

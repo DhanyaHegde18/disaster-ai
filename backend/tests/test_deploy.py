@@ -300,3 +300,25 @@ def test_backup_includes_the_risk_map(hub, world):
     config.LATEST_RISK_FILE.unlink()
     state_backup.restore()
     assert config.LATEST_RISK_FILE.exists()
+
+
+def test_refused_ntfy_says_why_and_token_is_sent(monkeypatch):
+    monkeypatch.setattr(config, "SMS_PROVIDER", "ntfy")
+    monkeypatch.setattr(config, "OTP_DEMO_MODE", False)
+    monkeypatch.setattr(config, "NTFY_TOPIC_GP", "gp-secret")
+    seen = []
+
+    def refuse(url, data, timeout, headers):
+        seen.append(headers)
+        return types.SimpleNamespace(status_code=429, text='{"error":"limit reached"}',
+                                     json=lambda: {"error": "limit reached"})
+    monkeypatch.setattr(notify.requests, "post", refuse)
+    auth.add_official("9876543210", "Ujire GP", "gp", taluk_id=BELTHANGADY)
+    with app_client() as c:
+        r = c.post("/auth/request-code", json={"phone": "9876543210"})
+        assert r.status_code == 502 and "429" in r.json()["detail"] and "NTFY_TOKEN" in r.json()["detail"]
+        assert "Authorization" not in seen[-1]
+        monkeypatch.setattr(config, "NTFY_TOKEN", "tk_abc")
+        monkeypatch.setattr(config, "OTP_RESEND_S", 0)
+        c.post("/auth/request-code", json={"phone": "9876543210"})
+        assert seen[-1]["Authorization"] == "Bearer tk_abc"

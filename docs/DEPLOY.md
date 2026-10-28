@@ -91,6 +91,12 @@ From the laptop, the same job works by hand:
 `SERVER_URL=https://...onrender.com SNAPSHOT_TOKEN=... python -m backend.app.jobs.push_snapshot`.
 The last map is also backed up, so a restart doesn't lose it.
 
+## If sign-in codes don't arrive ("ntfy answered 429")
+
+ntfy.sh limits anonymous messages per internet address, and Render's address is shared with many apps. Make a free
+ntfy.sh account (no card): https://ntfy.sh/signup, then **Account → Access tokens → Create access token**. Put the
+token (`tk_...`) in Render's **Environment** as `NTFY_TOKEN`. Your phone's ntfy app keeps following the same topics.
+
 ## Letting anyone try the dashboard (demos)
 
 Add the variable `OPEN_SIGNIN` under **Environment**:

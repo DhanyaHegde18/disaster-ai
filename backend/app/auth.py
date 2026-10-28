@@ -208,8 +208,9 @@ def request_code(raw_phone: str, purpose: str = STAFF) -> dict:
                 if not topic:
                     raise AuthError("Sign-in codes go by ntfy, but no ntfy topic is set on the server "
                                     "(NTFY_TOPIC_GP / NTFY_TOPIC_NGO).", 500)
-                if not notify.send_code(topic, code, mask(phone)):
-                    raise sms.SMSError("ntfy did not accept the message")
+                why = notify.send_code(topic, code, mask(phone))
+                if why:
+                    raise sms.SMSError(why)
             elif provider == "ntfy":
                 provider = "screen"                 # villagers have no ntfy topic: shown on screen
         else:
