@@ -123,6 +123,14 @@ def remove_official(phone: str) -> bool:
     return bool(removed)
 
 
+GUEST_PREFIX = "Guest ····"
+
+
+def is_guest(official: dict) -> bool:
+    """Signed up by themselves under OPEN_SIGNIN (their codes are shown on screen, never sent anywhere)."""
+    return (official.get("name") or "").startswith(GUEST_PREFIX)
+
+
 def seed_officials(text: str) -> tuple[list[dict], list[str]]:
     """Add/update staff from the OFFICIALS setting (for servers without a shell):
     one per line or ';' -> phone, name, role, district, taluk. Returns (added, problems)."""
@@ -165,9 +173,15 @@ def get_official(phone: str) -> dict | None:
 
 def request_code(raw_phone: str, purpose: str = STAFF) -> dict:
     phone = normalize_phone(raw_phone)
-    if purpose == STAFF and not get_official(phone):
-        raise AuthError("This number is not registered for the dashboard. "
-                        "Ask the person who runs the system to add it.", 403)
+    official = get_official(phone) if purpose == STAFF else None
+    if purpose == STAFF and not official:
+        if config.OPEN_SIGNIN in ("viewer", "gp"):            # demo: anyone may look around
+            official = add_official(phone, f"{GUEST_PREFIX}{phone[-4:]}", "ngo" if config.OPEN_SIGNIN == "viewer" else "gp",
+                                    taluk_id=config.OPEN_SIGNIN_TALUK if config.OPEN_SIGNIN == "gp" else None)
+        else:
+            raise AuthError("This number is not registered for the dashboard. "
+                            "Ask the person who runs the system to add it.", 403)
+    guest = bool(official and is_guest(official))
     now = _now()
     with database.connect() as c:
         row = c.execute("SELECT sent_at FROM otp_codes WHERE phone = ? AND purpose = ?", (phone, purpose)).fetchone()
@@ -176,7 +190,7 @@ def request_code(raw_phone: str, purpose: str = STAFF) -> dict:
         if wait > 0:
             raise AuthError(f"Please wait {int(wait) + 1} seconds before asking for a new code.", 429)
 
-    provider, code = config.SMS_PROVIDER, None
+    provider, code = ("demo" if guest else config.SMS_PROVIDER), None      # guests: code on screen
     try:
         if provider == "twilio":
             sms.twilio_start(phone)                 # Twilio makes and remembers the code

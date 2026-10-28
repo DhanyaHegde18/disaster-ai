@@ -108,6 +108,10 @@ def health():
             "sign_in": ("demo codes on screen" if config.OTP_DEMO_MODE else
                         "staff codes by ntfy to their area's alarm topic; villager codes on screen"
                         if config.SMS_PROVIDER == "ntfy" else f"SMS codes via {config.SMS_PROVIDER}"),
+            "open_sign_in": {"off": "off (registered staff only)",
+                             "viewer": "ON: any number can sign in as a read-only guest (code on screen)",
+                             "gp": f"ON: any number can sign in as a Gram Panchayat guest of {config.OPEN_SIGNIN_TALUK} "
+                                   f"and approve real alerts"}.get(config.OPEN_SIGNIN, "off"),
             "database_backup": state_backup.summary(),
             "public_address": (f"{config.PUBLIC_URL} (from .env)" if config.PUBLIC_URL
                                else f"{notify.learned_public_url()} (learned from the dashboard)" if notify.learned_public_url()

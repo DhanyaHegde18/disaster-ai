@@ -154,3 +154,45 @@ def test_unloadable_landslide_model_falls_back_to_rain_rule():
     with app_client() as c:
         assert "could not be loaded here" in c.get("/health").json()["landslide_model"]
     landslide.load_error = None
+
+
+# ---------- anyone may sign in (OPEN_SIGNIN) ----------
+
+def guest_sign_in(c, phone="9000012345"):
+    r = c.post("/auth/request-code", json={"phone": phone})
+    assert r.status_code == 200, r.text
+    code = r.json()["demo_code"]                                      # shown on screen
+    r = c.post("/auth/verify", json={"phone": phone, "code": code})
+    assert r.status_code == 200, r.text
+    return r.json()
+
+
+def test_open_signin_off_by_default():
+    with app_client() as c:
+        assert c.post("/auth/request-code", json={"phone": "9000012345"}).status_code == 403
+
+
+def test_open_signin_viewer_is_read_only(monkeypatch, ntfy):
+    monkeypatch.setattr(config, "OPEN_SIGNIN", "viewer")
+    with app_client() as c:
+        me = guest_sign_in(c)
+        assert me["role"] == "ngo" and me["name"] == "Guest ····2345"
+        assert c.get("/risk").status_code == 200                       # sees the risk
+        assert c.post("/alerts/generate").status_code == 403           # can't draft or approve
+        assert ntfy == []                                              # guest codes go nowhere, only on screen
+        assert c.get("/health").json()["open_sign_in"].startswith("ON: any number can sign in as a read-only guest")
+
+
+def test_open_signin_gp_guest(monkeypatch):
+    monkeypatch.setattr(config, "OPEN_SIGNIN", "gp")
+    with app_client() as c:
+        me = guest_sign_in(c)
+        assert me["role"] == "gp" and me["taluk_id"] == BELTHANGADY
+
+
+def test_registered_staff_still_get_ntfy_codes_with_open_signin(monkeypatch, ntfy):
+    monkeypatch.setattr(config, "OPEN_SIGNIN", "viewer")
+    auth.add_official("9876543210", "Ujire GP", "gp", taluk_id=BELTHANGADY)
+    with app_client() as c:
+        r = c.post("/auth/request-code", json={"phone": "9876543210"}).json()
+        assert r["sent_by"] == "ntfy" and "demo_code" not in r and len(ntfy) == 1

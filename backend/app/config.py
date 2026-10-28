@@ -118,3 +118,11 @@ STATE_BACKUP_MIN = float(os.getenv("STATE_BACKUP_MIN", "5"))
 # Dashboard staff without a shell on the server: one per line or ';'
 #   phone, name, role, district, taluk        e.g.  98xxxxxxxx, Ujire GP, gp, Dakshina Kannada, Belthangady
 OFFICIALS = os.getenv("OFFICIALS", "")
+# Let ANY phone number sign in to the dashboard (for demos), with the code shown on screen:
+#   off     only registered staff (default)
+#   viewer  unknown numbers become read-only guests who see all of Karnataka like NGO staff (no phone numbers,
+#           can't approve alerts or change relief centres). Safe on a public site.
+#   gp      unknown numbers become Gram Panchayat guests of OPEN_SIGNIN_TALUK. They CAN approve real alerts that
+#           villagers see and that ring the GP alarm topic: use only while presenting.
+OPEN_SIGNIN = os.getenv("OPEN_SIGNIN", "off").strip().lower()
+OPEN_SIGNIN_TALUK = os.getenv("OPEN_SIGNIN_TALUK", "dakshina-kannada:belthangady").strip()

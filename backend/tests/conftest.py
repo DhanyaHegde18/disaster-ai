@@ -102,7 +102,8 @@ def world(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "COOKIE_SECURE", False)
     monkeypatch.setattr(config, "STATE_REPO", "")             # never back up test databases to a real repository
     monkeypatch.setattr(config, "HF_TOKEN", "")
-    monkeypatch.setattr(config, "OFFICIALS", "")      # the test client talks plain http, even if .env says https
+    monkeypatch.setattr(config, "OFFICIALS", "")
+    monkeypatch.setattr(config, "OPEN_SIGNIN", "off")      # the test client talks plain http, even if .env says https
     from backend.app.jobs import score_grid
     monkeypatch.setattr(score_grid, "fetch_daily_rain", w.daily)
     from backend.app.services import landslide                 # no landslide model unless a test trains one

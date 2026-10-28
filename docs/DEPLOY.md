@@ -75,6 +75,19 @@ The private dataset is created by the server itself; you don't need to make it.
 3. Backup: GitHub repository → **Settings → Secrets and variables → Actions → Variables → New variable**
    `SERVER_URL` = `https://<your-address>`. Then **Actions → keep the server awake → Run workflow** once.
 
+## Letting anyone try the dashboard (demos)
+
+Add the variable `OPEN_SIGNIN` under **Environment**:
+
+- `viewer` (recommended on a public site): any phone number can sign in as a **read-only guest**, with the code
+  shown on screen. Guests see all of Karnataka like NGO staff, but no phone numbers, and can't approve alerts or
+  change relief centres.
+- `gp`: any number signs in as a Gram Panchayat guest of `OPEN_SIGNIN_TALUK` (default Belthangady). Guests **can
+  approve real alerts** that villagers see and that ring the alarm topic, so use it only while presenting, then set
+  it back to `viewer` or `off`.
+
+Registered staff (`OFFICIALS`) still get their codes by ntfy.
+
 ## Updating
 
 `git push` is all it takes: Render rebuilds and restarts automatically (**autoDeploy**), and the database comes
