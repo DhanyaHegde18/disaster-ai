@@ -16,3 +16,4 @@ pandas==3.0.6
 scikit-learn==1.9.1
 scipy==1.18.1
 pywebpush>=2.0
+pywebpush>=2.0
